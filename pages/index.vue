@@ -493,10 +493,12 @@ onMounted(() => {
 	z-index: 2;
 	padding: 2rem;
 	margin-top: 4rem;
+	position: relative;
 }
 
 .search-section {
 	text-align: center;
+	position: relative;
 
 	.main-title {
 		width: 50rem;
@@ -655,9 +657,11 @@ onMounted(() => {
 	.content-wrapper {
 		padding: 1rem;
 		margin-top: 2rem;
+		overflow: hidden;
 	}
 
 	.search-section {
+		position: static;
 		.main-title {
 			font-size: 2.5rem;
 			width: 100%;
@@ -703,9 +707,11 @@ onMounted(() => {
 }
 
 .search-results-container {
-	position: relative;
+	position: absolute;
 	width: 100%;
 	z-index: 1000;
+	left: 0;
+	right: 0;
 }
 
 .search-results-backdrop {
@@ -716,7 +722,7 @@ onMounted(() => {
 	bottom: 0;
 	background: rgba(0, 0, 0, 0.5);
 	backdrop-filter: blur(4px);
-	z-index: 1;
+	z-index: 999;
 }
 
 .search-results {
@@ -728,9 +734,10 @@ onMounted(() => {
 	border: 2px solid var(--border-color);
 	border-radius: 12px;
 	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-	z-index: 2;
+	z-index: 1000;
 	max-height: 80vh;
 	overflow-y: auto;
+	margin: 0 1rem;
 
 	&::-webkit-scrollbar {
 		width: 8px;
@@ -894,7 +901,23 @@ onMounted(() => {
 		left: 0;
 		right: 0;
 		max-height: 70vh;
+		margin: 0;
 		border-radius: 12px 12px 0 0;
+		pointer-events: auto;
+	}
+
+	.search-results-container {
+		position: fixed;
+		top: auto;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		height: 100%;
+		pointer-events: none;
+	}
+
+	.search-results-backdrop {
+		pointer-events: auto;
 	}
 
 	.search-result-item {
