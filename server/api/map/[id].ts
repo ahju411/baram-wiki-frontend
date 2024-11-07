@@ -1,10 +1,11 @@
 import { defineEventHandler, createError } from 'h3'
 
 export default defineEventHandler(async (event) => {
+  const { apiBase } = useRuntimeConfig().public;
   const { id } = event.context.params as { id: string }
 
   try {
-    const data = await $fetch(`http://localhost:3001/api/map/${id}`)
+    const data = await $fetch(`${apiBase}/map/${id}`)
     return data
   } catch (error) {
     throw createError({
