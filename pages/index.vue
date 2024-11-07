@@ -170,13 +170,18 @@ const isLoading = ref(false);
 const resultIndex = ref(0);
 const trendingKeywords = ref([
 	{
-		id: 'I000000',
+		id: 'I627884',
 		name: '도토리',
 		type: 'item',
 	},
 	{
-		id: 'M000000',
+		id: 'MO110645',
 		name: '다람쥐',
+		type: 'monster',
+	},
+	{
+		id: 'MO181712',
+		name: '토끼',
 		type: 'monster',
 	},
 ]);
@@ -187,6 +192,14 @@ const recentUpdates = ref([
 		type: 'item',
 		desc: '신규 아이템이 추가되었습니다.',
 		images: 'I091985.png',
+	},
+
+	{
+		id: 'I018598',
+		name: '금남자도복',
+		type: 'item',
+		desc: '신규 아이템이 추가되었습니다.',
+		images: 'I018598.png',
 	},
 ]);
 
@@ -894,42 +907,123 @@ onMounted(() => {
 
 // 반응형 스타일
 @media (max-width: 768px) {
-	.search-results {
-		position: fixed;
-		top: auto;
-		bottom: 0;
-		left: 0;
-		right: 0;
-		max-height: 70vh;
-		margin: 0;
-		border-radius: 12px 12px 0 0;
-		pointer-events: auto;
-	}
-
 	.search-results-container {
 		position: fixed;
-		top: auto;
-		bottom: 0;
+		top: 0;
 		left: 0;
 		right: 0;
-		height: 100%;
+		bottom: 0;
+		z-index: 1000;
+		display: flex;
+		flex-direction: column;
+		justify-content: flex-end;
 		pointer-events: none;
 	}
 
 	.search-results-backdrop {
+		position: fixed;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		background: rgba(0, 0, 0, 0.5);
+		backdrop-filter: blur(4px);
+		z-index: 999;
 		pointer-events: auto;
 	}
 
+	.search-results {
+		position: relative;
+		background: var(--secondary-bg);
+		border-radius: 20px 20px 0 0;
+		border: none;
+		box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.2);
+		max-height: 85vh;
+		margin: 0;
+		padding: 1rem 0;
+		overflow-y: auto;
+		-webkit-overflow-scrolling: touch;
+		pointer-events: auto;
+		transform: translateZ(0);
+		will-change: transform;
+
+		// 스크롤바 스타일 수정
+		&::-webkit-scrollbar {
+			width: 4px;
+		}
+
+		&::-webkit-scrollbar-track {
+			background: transparent;
+		}
+
+		&::-webkit-scrollbar-thumb {
+			background: var(--border-color);
+			border-radius: 4px;
+		}
+	}
+
+	// iOS 안전 영역 대응
+	@supports (-webkit-touch-callout: none) {
+		.search-results {
+			padding-bottom: calc(env(safe-area-inset-bottom) + 1rem);
+		}
+	}
+
+	.search-loading {
+		padding: 2rem 1rem;
+	}
+
 	.search-result-item {
-		padding: 0.8rem;
+		padding: 0.8rem 1rem;
+		gap: 0.8rem;
 
 		.result-icon {
-			width: 40px;
-			height: 40px;
+			width: 42px;
+			height: 42px;
+			border-radius: 6px;
+		}
+
+		.result-info {
+			.result-type {
+				font-size: 0.8rem;
+				margin-bottom: 0.1rem;
+			}
+
+			.result-name {
+				font-size: 1rem;
+				margin-bottom: 0.1rem;
+			}
+
+			.result-description {
+				font-size: 0.85rem;
+			}
 		}
 
 		.result-shortcut {
 			display: none;
+		}
+
+		&:active {
+			background: var(--hover-highlight);
+			.result-type {
+				color: var(--highlight);
+			}
+		}
+	}
+
+	.search-no-results {
+		padding: 2rem 1rem;
+
+		p {
+			font-size: 1rem;
+		}
+
+		.search-suggestions {
+			font-size: 0.85rem;
+
+			li {
+				margin: 0.4rem 0;
+			}
 		}
 	}
 }
