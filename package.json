@@ -1,22 +1,23 @@
 {
-  "name": "nuxt-app",
-  "private": true,
-  "type": "module",
-  "scripts": {
-    "build": "nuxt build",
-    "dev": "nuxt dev",
-    "generate": "nuxt generate",
-    "preview": "nuxt preview",
-    "start": "nuxt start",
-    "postinstall": "nuxt prepare"
-  },
-  "dependencies": {
-    "@nuxt/image": "^1.8.1",
-    "nuxt": "^3.14.159",
-    "vue": "latest",
-    "vue-router": "latest"
-  },
-  "devDependencies": {
-    "sass": "^1.80.6"
-  }
+	"name": "nuxt-app",
+	"private": true,
+	"type": "module",
+	"scripts": {
+		"build": "nuxt build",
+		"dev": "nuxt dev",
+		"generate": "nuxt generate",
+		"preview": "nuxt preview",
+		"start": "nuxt start",
+		"postinstall": "nuxt prepare",
+		"deploy": "npm run build && sudo chown -R apache:apache .output && sudo chmod -R 755 .output && pm2 restart baram-wiki"
+	},
+	"dependencies": {
+		"@nuxt/image": "^1.8.1",
+		"nuxt": "^3.14.159",
+		"vue": "latest",
+		"vue-router": "latest"
+	},
+	"devDependencies": {
+		"sass": "^1.80.6"
+	}
 }
