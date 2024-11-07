@@ -1,0 +1,291 @@
+.detail-container {
+	background: var(--panel-bg);
+	border: 1px solid var(--border-color);
+	border-radius: 8px;
+	padding: 30px;
+	margin-top: 20px;
+	width: 100vw;
+}
+
+.item-detail {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 20px;
+}
+
+.item-image {
+	position: static;
+	text-align: center;
+	width: 100%;
+	max-width: 400px;
+}
+
+.item-image img {
+	object-fit: contain;
+	background: var(--main-bg);
+	border: 1px solid var(--border-color);
+	border-radius: 8px;
+	padding: 20px;
+	margin: 0 auto;
+}
+
+.item-image h2 {
+	margin: 15px 0;
+	color: var(--highlight);
+}
+
+.item-info {
+	width: 100%;
+	max-width: 400px;
+	display: flex;
+	flex-direction: column;
+	gap: 15px;
+}
+
+.stats,
+.description {
+	grid-column: 1 / -1;
+	background: var(--main-bg);
+	border-radius: 8px;
+	padding: 20px;
+}
+
+.drops {
+	background: var(--main-bg);
+	border-radius: 8px;
+	padding: 20px;
+}
+
+.drop-items {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+	gap: 15px;
+	margin-top: 15px;
+}
+
+.drop-item {
+	display: flex;
+	flex-direction: column;
+	background: var(--panel-bg);
+	border: 1px solid var(--border-color);
+	border-radius: 8px;
+	padding: 12px;
+	text-align: center;
+	align-items: center;
+	transition: transform 0.2s;
+	cursor: pointer;
+}
+
+.drop-item:hover {
+	transform: translateY(-3px);
+	border-color: var(--highlight);
+}
+
+.drop-item img {
+	width: 64px;
+	height: 64px;
+	object-fit: contain;
+	margin-bottom: 8px;
+}
+
+.found-in-maps {
+	background: var(--main-bg);
+	border-radius: 8px;
+	padding: 20px;
+}
+
+.map-grid {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 20px;
+}
+
+.map-card {
+	width: 100%;
+	max-width: 400px;
+	background: var(--panel-bg);
+	border: 1px solid var(--border-color);
+	border-radius: 8px;
+	overflow: hidden;
+	transition: transform 0.2s;
+	cursor: pointer;
+}
+
+.map-card:hover {
+	transform: translateY(-3px);
+	border-color: var(--highlight);
+}
+
+.map-card img {
+	width: 100%;
+	height: auto;
+	object-fit: contain;
+}
+
+.map-card .map-info {
+	padding: 15px;
+}
+
+@media (max-width: 1024px) {
+	.item-info {
+		grid-template-columns: 1fr;
+	}
+
+	.map-grid {
+		grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+	}
+}
+
+@media (max-width: 768px) {
+	.detail-container {
+		width: 100%;
+	}
+	.item-detail {
+		grid-template-columns: 1fr;
+	}
+
+	.item-image {
+		position: static;
+	}
+
+	.drop-items {
+		grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+	}
+
+	.map-grid {
+		flex-direction: column;
+	}
+}
+
+.stats table {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+.stats td {
+	padding: 8px;
+	border-bottom: 1px solid rgba(142, 116, 75, 0.3);
+	font-size: 0.95em;
+}
+
+.stats td:first-child {
+	width: 100px;
+	color: var(--highlight);
+	font-weight: bold;
+}
+
+h3 {
+	color: var(--highlight);
+	margin: 0 0 15px 0;
+	font-size: 1.2em;
+}
+
+.monster-detail {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 20px;
+}
+
+.monster-image {
+	position: static;
+	text-align: center;
+	width: 100%;
+	max-width: 400px;
+}
+
+.monster-image img {
+	background: var(--main-bg);
+	border: 1px solid var(--border-color);
+	border-radius: 8px;
+	padding: 20px;
+}
+
+.monster-image h2 {
+	margin: 15px 0;
+	color: var(--highlight);
+}
+
+.monster-info {
+	width: 100%;
+	max-width: 400px;
+	display: flex;
+	flex-direction: column;
+	gap: 15px;
+}
+
+@media (max-width: 768px) {
+	.monster-detail {
+		grid-template-columns: 1fr;
+	}
+
+	.monster-image {
+		position: static;
+	}
+}
+
+.map-detail {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 20px;
+}
+
+.map-image {
+	position: static;
+	text-align: center;
+	width: 100%;
+	max-width: 400px;
+}
+
+.map-image img {
+	background: var(--main-bg);
+	border: 1px solid var(--border-color);
+	border-radius: 8px;
+	padding: 20px;
+}
+
+.map-image h2 {
+	margin: 15px 0;
+	color: var(--highlight);
+}
+
+.map-info {
+	width: 100%;
+	max-width: 400px;
+	display: flex;
+	flex-direction: column;
+	gap: 15px;
+}
+
+.spawned-monsters {
+	background: var(--main-bg);
+	border-radius: 8px;
+	padding: 20px;
+}
+
+.monster-card {
+	display: flex;
+	align-items: center;
+	padding: 10px;
+	border: 1px solid var(--border-color);
+	border-radius: 5px;
+	margin-bottom: 10px;
+	transition: background-color 0.3s, border-color 0.3s;
+	background-color: var(--panel-bg);
+	color: var(--text-color);
+}
+.monster-card:hover {
+	background-color: var(--hover-highlight);
+	border-color: var(--highlight);
+}
+
+.monster-card img {
+	margin-right: 10px;
+}
+
+.monster-card span {
+	font-weight: bold;
+}

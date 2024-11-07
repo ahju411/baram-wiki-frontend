@@ -1,0 +1,51 @@
+:root {
+	--main-bg: #2c2219;
+	--panel-bg: #3c2f25;
+	--border-color: #8e744b;
+	--text-color: #d4c3a5;
+	--highlight: #b29162;
+	--hover-highlight: rgba(197, 167, 125, 0.1);
+	--button-gradient: linear-gradient(to bottom, #8e744b, #6a563c);
+	--modal-overlay: rgba(0, 0, 0, 0.7);
+	--secondary-bg: #251c14;
+	--secondary-panel: #463528;
+	--secondary-border: #735c3d;
+	--secondary-text: #a69781;
+	--secondary-highlight: #8b714d;
+}
+
+body {
+	margin: 0;
+	padding: 0;
+	background-color: var(--main-bg);
+	color: var(--text-color);
+	font-family: 'DungGeunMo', sans-serif;
+}
+
+a {
+	text-decoration: none;
+}
+
+p {
+	margin: 0;
+	padding: 0;
+	line-height: 1.5;
+}
+
+/* 공통 스크롤바 스타일 */
+::-webkit-scrollbar {
+	width: 8px;
+}
+
+::-webkit-scrollbar-track {
+	background: var(--main-bg);
+}
+
+::-webkit-scrollbar-thumb {
+	background: var(--border-color);
+	border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+	background: var(--highlight);
+}

@@ -1,22 +1,33 @@
 <template>
-    <div>
-      <NuxtRouteAnnouncer />
-      <Header />
-      <NuxtPage />
-      <Footer />
-    </div>
-  </template>
-  
-  <script setup>
-  import Header from '~/components/Header.vue'
-  import Footer from '~/components/Footer.vue'
-  </script>
-  
-  <style scoped lang="scss">
-  /* 레이아웃 스타일 */
-  body {
-    margin: 0;
-    font-family: 'Noto Sans KR', sans-serif;
-  }
-  </style>
-  
+	<div class="container">
+		<NuxtRouteAnnouncer />
+		<Header />
+		<main class="content">
+			<NuxtPage />
+		</main>
+		<Footer />
+	</div>
+</template>
+
+<script setup>
+import Header from '~/components/Header.vue';
+import Footer from '~/components/Footer.vue';
+</script>
+
+<style scoped lang="scss">
+.container {
+	display: flex;
+	flex-direction: column;
+	min-height: 100vh;
+}
+
+.content {
+	flex: 1;
+	margin: 0 auto;
+	max-width: 1200px;
+	padding: 0 20px;
+	display: flex;
+	// flex-direction: column;
+	align-items: center;
+}
+</style>
