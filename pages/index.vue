@@ -147,7 +147,7 @@
 
 				<!-- 최근 업데이트 정보 -->
 				<div v-if="recentUpdates.length" class="recent-updates">
-					<h3 class="section-title">최근 업데이트</h3>
+					<h3 class="section-title">최근 업데이트 hi</h3>
 					<div class="updates-grid">
 						<NuxtLink
 							v-for="update in recentUpdates"
