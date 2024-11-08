@@ -32,6 +32,7 @@
 						<li><NuxtLink to="/skill/t">도사</NuxtLink></li>
 					</ul>
 				</div>
+				<NuxtLink to="/map/level" role="button">레벨별 사냥터</NuxtLink>
 			</nav>
 
 			<!-- 모바일 사이드 메뉴 추가 -->
@@ -474,9 +475,9 @@ $transition-duration: 0.3s;
 			font-weight: bold;
 			min-width: 80px;
 			text-align: center;
+			font-family: inherit;
+			font-size: inherit;
 			@extend %paper-style;
-			box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.2),
-				0 2px 5px rgba(0, 0, 0, 0.1);
 
 			&:hover {
 				color: var(--highlight);
