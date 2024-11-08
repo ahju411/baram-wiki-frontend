@@ -84,7 +84,7 @@
 								>
 									<div class="result-icon">
 										<NuxtImg
-											:src="`/images/${result.type}/${result.image}`"
+											:src="`/remote/${result.type}/${result.image}`"
 											:alt="result.name"
 											class="result-icon-img"
 										/>
@@ -163,9 +163,11 @@
 							class="update-card"
 						>
 							<NuxtImg
-								:src="`/images/${update.type}/${update.images}`"
+								:src="`/remote/${update.type}/${update.images}`"
 								:alt="update.name"
 								class="update-image"
+								width="200"
+								height="200"
 							/>
 							<div class="update-info">
 								<h4>{{ update.name }}</h4>

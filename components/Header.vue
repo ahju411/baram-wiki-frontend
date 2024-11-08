@@ -126,7 +126,7 @@
 								role="button"
 							>
 								<NuxtImg
-									:src="`/images/${result.type}/${result.image}`"
+									:src="`/remote/${result.type}/${result.image}`"
 									:alt="result.name"
 									width="32"
 									height="32"
@@ -171,7 +171,7 @@
 								role="button"
 							>
 								<NuxtImg
-									:src="`/images/${result.type}/${result.image}`"
+									:src="`/remote/${result.type}/${result.image}`"
 									:alt="result.name"
 									width="32"
 									height="32"

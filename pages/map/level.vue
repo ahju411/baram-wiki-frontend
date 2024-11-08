@@ -28,7 +28,7 @@
 						<div class="level-image">
 							<NuxtLink :to="`/map/${level.id}`">
 								<NuxtImg
-									:src="`/images/map/${level.images}`"
+									:src="`/remote/map/${level.images}`"
 									:alt="level.name"
 									width="300"
 									height="300"
@@ -56,7 +56,7 @@
 										<td class="monster-image">
 											<NuxtLink :to="`/monster/${monsterData.monster.id}`">
 												<NuxtImg
-													:src="`/images/monster/${monsterData.monster.images}`"
+													:src="`/remote/monster/${monsterData.monster.images}`"
 													:alt="monsterData.monster.name"
 													width="48"
 													height="48"
@@ -81,7 +81,7 @@
 													class="drop-item"
 												>
 													<NuxtImg
-														:src="`/images/item/${drop.item.images}`"
+														:src="`/remote/item/${drop.item.images}`"
 														:alt="drop.item.name"
 														width="32"
 														height="32"
@@ -107,40 +107,14 @@
 <script lang="ts" setup>
 import type { MapLevel } from '~/types/map';
 
-const { data } = await useAsyncData<MapLevel>('map-level', () =>
+// 이미 처리된 데이터를 바로 사용
+const { data: groupedLevels } = await useAsyncData('map-level', () =>
 	$fetch('/api/map/level-guide')
 );
 
-const groupedLevels = computed(() => {
-	if (!data.value) return {};
+const activeTab = ref('1 ~ 40');
 
-	return data.value.reduce((acc, level) => {
-		// 레벨 범위에서 첫 번째 숫자 추출
-		const startLevel = parseInt(level.level.split('~')[0].trim());
-
-		let group = '그 외';
-		if (!isNaN(startLevel)) {
-			if (startLevel <= 40) group = '1 ~ 40';
-			else if (startLevel <= 60) group = '41 ~ 60';
-			else group = '61 이상';
-		}
-
-		// 몬스터 경험치 기준으로 정렬
-		const sortedMonsters = {
-			...level,
-			monsters: [...level.monsters].sort(
-				(a, b) => a.monster.exp - b.monster.exp
-			),
-		};
-
-		if (!acc[group]) acc[group] = [];
-		acc[group].push(sortedMonsters);
-		return acc;
-	}, {} as Record<string, MapLevel[]>);
-});
-
-const activeTab = ref('1 ~ 40'); // 기본 활성 탭 설정
-
+// SEO 메타 설정
 useSeoMeta({
 	title: `바람위키 | 맵 레벨 가이드`,
 	description: `바람의 나라 맵 레벨 가이드`,

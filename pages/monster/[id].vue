@@ -4,7 +4,7 @@
 		<div v-else class="monster-detail">
 			<div class="monster-image">
 				<NuxtImg
-					:src="`/images/monster/${monster.images}`"
+					:src="`/remote/monster/${monster.images}`"
 					:alt="monster.name"
 					width="100"
 					height="100"
@@ -58,7 +58,7 @@
 					<NuxtLink :to="`/map/${monster.respawn}`">
 						<div class="map-spawn-info">
 							<NuxtImg
-								:src="`/images/map/${monster.map_images}`"
+								:src="`/remote/map/${monster.map_images}`"
 								:alt="monster.map_name"
 								width="100"
 								height="100"
@@ -74,7 +74,11 @@
 						<li v-for="drop in monster.drops" :key="drop.item_id">
 							<NuxtLink :to="`/item/${drop.item.id}`">
 								<div class="item-card">
-									<NuxtImg :src="drop.item.iconUrl" width="48" height="48" />
+									<NuxtImg
+										:src="`/remote/item/${drop.item.images}`"
+										width="48"
+										height="48"
+									/>
 									<span>{{ drop.item.name }}</span>
 								</div>
 							</NuxtLink>
