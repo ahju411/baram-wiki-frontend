@@ -53,9 +53,9 @@
 							</div>
 						</template>
 						<template v-else>
-							<ul v-if="results.length > 0" class="search-results-list">
+							<ul v-if="filteredResults.length > 0" class="search-results-list">
 								<li
-									v-for="(result, index) in results"
+									v-for="(result, index) in filteredResults"
 									:key="result.id"
 									:class="[
 										'search-result-item',
@@ -285,7 +285,56 @@ watchEffect(async () => {
 // 컴포넌트 마운트 시 검색창 포커스
 onMounted(() => {
 	searchInput.value?.focus();
+	if (window?.visualViewport) {
+		prevVisualViewport = window.visualViewport.height;
+		window.visualViewport.addEventListener(
+			'resize',
+			handleVisualViewportResize
+		);
+	}
 });
+
+// 컴포넌트 언마운트 시 이벤트 리스너 제거
+onUnmounted(() => {
+	if (window?.visualViewport) {
+		window.visualViewport.removeEventListener(
+			'resize',
+			handleVisualViewportResize
+		);
+	}
+});
+
+// 모바일용 필터된 검색 결과
+const filteredResults = computed(() => {
+	if (window?.innerWidth <= 768) {
+		// 검색어와 정확히 일치하는 항목을 우선 정렬
+		const sorted = [...results.value].sort((a, b) => {
+			const aExact = a.name === keyword.value ? -1 : 0;
+			const bExact = b.name === keyword.value ? -1 : 0;
+			return aExact - bExact;
+		});
+		return sorted.slice(0, 5); // 최대 5개까지만 표시
+	}
+	return results.value;
+});
+
+// VisualViewport 관련 로직 추가
+let prevVisualViewport = 0;
+
+const handleVisualViewportResize = () => {
+	const currentVisualViewport = window.visualViewport.height;
+
+	if (
+		prevVisualViewport - 30 > currentVisualViewport &&
+		prevVisualViewport - 100 < currentVisualViewport
+	) {
+		const scrollHeight = window.document.scrollingElement.scrollHeight;
+		const scrollTop = scrollHeight - window.visualViewport.height;
+		window.scrollTo(0, scrollTop);
+	}
+
+	prevVisualViewport = window.visualViewport.height;
+};
 
 // 검색 상태 관리를 위한 ref 추가
 const isSearching = computed(() => {
@@ -586,8 +635,8 @@ const isSearching = computed(() => {
 		&.is-searching {
 			position: fixed;
 			width: calc(100% - 2rem); // 좌우 패딩을 고려한 너비
-			left: 1rem;
-			right: 1rem;
+			left: 50%;
+			transform: translateX(-50%);
 			top: 1rem;
 			background: var(--secondary-bg);
 			border-radius: 12px;
