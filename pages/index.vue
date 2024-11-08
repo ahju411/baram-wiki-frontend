@@ -12,7 +12,7 @@
 				<h1 class="main-title">바람위키</h1>
 				<p class="search-description">아이템, 스킬 정보를 검색해보세요</p>
 
-				<div class="search-container">
+				<div class="search-container" :class="{ 'is-searching': isSearching }">
 					<input
 						type="text"
 						class="search-input"
@@ -286,6 +286,11 @@ watchEffect(async () => {
 onMounted(() => {
 	searchInput.value?.focus();
 });
+
+// 검색 상태 관리를 위한 ref 추가
+const isSearching = computed(() => {
+	return Boolean(keyword.value && window.innerWidth <= 768);
+});
 </script>
 
 <style scoped lang="scss">
@@ -300,7 +305,6 @@ onMounted(() => {
 		var(--main-bg) 100%
 	);
 	position: relative;
-	overflow: hidden;
 }
 
 .particles {
@@ -670,7 +674,6 @@ onMounted(() => {
 	.content-wrapper {
 		padding: 1rem;
 		margin-top: 2rem;
-		overflow: hidden;
 	}
 
 	.search-section {
@@ -682,6 +685,19 @@ onMounted(() => {
 	}
 
 	.search-container {
+		z-index: 1001;
+
+		&.is-searching {
+			position: fixed;
+			width: calc(100% - 2rem);
+			left: 1rem;
+			right: 1rem;
+			top: 1rem;
+			background: var(--secondary-bg);
+			border-radius: 12px;
+			padding: 0.5rem;
+			box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+		}
 		.search-input {
 			padding: 1rem 3.5rem 1rem 1.5rem;
 			font-size: 1rem;
