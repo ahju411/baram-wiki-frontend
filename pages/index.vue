@@ -579,6 +579,22 @@ const isSearching = computed(() => {
 			color: var(--highlight);
 		}
 	}
+
+	@media (max-width: 768px) {
+		z-index: 1001;
+
+		&.is-searching {
+			position: fixed;
+			width: calc(100% - 2rem); // 좌우 패딩을 고려한 너비
+			left: 1rem;
+			right: 1rem;
+			top: 1rem;
+			background: var(--secondary-bg);
+			border-radius: 12px;
+			padding: 0.5rem;
+			box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+		}
+	}
 }
 
 .trending-searches {
@@ -685,25 +701,8 @@ const isSearching = computed(() => {
 	}
 
 	.search-container {
-		z-index: 1001;
-		margin: 0 auto;
-		left: 50%;
-		transform: translateX(-50%);
-
-		&.is-searching {
-			position: fixed;
-			display: flex;
-			width: calc(100% - 2rem);
-			left: 50%;
-			transform: translateX(-50%);
-			top: env(safe-area-inset-top, 1rem);
-			background: var(--secondary-bg);
-			border-radius: 12px;
-			padding: 0.5rem;
-			box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-		}
 		.search-input {
-			padding: 1rem 3rem 1rem 1.5rem;
+			padding: 1rem 3.5rem 1rem 1.5rem;
 			font-size: 1rem;
 		}
 	}
@@ -715,100 +714,6 @@ const isSearching = computed(() => {
 		.update-info {
 			text-align: center;
 		}
-	}
-
-	.search-results-container {
-		position: fixed;
-		top: calc(4rem + env(safe-area-inset-top, 0));
-		left: 0;
-		right: 0;
-		bottom: 0;
-		z-index: 1000;
-		display: flex;
-		flex-direction: column;
-		pointer-events: none;
-		padding: 0 1rem;
-
-		// 키보드가 올라왔을 때의 높이 조정
-		height: calc(100% - 4rem - env(safe-area-inset-top, 0));
-		max-height: calc(85vh - env(safe-area-inset-top, 0));
-	}
-
-	.search-results {
-		position: relative;
-		background: var(--secondary-bg);
-		border-radius: 16px;
-		border: 1px solid var(--border-color);
-		box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-		margin-top: 0.5rem;
-		padding: 0.5rem 0;
-		overflow-y: auto;
-		-webkit-overflow-scrolling: touch;
-		pointer-events: auto;
-
-		// 높이 제한 설정
-		max-height: calc(100% - 1rem);
-		height: auto;
-
-		// 스크롤바 스타일
-		&::-webkit-scrollbar {
-			width: 4px;
-		}
-
-		&::-webkit-scrollbar-track {
-			background: transparent;
-		}
-
-		&::-webkit-scrollbar-thumb {
-			background: var(--border-color);
-			border-radius: 4px;
-		}
-	}
-
-	.search-result-item {
-		padding: 0.8rem 1rem;
-		gap: 0.8rem;
-
-		.result-info {
-			flex: 1;
-			min-width: 0;
-			padding-right: 0.5rem; // 우측 여백 추가
-		}
-
-		.result-description {
-			max-width: calc(100% - 1rem); // 우측 여백 확보
-		}
-	}
-
-	// 검색 결과가 없을 때의 스타일
-	.search-no-results {
-		padding: 2rem 1rem;
-		margin: 0 auto;
-		max-width: 100%;
-	}
-}
-
-// iOS 키보드 대응
-@supports (-webkit-touch-callout: none) {
-	.search-results-container {
-		// 키보드 높이에 따른 자동 조정
-		height: -webkit-fill-available;
-		max-height: -webkit-fill-available;
-	}
-
-	.search-results {
-		// 하단 안전 영역 고려
-		padding-bottom: calc(0.5rem + env(safe-area-inset-bottom, 0));
-		// 키보드가 올라왔을 때의 높이 제한
-		max-height: calc(
-			100vh - 8rem - env(safe-area-inset-top, 0) -
-				env(safe-area-inset-bottom, 0)
-		);
-	}
-
-	.search-container.is-searching {
-		// iOS에서 상단 안전 영역 고려
-		top: calc(env(safe-area-inset-top, 1rem) + 0.5rem);
 	}
 }
 
@@ -834,19 +739,11 @@ const isSearching = computed(() => {
 }
 
 .search-results-container {
-	position: fixed;
-	top: calc(4rem + env(safe-area-inset-top));
+	position: absolute;
+	width: 100%;
+	z-index: 1000;
 	left: 0;
 	right: 0;
-	bottom: 0;
-	z-index: 1000;
-	display: flex;
-	flex-direction: column;
-	pointer-events: none;
-
-	// 키보드가 올라왔을 때도 결과가 보이도록 조정
-	height: auto;
-	max-height: calc(100vh - 4rem - env(safe-area-inset-top));
 }
 
 .search-results-backdrop {
@@ -858,27 +755,39 @@ const isSearching = computed(() => {
 	background: rgba(0, 0, 0, 0.5);
 	backdrop-filter: blur(4px);
 	z-index: 999;
-	pointer-events: auto;
 }
 
 .search-results {
-	position: relative;
+	position: absolute;
+	top: 0.5rem;
+	left: 0;
+	right: 0;
 	background: var(--secondary-bg);
+	border: 2px solid var(--border-color);
 	border-radius: 12px;
-	border: none;
-	box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.2);
-	margin: 0.5rem 1rem;
-	padding: 0.5rem 0;
+	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+	z-index: 1000;
+	max-height: 80vh;
 	overflow-y: auto;
-	-webkit-overflow-scrolling: touch;
-	pointer-events: auto;
-	z-index: 999;
+	margin: 0 1rem;
 
-	// 키보드가 올라왔을 때도 스크롤 가능하도록 높이 조정
-	max-height: calc(
-		100vh - 6rem - env(safe-area-inset-top) - env(safe-area-inset-bottom)
-	);
-	height: auto;
+	&::-webkit-scrollbar {
+		width: 8px;
+	}
+
+	&::-webkit-scrollbar-track {
+		background: var(--main-bg);
+		border-radius: 4px;
+	}
+
+	&::-webkit-scrollbar-thumb {
+		background: var(--border-color);
+		border-radius: 4px;
+
+		&:hover {
+			background: var(--highlight);
+		}
+	}
 }
 
 .search-loading {
@@ -1048,7 +957,7 @@ const isSearching = computed(() => {
 		border-radius: 20px 20px 0 0;
 		border: none;
 		box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.2);
-		max-height: 60vh;
+		max-height: 85vh;
 		margin: 0;
 		padding: 1rem 0;
 		overflow-y: auto;
@@ -1135,19 +1044,6 @@ const isSearching = computed(() => {
 				margin: 0.4rem 0;
 			}
 		}
-	}
-}
-
-// iOS 키보드 대응을 위한 추가 스타일
-@supports (-webkit-touch-callout: none) {
-	.search-results-container {
-		// 키보드가 올라왔을 때 자동으로 조정되도록 설정
-		height: -webkit-fill-available;
-	}
-
-	.search-results {
-		// iOS 키보드가 올라왔을 때의 여백 처리
-		padding-bottom: max(0.5rem, env(safe-area-inset-bottom));
 	}
 }
 </style>
