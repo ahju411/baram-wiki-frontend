@@ -216,9 +216,20 @@ const handleInput = (e: Event) => {
 		return;
 	}
 
-	// 입력 시 키보드 조절 재실행
-	if (window?.visualViewport) {
-		handleVisualViewportResize();
+	// iOS에서는 input 이벤트에서 직접 스크롤 처리
+	if (isIOS.value && keyword.value.length === 1) {
+		// 첫 글자 입력 시에만
+		setTimeout(() => {
+			const searchContainer = document.querySelector('.search-container');
+			if (searchContainer) {
+				const containerRect = searchContainer.getBoundingClientRect();
+				const scrollTop = window.pageYOffset + containerRect.top - 20;
+				window.scrollTo({
+					top: scrollTop,
+					behavior: 'smooth',
+				});
+			}
+		}, 100);
 	}
 };
 
@@ -330,22 +341,54 @@ const filteredResults = computed(() => {
 let prevVisualViewport = 0;
 const isKeyboardVisible = ref(false);
 
+// iOS 디바이스 체크 함수 추가
+const isIOS = computed(() => {
+	return (
+		/iPad|iPhone|iPod/.test(navigator?.userAgent) ||
+		(navigator?.platform === 'MacIntel' && navigator.maxTouchPoints > 1)
+	);
+});
+
 const handleVisualViewportResize = () => {
 	if (!window?.visualViewport) return;
 
 	const currentVisualViewport = window.visualViewport.height;
 	const windowHeight = window.innerHeight;
 
-	// 키보드가 표시되었는지 확인
-	isKeyboardVisible.value = currentVisualViewport < windowHeight * 0.8;
+	// iOS와 다른 플랫폼에 대해 다른 기준 적용
+	const newKeyboardVisible = isIOS.value
+		? currentVisualViewport !== windowHeight // iOS는 높이 변화만으로 판단
+		: currentVisualViewport < windowHeight * 0.8; // 다른 플랫폼은 20% 기준 유지
 
-	if (isKeyboardVisible.value) {
-		const scrollHeight = document.scrollingElement?.scrollHeight || 0;
-		const scrollTop = scrollHeight - currentVisualViewport;
-		window.scrollTo({
-			top: scrollTop,
-			behavior: 'smooth',
-		});
+	if (newKeyboardVisible !== isKeyboardVisible.value && keyword.value) {
+		isKeyboardVisible.value = newKeyboardVisible;
+
+		if (isKeyboardVisible.value) {
+			// iOS의 경우 setTimeout으로 지연 처리
+			if (isIOS.value) {
+				setTimeout(() => {
+					const searchContainer = document.querySelector('.search-container');
+					if (searchContainer) {
+						const containerRect = searchContainer.getBoundingClientRect();
+						const scrollTop = window.pageYOffset + containerRect.top - 20;
+						window.scrollTo({
+							top: scrollTop,
+							behavior: 'smooth',
+						});
+					}
+				}, 100); // 약간의 지연 추가
+			} else {
+				const searchContainer = document.querySelector('.search-container');
+				if (searchContainer) {
+					const containerRect = searchContainer.getBoundingClientRect();
+					const scrollTop = window.pageYOffset + containerRect.top - 20;
+					window.scrollTo({
+						top: scrollTop,
+						behavior: 'smooth',
+					});
+				}
+			}
+		}
 	}
 
 	prevVisualViewport = currentVisualViewport;
