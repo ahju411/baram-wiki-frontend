@@ -2,6 +2,13 @@
 export default defineNuxtConfig({
 	compatibilityDate: '2024-11-07',
 	devtools: { enabled: true },
+	image: {
+		provider: 'ipx',
+		domains: ['evfuckbgifbr27188584.gcdn.ntruss.com'],
+		alias: {
+			remote: 'https://evfuckbgifbr27188584.gcdn.ntruss.com',
+		},
+	},
 
 	css: ['~/assets/variable.css'],
 
@@ -16,8 +23,7 @@ export default defineNuxtConfig({
 				{ charset: 'utf-8' },
 				{
 					name: 'viewport',
-					content:
-						'width=device-width,initial-scale=1,viewport-fit=cover,maximum-scale=1',
+					content: 'width=device-width,initial-scale=1,viewport-fit=cover',
 				},
 				{ name: 'format-detection', content: 'telephone=no' },
 				{

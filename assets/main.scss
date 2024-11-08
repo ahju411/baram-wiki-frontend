@@ -738,6 +738,9 @@
 .notice-section {
 	margin-bottom: 2rem;
 	animation: fadeIn 0.8s ease-out;
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
 }
 
 .notice-container {
