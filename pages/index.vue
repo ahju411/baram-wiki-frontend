@@ -215,6 +215,11 @@ const handleInput = (e: Event) => {
 		results.value = [];
 		return;
 	}
+
+	// 입력 시 키보드 조절 재실행
+	if (window?.visualViewport) {
+		handleVisualViewportResize();
+	}
 };
 
 // 검색결과 키보드 이동 처리
@@ -253,6 +258,7 @@ const closeSearchResults = () => {
 	keyword.value = '';
 	results.value = [];
 	resultIndex.value = 0;
+	isKeyboardVisible.value = false;
 };
 
 // 아이템 클릭 처리 함수 추가
@@ -291,6 +297,7 @@ onMounted(() => {
 			'resize',
 			handleVisualViewportResize
 		);
+		window.addEventListener('resize', handleVisualViewportResize);
 	}
 });
 
@@ -301,6 +308,7 @@ onUnmounted(() => {
 			'resize',
 			handleVisualViewportResize
 		);
+		window.removeEventListener('resize', handleVisualViewportResize);
 	}
 });
 
@@ -318,22 +326,29 @@ const filteredResults = computed(() => {
 	return results.value;
 });
 
-// VisualViewport 관련 로직 추가
+// VisualViewport 관련 로직 수정
 let prevVisualViewport = 0;
+const isKeyboardVisible = ref(false);
 
 const handleVisualViewportResize = () => {
-	const currentVisualViewport = window.visualViewport.height;
+	if (!window?.visualViewport) return;
 
-	if (
-		prevVisualViewport - 30 > currentVisualViewport &&
-		prevVisualViewport - 100 < currentVisualViewport
-	) {
-		const scrollHeight = window.document.scrollingElement.scrollHeight;
-		const scrollTop = scrollHeight - window.visualViewport.height;
-		window.scrollTo(0, scrollTop);
+	const currentVisualViewport = window.visualViewport.height;
+	const windowHeight = window.innerHeight;
+
+	// 키보드가 표시되었는지 확인
+	isKeyboardVisible.value = currentVisualViewport < windowHeight * 0.8;
+
+	if (isKeyboardVisible.value) {
+		const scrollHeight = document.scrollingElement?.scrollHeight || 0;
+		const scrollTop = scrollHeight - currentVisualViewport;
+		window.scrollTo({
+			top: scrollTop,
+			behavior: 'smooth',
+		});
 	}
 
-	prevVisualViewport = window.visualViewport.height;
+	prevVisualViewport = currentVisualViewport;
 };
 
 // 검색 상태 관리를 위한 ref 추가
@@ -589,6 +604,7 @@ const isSearching = computed(() => {
 	max-width: 600px;
 	margin: 0 auto;
 	display: flex;
+	z-index: 1001;
 
 	.search-input {
 		width: 100%;
@@ -809,6 +825,7 @@ const isSearching = computed(() => {
 .search-results {
 	position: absolute;
 	top: 0.5rem;
+	transform: translateY(0);
 	left: 0;
 	right: 0;
 	background: var(--secondary-bg);
