@@ -16,6 +16,13 @@
 						<span class="notice-date">2024.11.08</span>
 					</div>
 				</div>
+				<div class="notice-container">
+					<span class="notice-badge">공지</span>
+					<div class="notice-content">
+						<span class="notice-text">레벨별 사냥터 오픈!</span>
+						<span class="notice-date">2024.11.09</span>
+					</div>
+				</div>
 			</section>
 
 			<!-- 메인 검색 섹션 -->

@@ -26,12 +26,14 @@
 					</div>
 					<div class="level-content">
 						<div class="level-image">
-							<NuxtImg
-								:src="`/images/map/${level.images}`"
-								:alt="level.name"
-								width="300"
-								height="300"
-							/>
+							<NuxtLink :to="`/map/${level.id}`">
+								<NuxtImg
+									:src="`/images/map/${level.images}`"
+									:alt="level.name"
+									width="300"
+									height="300"
+								/>
+							</NuxtLink>
 						</div>
 						<p class="level-info">{{ level.information }}</p>
 
@@ -52,20 +54,30 @@
 										:key="index"
 									>
 										<td class="monster-image">
-											<NuxtImg
-												:src="`/images/monster/${monsterData.monster.images}`"
-												:alt="monsterData.monster.name"
-												width="48"
-												height="48"
-											/>
+											<NuxtLink :to="`/monster/${monsterData.monster.id}`">
+												<NuxtImg
+													:src="`/images/monster/${monsterData.monster.images}`"
+													:alt="monsterData.monster.name"
+													width="48"
+													height="48"
+												/>
+											</NuxtLink>
 										</td>
-										<td>{{ monsterData.monster.name }}</td>
+										<td>
+											<NuxtLink
+												:to="`/monster/${monsterData.monster.id}`"
+												class="monster-name"
+											>
+												{{ monsterData.monster.name }}
+											</NuxtLink>
+										</td>
 										<td>{{ monsterData.monster.exp }}</td>
 										<td class="drop-items" colspan="3">
 											<div class="drop-item-list">
-												<div
+												<NuxtLink
 													v-for="drop in monsterData.monster.dropItems"
 													:key="drop.item.id"
+													:to="`/item/${drop.item.id}`"
 													class="drop-item"
 												>
 													<NuxtImg
@@ -78,7 +90,7 @@
 													<span class="drop-price"
 														>{{ drop.item.price }}전</span
 													>
-												</div>
+												</NuxtLink>
 											</div>
 										</td>
 									</tr>
@@ -151,14 +163,11 @@ useSeoMeta({
 			background: var(--panel-bg);
 			cursor: pointer;
 			transition: all 0.2s ease;
+			color: var(--secondary-text);
 
 			&.active {
 				background: var(--button-gradient);
 				color: var(--text-color);
-			}
-
-			&:hover {
-				background: var(--hover-highlight);
 			}
 		}
 	}
@@ -218,6 +227,10 @@ useSeoMeta({
 				object-fit: contain;
 				border-radius: 4px;
 			}
+
+			&:hover {
+				opacity: 0.8;
+			}
 		}
 
 		.level-info {
@@ -268,6 +281,18 @@ useSeoMeta({
 					object-fit: contain;
 					vertical-align: middle;
 				}
+
+				&:hover {
+					opacity: 0.8;
+				}
+			}
+
+			.monster-name {
+				color: var(--text-color);
+
+				&:hover {
+					color: var(--secondary-highlight);
+				}
 			}
 
 			.drop-items {
@@ -296,6 +321,12 @@ useSeoMeta({
 
 					.drop-price {
 						color: var(--secondary-text);
+					}
+
+					&:hover {
+						.drop-name {
+							color: var(--secondary-highlight);
+						}
 					}
 				}
 			}
