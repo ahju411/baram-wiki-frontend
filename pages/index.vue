@@ -1040,12 +1040,8 @@ const isSearching = computed(() => {
 		top: 0;
 		left: 0;
 		right: 0;
-		bottom: 0;
 		z-index: 1000;
-		display: flex;
-		flex-direction: column;
-		justify-content: flex-end;
-		pointer-events: none;
+		pointer-events: auto;
 	}
 
 	.search-results-backdrop {
@@ -1063,37 +1059,22 @@ const isSearching = computed(() => {
 	.search-results {
 		position: relative;
 		background: var(--secondary-bg);
-		border-radius: 20px 20px 0 0;
-		border: none;
-		box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.2);
-		max-height: 85vh;
-		margin: 0;
-		padding: 1rem 0;
+		border-radius: 12px;
+		border: 1px solid var(--border-color);
+		box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+		max-height: 50vh;
+		margin-top: 4rem;
+		padding: 0.5rem 0;
 		overflow-y: auto;
 		-webkit-overflow-scrolling: touch;
-		pointer-events: auto;
 		transform: translateZ(0);
 		will-change: transform;
-
-		// 스크롤바 스타일 수정
-		&::-webkit-scrollbar {
-			width: 4px;
-		}
-
-		&::-webkit-scrollbar-track {
-			background: transparent;
-		}
-
-		&::-webkit-scrollbar-thumb {
-			background: var(--border-color);
-			border-radius: 4px;
-		}
 	}
 
-	// iOS 안전 영역 대응
+	// iOS 안전 영역 대응 스타일 제거 (더 이상 필요하지 않음)
 	@supports (-webkit-touch-callout: none) {
 		.search-results {
-			padding-bottom: calc(env(safe-area-inset-bottom) + 1rem);
+			padding-bottom: 0.5rem;
 		}
 	}
 
