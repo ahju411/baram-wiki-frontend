@@ -7,6 +7,17 @@
 		</div>
 
 		<div class="content-wrapper">
+			<!-- 공지사항 섹션 추가 -->
+			<section class="notice-section">
+				<div class="notice-container">
+					<span class="notice-badge">공지</span>
+					<div class="notice-content">
+						<span class="notice-text">바람위키에 오신 것을 환영합니다!</span>
+						<span class="notice-date">2024.11.08</span>
+					</div>
+				</div>
+			</section>
+
 			<!-- 메인 검색 섹션 -->
 			<section class="search-section">
 				<h1 class="main-title">바람위키</h1>
