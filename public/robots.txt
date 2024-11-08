@@ -1,1 +1,16 @@
+User-agent: *
+Allow: /
 
+# Google Bot
+User-agent: Googlebot
+Allow: /
+Sitemap: https://www.baramwiki.com/sitemap.xml
+
+# Google Image
+User-agent: Googlebot-Image
+Allow: /
+
+# Naver Bot
+User-agent: Yeti
+Allow: /
+Sitemap: https://www.baramwiki.com/sitemap.xml

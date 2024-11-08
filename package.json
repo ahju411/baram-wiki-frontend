@@ -9,7 +9,8 @@
 		"preview": "nuxt preview",
 		"start": "nuxt start",
 		"postinstall": "nuxt prepare",
-		"deploy": "npm run build && sudo chown -R apache:apache .output && sudo chmod -R 755 .output && pm2 restart baram-wiki"
+		"deploy": "npm run build && sudo chown -R apache:apache .output && sudo chmod -R 755 .output && pm2 restart baram-wiki",
+		"generate-sitemap": "node scripts/generate-sitemap.js"
 	},
 	"dependencies": {
 		"@nuxt/image": "^1.8.1",
@@ -18,6 +19,8 @@
 		"vue-router": "latest"
 	},
 	"devDependencies": {
-		"sass": "^1.80.6"
+		"globby": "^14.0.2",
+		"sass": "^1.80.6",
+		"ts-node": "^10.9.2"
 	}
 }
