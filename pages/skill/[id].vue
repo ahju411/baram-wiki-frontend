@@ -60,6 +60,16 @@ const { data: skill } = await useAsyncData<Skill>('skillData', () =>
 	$fetch(`/api/skill/job/${id}`)
 );
 
+const typeMatch = (id: string) => {
+	return id === 'w'
+		? '전사'
+		: id === 'p'
+		? '주술사'
+		: id === 'n'
+		? '도적'
+		: '도사';
+};
+
 // 총 비용 계산 함수
 const calculateTotalCost = (details: SkillDetail[]) => {
 	return details.reduce((total, detail) => {
@@ -71,6 +81,11 @@ const calculateTotalCost = (details: SkillDetail[]) => {
 const formatPrice = (price: number) => {
 	return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 };
+
+useSeoMeta({
+	title: '바람위키 | 스킬 - ' + typeMatch(id as string),
+	description: '바람의 나라 스킬 정보 - ' + typeMatch(id as string),
+});
 </script>
 
 <style scoped lang="scss">
