@@ -51,6 +51,10 @@ export default defineNuxtConfig({
 					content:
 						'바람의나라 게임 아이템, 몬스터, 맵 정보를 손쉽게 검색하고 찾아볼 수 있는 서비스입니다.',
 				},
+				{
+					name: 'naver-site-verification',
+					content: '1f19048f8b4d6021163baa4bd1b4fcd9ff667be9',
+				},
 			],
 			link: [
 				{
