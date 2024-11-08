@@ -14,7 +14,11 @@ export default defineNuxtConfig({
 			title: '바람위키',
 			meta: [
 				{ charset: 'utf-8' },
-				{ name: 'viewport', content: 'width=device-width, initial-scale=1' },
+				{
+					name: 'viewport',
+					content:
+						'width=device-width,initial-scale=1,viewport-fit=cover,maximum-scale=1',
+				},
 				{ name: 'format-detection', content: 'telephone=no' },
 				{
 					name: 'description',
