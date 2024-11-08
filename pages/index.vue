@@ -164,27 +164,22 @@
 <script setup lang="ts">
 import type { Search } from '~/types/search';
 
+// 1. 상태 관리 (State Management)
 const keyword = ref('');
 const results = ref<Search[]>([]);
 const isLoading = ref(false);
 const resultIndex = ref(0);
+const searchInput = ref<HTMLInputElement | null>(null);
+const isKeyboardVisible = ref(false);
+let prevVisualViewport = 0;
+
+// 2. 정적 데이터 (Static Data)
 const trendingKeywords = ref([
-	{
-		id: 'I627884',
-		name: '도토리',
-		type: 'item',
-	},
-	{
-		id: 'MO110645',
-		name: '다람쥐',
-		type: 'monster',
-	},
-	{
-		id: 'MO181712',
-		name: '토끼',
-		type: 'monster',
-	},
+	{ id: 'I627884', name: '도토리', type: 'item' },
+	{ id: 'MO110645', name: '다람쥐', type: 'monster' },
+	{ id: 'MO181712', name: '토끼', type: 'monster' },
 ]);
+
 const recentUpdates = ref([
 	{
 		id: 'I091985',
@@ -203,12 +198,32 @@ const recentUpdates = ref([
 	},
 ]);
 
-// ref 추가
-const searchInput = ref<HTMLInputElement | null>(null);
-
-// 검색 결과가 있는지 확인하는 computed 속성
+// 3. Computed Properties
 const hasResults = computed(() => results.value.length > 0);
 
+const isIOS = computed(
+	() =>
+		/iPad|iPhone|iPod/.test(navigator?.userAgent) ||
+		(navigator?.platform === 'MacIntel' && navigator.maxTouchPoints > 1)
+);
+
+const isSearching = computed(() =>
+	Boolean(keyword.value && window.innerWidth <= 768)
+);
+
+const filteredResults = computed(() => {
+	if (!window?.innerWidth || window.innerWidth > 768) return results.value;
+
+	return [...results.value]
+		.sort((a, b) => {
+			const aExact = a.name === keyword.value ? -1 : 0;
+			const bExact = b.name === keyword.value ? -1 : 0;
+			return aExact - bExact;
+		})
+		.slice(0, 5);
+});
+
+// 4. 검색 관련 함수 (Search Functions)
 const handleInput = (e: Event) => {
 	keyword.value = (e.target as HTMLInputElement).value;
 	if (!keyword.value) {
@@ -216,24 +231,11 @@ const handleInput = (e: Event) => {
 		return;
 	}
 
-	// iOS에서는 input 이벤트에서 직접 스크롤 처리
 	if (isIOS.value && keyword.value.length === 1) {
-		// 첫 글자 입력 시에만
-		setTimeout(() => {
-			const searchContainer = document.querySelector('.search-container');
-			if (searchContainer) {
-				const containerRect = searchContainer.getBoundingClientRect();
-				const scrollTop = window.pageYOffset + containerRect.top - 20;
-				window.scrollTo({
-					top: scrollTop,
-					behavior: 'smooth',
-				});
-			}
-		}, 100);
+		scrollToSearchContainer();
 	}
 };
 
-// 검색결과 키보드 이동 처리
 const handleKeyDown = (e: KeyboardEvent) => {
 	if (!hasResults.value) return;
 
@@ -247,59 +249,65 @@ const handleKeyDown = (e: KeyboardEvent) => {
 			resultIndex.value >= results.value.length - 1 ? 0 : resultIndex.value + 1;
 	}
 
-	const selectedItem = document.querySelector(
-		`[data-index="${resultIndex.value}"]`
-	);
-	selectedItem?.scrollIntoView({ block: 'nearest' });
+	document
+		.querySelector(`[data-index="${resultIndex.value}"]`)
+		?.scrollIntoView({ block: 'nearest' });
 };
 
-// 엔터키 처리 함수 추가
 const handleEnter = () => {
 	if (hasResults.value && results.value[resultIndex.value]) {
 		const selectedResult = results.value[resultIndex.value];
-		keyword.value = '';
-		results.value = [];
-		resultIndex.value = 0;
-
+		resetSearchState();
 		navigateTo(`/${selectedResult.type}/${selectedResult.id}`);
 	}
 };
 
-const closeSearchResults = () => {
+const handleItemClick = (result: Search) => {
+	resetSearchState();
+	navigateTo(`/${result.type}/${result.id}`);
+};
+
+// 5. 유틸리티 함수 (Utility Functions)
+const resetSearchState = () => {
 	keyword.value = '';
 	results.value = [];
 	resultIndex.value = 0;
 	isKeyboardVisible.value = false;
 };
 
-// 아이템 클릭 처리 함수 추가
-const handleItemClick = (result: Search) => {
-	keyword.value = '';
-	results.value = [];
-	resultIndex.value = 0;
-	navigateTo(`/${result.type}/${result.id}`);
+const scrollToSearchContainer = () => {
+	setTimeout(() => {
+		const searchContainer = document.querySelector('.search-container');
+		if (searchContainer) {
+			const containerRect = searchContainer.getBoundingClientRect();
+			const scrollTop = window.pageYOffset + containerRect.top - 20;
+			window.scrollTo({ top: scrollTop, behavior: 'smooth' });
+		}
+	}, 100);
 };
 
-watchEffect(async () => {
-	if (keyword.value) {
-		isLoading.value = true;
-		try {
-			const { results: searchResults } = await $fetch<{ results: Search[] }>(
-				`/api/search/${encodeURIComponent(keyword.value)}`
-			);
-			results.value = searchResults;
-		} catch (error) {
-			console.error('검색 중 오류 발생:', error);
-			results.value = [];
-		} finally {
-			isLoading.value = false;
-		}
-	} else {
-		results.value = [];
-	}
-});
+const handleVisualViewportResize = () => {
+	if (!window?.visualViewport) return;
 
-// 컴포넌트 마운트 시 검색창 포커스
+	const currentVisualViewport = window.visualViewport.height;
+	const windowHeight = window.innerHeight;
+	const newKeyboardVisible = isIOS.value
+		? currentVisualViewport !== windowHeight
+		: currentVisualViewport < windowHeight * 0.8;
+
+	if (newKeyboardVisible !== isKeyboardVisible.value && keyword.value) {
+		isKeyboardVisible.value = newKeyboardVisible;
+		if (isKeyboardVisible.value) {
+			isIOS.value
+				? setTimeout(scrollToSearchContainer, 100)
+				: scrollToSearchContainer();
+		}
+	}
+
+	prevVisualViewport = currentVisualViewport;
+};
+
+// 6. 라이프사이클 훅 (Lifecycle Hooks)
 onMounted(() => {
 	searchInput.value?.focus();
 	if (window?.visualViewport) {
@@ -312,7 +320,6 @@ onMounted(() => {
 	}
 });
 
-// 컴포넌트 언마운트 시 이벤트 리스너 제거
 onUnmounted(() => {
 	if (window?.visualViewport) {
 		window.visualViewport.removeEventListener(
@@ -323,817 +330,28 @@ onUnmounted(() => {
 	}
 });
 
-// 모바일용 필터된 검색 결과
-const filteredResults = computed(() => {
-	if (window?.innerWidth <= 768) {
-		// 검색어와 정확히 일치하는 항목을 우선 정렬
-		const sorted = [...results.value].sort((a, b) => {
-			const aExact = a.name === keyword.value ? -1 : 0;
-			const bExact = b.name === keyword.value ? -1 : 0;
-			return aExact - bExact;
-		});
-		return sorted.slice(0, 5); // 최대 5개까지만 표시
-	}
-	return results.value;
-});
-
-// VisualViewport 관련 로직 수정
-let prevVisualViewport = 0;
-const isKeyboardVisible = ref(false);
-
-// iOS 디바이스 체크 함수 추가
-const isIOS = computed(() => {
-	return (
-		/iPad|iPhone|iPod/.test(navigator?.userAgent) ||
-		(navigator?.platform === 'MacIntel' && navigator.maxTouchPoints > 1)
-	);
-});
-
-const handleVisualViewportResize = () => {
-	if (!window?.visualViewport) return;
-
-	const currentVisualViewport = window.visualViewport.height;
-	const windowHeight = window.innerHeight;
-
-	// iOS와 다른 플랫폼에 대해 다른 기준 적용
-	const newKeyboardVisible = isIOS.value
-		? currentVisualViewport !== windowHeight // iOS는 높이 변화만으로 판단
-		: currentVisualViewport < windowHeight * 0.8; // 다른 플랫폼은 20% 기준 유지
-
-	if (newKeyboardVisible !== isKeyboardVisible.value && keyword.value) {
-		isKeyboardVisible.value = newKeyboardVisible;
-
-		if (isKeyboardVisible.value) {
-			// iOS의 경우 setTimeout으로 지연 처리
-			if (isIOS.value) {
-				setTimeout(() => {
-					const searchContainer = document.querySelector('.search-container');
-					if (searchContainer) {
-						const containerRect = searchContainer.getBoundingClientRect();
-						const scrollTop = window.pageYOffset + containerRect.top - 20;
-						window.scrollTo({
-							top: scrollTop,
-							behavior: 'smooth',
-						});
-					}
-				}, 100); // 약간의 지연 추가
-			} else {
-				const searchContainer = document.querySelector('.search-container');
-				if (searchContainer) {
-					const containerRect = searchContainer.getBoundingClientRect();
-					const scrollTop = window.pageYOffset + containerRect.top - 20;
-					window.scrollTo({
-						top: scrollTop,
-						behavior: 'smooth',
-					});
-				}
-			}
-		}
+// 7. 검색 API 호출 (API Calls)
+watchEffect(async () => {
+	if (!keyword.value) {
+		results.value = [];
+		return;
 	}
 
-	prevVisualViewport = currentVisualViewport;
-};
-
-// 검색 상태 관리를 위한 ref 추가
-const isSearching = computed(() => {
-	return Boolean(keyword.value && window.innerWidth <= 768);
+	isLoading.value = true;
+	try {
+		const { results: searchResults } = await $fetch<{ results: Search[] }>(
+			`/api/search/${encodeURIComponent(keyword.value)}`
+		);
+		results.value = searchResults;
+	} catch (error) {
+		console.error('검색 중 오류 발생:', error);
+		results.value = [];
+	} finally {
+		isLoading.value = false;
+	}
 });
 </script>
 
 <style scoped lang="scss">
-.main-container {
-	min-height: 100vh;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	background: radial-gradient(
-		circle at center,
-		var(--secondary-bg) 0%,
-		var(--main-bg) 100%
-	);
-	position: relative;
-}
-
-.particles {
-	position: absolute;
-	width: 100%;
-	height: 100%;
-	top: 0;
-	left: 0;
-	overflow: hidden;
-	z-index: 1;
-	pointer-events: none;
-}
-
-.particle {
-	position: absolute;
-	width: 2px;
-	height: 2px;
-	background: var(--border-color);
-	border-radius: 50%;
-	opacity: 0.3;
-	animation: float 15s infinite linear;
-
-	// 20개의 파티클에 대해 각각 다른 위치와 크기 지정
-	&:nth-child(1) {
-		width: 3px;
-		height: 3px;
-		left: 10%;
-		top: 20%;
-		animation-delay: 0s;
-		animation-duration: 25s;
-	}
-	&:nth-child(2) {
-		width: 2px;
-		height: 2px;
-		left: 20%;
-		top: 40%;
-		animation-delay: 0.3s;
-		animation-duration: 22s;
-	}
-	&:nth-child(3) {
-		width: 4px;
-		height: 4px;
-		left: 30%;
-		top: 60%;
-		animation-delay: 0.5s;
-		animation-duration: 28s;
-	}
-	&:nth-child(4) {
-		width: 2px;
-		height: 2px;
-		left: 40%;
-		top: 80%;
-		animation-delay: 0.5s;
-		animation-duration: 20s;
-	}
-	&:nth-child(5) {
-		width: 3px;
-		height: 3px;
-		left: 50%;
-		top: 25%;
-		animation-delay: 0.7s;
-		animation-duration: 24s;
-	}
-	&:nth-child(6) {
-		width: 2px;
-		height: 2px;
-		left: 60%;
-		top: 45%;
-		animation-delay: 0.7s;
-		animation-duration: 26s;
-	}
-	&:nth-child(7) {
-		width: 4px;
-		height: 4px;
-		left: 70%;
-		top: 65%;
-		animation-delay: 1.2s;
-		animation-duration: 23s;
-	}
-	&:nth-child(8) {
-		width: 3px;
-		height: 3px;
-		left: 80%;
-		top: 85%;
-		animation-delay: 1.4s;
-		animation-duration: 27s;
-	}
-	&:nth-child(9) {
-		width: 2px;
-		height: 2px;
-		left: 90%;
-		top: 15%;
-		animation-delay: 1.6s;
-		animation-duration: 21s;
-	}
-	&:nth-child(10) {
-		width: 3px;
-		height: 3px;
-		left: 15%;
-		top: 35%;
-		animation-delay: 1.8s;
-		animation-duration: 29s;
-	}
-	&:nth-child(11) {
-		width: 4px;
-		height: 4px;
-		left: 25%;
-		top: 55%;
-		animation-delay: 2s;
-		animation-duration: 24s;
-	}
-	&:nth-child(12) {
-		width: 2px;
-		height: 2px;
-		left: 35%;
-		top: 75%;
-		animation-delay: 2.2s;
-		animation-duration: 26s;
-	}
-	&:nth-child(13) {
-		width: 3px;
-		height: 3px;
-		left: 45%;
-		top: 30%;
-		animation-delay: 2.4s;
-		animation-duration: 22s;
-	}
-	&:nth-child(14) {
-		width: 2px;
-		height: 2px;
-		left: 55%;
-		top: 50%;
-		animation-delay: 2.6s;
-		animation-duration: 25s;
-	}
-	&:nth-child(15) {
-		width: 4px;
-		height: 4px;
-		left: 65%;
-		top: 70%;
-		animation-delay: 2.8s;
-		animation-duration: 28s;
-	}
-	&:nth-child(16) {
-		width: 3px;
-		height: 3px;
-		left: 75%;
-		top: 90%;
-		animation-delay: 3s;
-		animation-duration: 23s;
-	}
-	&:nth-child(17) {
-		width: 2px;
-		height: 2px;
-		left: 85%;
-		top: 10%;
-		animation-delay: 3.2s;
-		animation-duration: 27s;
-	}
-	&:nth-child(18) {
-		width: 4px;
-		height: 4px;
-		left: 95%;
-		top: 30%;
-		animation-delay: 3.4s;
-		animation-duration: 24s;
-	}
-	&:nth-child(19) {
-		width: 3px;
-		height: 3px;
-		left: 5%;
-		top: 50%;
-		animation-delay: 3.6s;
-		animation-duration: 26s;
-	}
-	&:nth-child(20) {
-		width: 2px;
-		height: 2px;
-		left: 15%;
-		top: 70%;
-		animation-delay: 3.8s;
-		animation-duration: 25s;
-	}
-}
-
-@keyframes float {
-	0% {
-		transform: translateY(0) rotate(0deg);
-		opacity: 0;
-	}
-	50% {
-		opacity: 0.5;
-	}
-	100% {
-		transform: translateY(-100vh) rotate(360deg);
-		opacity: 0;
-	}
-}
-
-.content-wrapper {
-	width: 100%;
-	max-width: 800px;
-	z-index: 2;
-	padding: 2rem;
-	margin-top: 4rem;
-	position: relative;
-}
-
-.search-section {
-	text-align: center;
-	position: relative;
-
-	.main-title {
-		width: 50rem;
-		font-size: 3rem;
-		color: var(--highlight);
-		margin-bottom: 1rem;
-		text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-		animation: fadeInDown 1s ease-out;
-	}
-
-	.search-description {
-		font-size: 1.2rem;
-		color: var(--text-color);
-		margin-bottom: 2rem;
-		animation: fadeIn 1s ease-out 0.5s both;
-	}
-}
-
-.search-container {
-	position: relative;
-	width: 100%;
-	max-width: 600px;
-	margin: 0 auto;
-	display: flex;
-	z-index: 1001;
-
-	.search-input {
-		width: 100%;
-		padding: 1.5rem 4rem 1.5rem 2rem;
-		background: rgba(60, 47, 37, 0.9);
-		border: 2px solid var(--border-color);
-		border-radius: 12px;
-		color: var(--text-color);
-		font-size: 1.1rem;
-		backdrop-filter: blur(10px);
-		transition: all 0.3s ease;
-
-		&:focus {
-			outline: none;
-			border-color: var(--highlight);
-			box-shadow: 0 0 15px rgba(178, 145, 98, 0.3);
-		}
-
-		&::placeholder {
-			color: var(--secondary-text);
-		}
-	}
-
-	.search-button {
-		position: absolute;
-		right: 1rem;
-		top: 50%;
-		transform: translateY(-50%);
-		background: none;
-		border: none;
-		color: var(--border-color);
-		cursor: pointer;
-		padding: 0.5rem;
-		transition: color 0.3s ease;
-
-		&:hover {
-			color: var(--highlight);
-		}
-	}
-
-	@media (max-width: 768px) {
-		z-index: 1001;
-
-		&.is-searching {
-			position: fixed;
-			width: calc(100% - 2rem); // 좌우 패딩을 고려한 너비
-			left: 50%;
-			transform: translateX(-50%);
-			top: 1rem;
-			background: var(--secondary-bg);
-			border-radius: 12px;
-			padding: 0.5rem;
-			box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-		}
-	}
-}
-
-.trending-searches {
-	margin-top: 3rem;
-
-	.trending-title {
-		color: var(--highlight);
-		font-size: 1.2rem;
-		margin-bottom: 1rem;
-	}
-
-	.keyword-list {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 0.8rem;
-		justify-content: center;
-	}
-
-	.keyword-chip {
-		background: rgba(60, 47, 37, 0.9);
-		border: 1px solid var(--border-color);
-		color: var(--text-color);
-		padding: 0.5rem 1rem;
-		border-radius: 20px;
-		cursor: pointer;
-		transition: all 0.3s ease;
-
-		&:hover {
-			background: var(--hover-highlight);
-			border-color: var(--highlight);
-			color: var(--highlight);
-		}
-	}
-}
-
-.recent-updates {
-	margin-top: 4rem;
-
-	.section-title {
-		color: var(--highlight);
-		font-size: 1.5rem;
-		margin-bottom: 2rem;
-	}
-
-	.updates-grid {
-		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-		gap: 1.5rem;
-	}
-
-	.update-card {
-		background: rgba(60, 47, 37, 0.9);
-		border: 1px solid var(--border-color);
-		border-radius: 12px;
-		padding: 1rem;
-		display: flex;
-		align-items: center;
-		gap: 1rem;
-		transition: all 0.3s ease;
-
-		&:hover {
-			transform: translateY(-3px);
-			border-color: var(--highlight);
-			box-shadow: 0 8px 24px rgba(178, 145, 98, 0.2);
-		}
-
-		.update-image {
-			width: 48px;
-			height: 48px;
-			border-radius: 8px;
-			object-fit: cover;
-		}
-
-		.update-info {
-			text-align: left;
-
-			h4 {
-				color: var(--highlight);
-				margin: 0 0 0.5rem;
-			}
-
-			p {
-				color: var(--text-color);
-				font-size: 0.9rem;
-				margin: 0;
-			}
-		}
-	}
-}
-
-// 반응형 디자인
-@media (max-width: 768px) {
-	.content-wrapper {
-		padding: 1rem;
-		margin-top: 2rem;
-	}
-
-	.search-section {
-		position: static;
-		.main-title {
-			font-size: 2.5rem;
-			width: 100%;
-		}
-	}
-
-	.search-container {
-		.search-input {
-			padding: 1rem 3.5rem 1rem 1.5rem;
-			font-size: 1rem;
-		}
-	}
-
-	.update-card {
-		flex-direction: column;
-		text-align: center;
-
-		.update-info {
-			text-align: center;
-		}
-	}
-}
-
-// 애니메이션
-@keyframes fadeInDown {
-	from {
-		opacity: 0;
-		transform: translateY(-20px);
-	}
-	to {
-		opacity: 1;
-		transform: translateY(0);
-	}
-}
-
-@keyframes fadeIn {
-	from {
-		opacity: 0;
-	}
-	to {
-		opacity: 1;
-	}
-}
-
-.search-results-container {
-	position: absolute;
-	width: 100%;
-	z-index: 1000;
-	left: 0;
-	right: 0;
-}
-
-.search-results-backdrop {
-	position: fixed;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
-	background: rgba(0, 0, 0, 0.5);
-	backdrop-filter: blur(4px);
-	z-index: 999;
-}
-
-.search-results {
-	position: absolute;
-	top: 0.5rem;
-	transform: translateY(0);
-	left: 0;
-	right: 0;
-	background: var(--secondary-bg);
-	border: 2px solid var(--border-color);
-	border-radius: 12px;
-	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-	z-index: 1000;
-	max-height: 80vh;
-	overflow-y: auto;
-	margin: 0 1rem;
-
-	&::-webkit-scrollbar {
-		width: 8px;
-	}
-
-	&::-webkit-scrollbar-track {
-		background: var(--main-bg);
-		border-radius: 4px;
-	}
-
-	&::-webkit-scrollbar-thumb {
-		background: var(--border-color);
-		border-radius: 4px;
-
-		&:hover {
-			background: var(--highlight);
-		}
-	}
-}
-
-.search-loading {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	padding: 2rem;
-	color: var(--text-color);
-	gap: 1rem;
-
-	.loading-spinner {
-		width: 24px;
-		height: 24px;
-		border: 3px solid var(--border-color);
-		border-top-color: var(--highlight);
-		border-radius: 50%;
-		animation: spin 1s linear infinite;
-	}
-}
-
-.search-results-list {
-	list-style: none;
-	padding: 0;
-	margin: 0;
-}
-
-.search-result-item {
-	display: flex;
-	align-items: center;
-	padding: 1rem;
-	gap: 1rem;
-	border-bottom: 1px solid var(--border-color);
-	cursor: pointer;
-	transition: all 0.2s ease;
-
-	&:last-child {
-		border-bottom: none;
-	}
-
-	&:hover,
-	&--active {
-		background: var(--hover-highlight);
-
-		.result-type {
-			color: var(--highlight);
-		}
-	}
-
-	.result-icon {
-		width: 48px;
-		height: 48px;
-		border-radius: 8px;
-		overflow: hidden;
-		background: var(--main-bg);
-		border: 1px solid var(--border-color);
-		flex-shrink: 0;
-
-		&-img {
-			width: 100%;
-			height: 100%;
-			object-fit: contain;
-		}
-	}
-
-	.result-info {
-		flex: 1;
-		min-width: 0;
-	}
-
-	.result-type {
-		font-size: 0.9rem;
-		color: var(--text-color);
-		opacity: 0.8;
-		margin-bottom: 0.2rem;
-	}
-
-	.result-name {
-		font-size: 1.1rem;
-		color: var(--highlight);
-		margin-bottom: 0.2rem;
-		font-weight: bold;
-	}
-
-	.result-description {
-		font-size: 0.9rem;
-		color: var(--text-color);
-		opacity: 0.9;
-		white-space: nowrap;
-		overflow: hidden;
-		text-overflow: ellipsis;
-	}
-
-	.result-shortcut {
-		font-size: 0.8rem;
-		color: var(--text-color);
-		opacity: 0.7;
-		padding: 0.3rem 0.6rem;
-		background: rgba(0, 0, 0, 0.2);
-		border-radius: 4px;
-	}
-}
-
-.search-no-results {
-	padding: 2rem;
-	text-align: center;
-	color: var(--text-color);
-
-	.no-results-icon {
-		margin-bottom: 1rem;
-		color: var(--border-color);
-	}
-
-	p {
-		margin-bottom: 1rem;
-		font-size: 1.1rem;
-		color: var(--highlight);
-	}
-
-	.search-suggestions {
-		list-style: none;
-		padding: 0;
-		font-size: 0.9rem;
-		opacity: 0.8;
-
-		li {
-			margin: 0.5rem 0;
-		}
-	}
-}
-
-@keyframes spin {
-	to {
-		transform: rotate(360deg);
-	}
-}
-
-// 반응형 스타일
-@media (max-width: 768px) {
-	.search-results-container {
-		position: fixed;
-		top: 0;
-		left: 0;
-		right: 0;
-		z-index: 1000;
-		pointer-events: auto;
-	}
-
-	.search-results-backdrop {
-		position: fixed;
-		top: 0;
-		left: 0;
-		right: 0;
-		bottom: 0;
-		background: rgba(0, 0, 0, 0.5);
-		backdrop-filter: blur(4px);
-		z-index: 999;
-		pointer-events: auto;
-	}
-
-	.search-results {
-		position: relative;
-		background: var(--secondary-bg);
-		border-radius: 12px;
-		border: 1px solid var(--border-color);
-		box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-		max-height: 50vh;
-		margin-top: 4rem;
-		padding: 0.5rem 0;
-		overflow-y: auto;
-		-webkit-overflow-scrolling: touch;
-		transform: translateZ(0);
-		will-change: transform;
-	}
-
-	// iOS 안전 영역 대응 스타일 제거 (더 이상 필요하지 않음)
-	@supports (-webkit-touch-callout: none) {
-		.search-results {
-			padding-bottom: 0.5rem;
-		}
-	}
-
-	.search-loading {
-		padding: 2rem 1rem;
-	}
-
-	.search-result-item {
-		padding: 0.8rem 1rem;
-		gap: 0.8rem;
-
-		.result-icon {
-			width: 42px;
-			height: 42px;
-			border-radius: 6px;
-		}
-
-		.result-info {
-			.result-type {
-				font-size: 0.8rem;
-				margin-bottom: 0.1rem;
-			}
-
-			.result-name {
-				font-size: 1rem;
-				margin-bottom: 0.1rem;
-			}
-
-			.result-description {
-				font-size: 0.85rem;
-			}
-		}
-
-		.result-shortcut {
-			display: none;
-		}
-
-		&:active {
-			background: var(--hover-highlight);
-			.result-type {
-				color: var(--highlight);
-			}
-		}
-	}
-
-	.search-no-results {
-		padding: 2rem 1rem;
-
-		p {
-			font-size: 1rem;
-		}
-
-		.search-suggestions {
-			font-size: 0.85rem;
-
-			li {
-				margin: 0.4rem 0;
-			}
-		}
-	}
-}
+@use '@/assets/main.scss';
 </style>
