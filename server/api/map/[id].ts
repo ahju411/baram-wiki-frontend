@@ -13,13 +13,22 @@ export default defineEventHandler(async (event) => {
 			},
 		});
 
+		console.log(data);
+
+		if (!data) {
+			throw createError({
+				statusCode: 404,
+				statusMessage: '맵을 찾을 수 없습니다.',
+			});
+		}
+
 		return data;
 	} catch (error) {
 		console.error('Failed to fetch map data:', error); // 서버 콘솔에 에러 로그 남기기
 
 		throw createError({
-			statusCode: 500,
-			statusMessage: 'Failed to fetch map data',
+			statusCode: error.response?.status || 500,
+			statusMessage: error.response?.statusText || 'Failed to fetch map data',
 		});
 	}
 });
