@@ -4,7 +4,7 @@
 		<div v-else class="monster-detail">
 			<div class="monster-image">
 				<NuxtImg
-					:src="`/remote/monster/${monster.images}`"
+					:src="`/images/monster/${monster.images}`"
 					:alt="monster.name"
 					width="100"
 					height="100"
@@ -49,23 +49,12 @@
 								<td>몬스터 타입</td>
 								<td>{{ monster.mtype }}</td>
 							</tr>
+							<tr>
+								<td>리스폰 시간</td>
+								<td>{{ monster.respawn }}</td>
+							</tr>
 						</tbody>
 					</table>
-				</div>
-
-				<div class="stats">
-					<h3>몬스터 생성위치</h3>
-					<NuxtLink :to="`/map/${monster.respawn}`">
-						<div class="map-spawn-info">
-							<NuxtImg
-								:src="`/remote/map/${monster.map_images}`"
-								:alt="monster.map_name"
-								width="100"
-								height="100"
-							/>
-							<p>{{ monster.map_name }}</p>
-						</div>
-					</NuxtLink>
 				</div>
 
 				<div class="drops">
@@ -74,11 +63,7 @@
 						<li v-for="drop in monster.drops" :key="drop.item_id">
 							<NuxtLink :to="`/item/${drop.item.id}`">
 								<div class="item-card">
-									<NuxtImg
-										:src="`/remote/item/${drop.item.images}`"
-										width="48"
-										height="48"
-									/>
+									<NuxtImg :src="drop.item.iconUrl" width="48" height="48" />
 									<span>{{ drop.item.name }}</span>
 								</div>
 							</NuxtLink>
@@ -112,30 +97,6 @@ useSeoMeta({
 
 .stats td div {
 	margin: 2px 0;
-}
-
-.stats .map-spawn-info {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	gap: 5px;
-}
-
-.stats .map-spawn-info:hover {
-	p {
-		color: var(--highlight);
-		transition: color 0.3s;
-	}
-
-	img {
-		transform: scale(1.05);
-		transition: transform 0.5s;
-	}
-}
-
-.stats .map-spawn-info p {
-	color: var(--text-color);
-	font-size: 1.1rem;
 }
 
 .item-card {

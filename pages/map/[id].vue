@@ -4,7 +4,7 @@
 		<div v-else class="map-detail">
 			<div class="map-image">
 				<NuxtImg
-					:src="`/remote/map/${map.images}`"
+					:src="`/images/map/${map.images}`"
 					:alt="map.name"
 					width="150"
 					height="150"
@@ -36,7 +36,7 @@
 							<NuxtLink :to="`/monster/${spawn.monster.id}`">
 								<div class="monster-card">
 									<NuxtImg
-										:src="`/remote/monster/${spawn.monster.images}`"
+										:src="`/images/monster/${spawn.monster.images}`"
 										width="48"
 										height="48"
 									/>

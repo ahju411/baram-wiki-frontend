@@ -62,25 +62,23 @@
 //     ]
 // }
 
-import type { Item } from './item';
+import type { Item } from "./item"
 
 export interface Monster {
-	id: string;
-	name: string;
-	level: string;
-	hp: string;
-	mp: string;
-	exp: string;
-	defense: string;
-	mdefense: string;
-	mtype: string;
-	respawn: string;
-	information: string;
-	images: string;
-	map_name: string;
-	map_images: string;
-	drops: {
-		item_id: string;
-		item: Item;
-	}[];
+    id: string
+    name: string
+    level: string
+    hp: string
+    mp: string
+    exp: string
+    defense: string
+    mdefense: string
+    mtype: string
+    respawn: string
+    information: string
+    images: string
+    drops: {
+        item_id: string
+        item: Item
+    }[]
 }

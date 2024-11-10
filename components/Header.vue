@@ -13,86 +13,12 @@
 					<h1>바람위키</h1>
 				</NuxtLink>
 			</div>
-
-			<!-- 모바일 햄버거 메뉴 추가 -->
-			<button class="mobile-menu-trigger" @click="isMenuOpen = true">
-				<span></span>
-				<span></span>
-				<span></span>
-			</button>
-
-			<!-- 데스크톱 네비게이션 -->
-			<nav class="header__nav desktop-nav">
-        <NuxtLink to="/item-table" role="button">아이템</NuxtLink>
-				<div class="dropdown">
-					<button class="dropdown__trigger">스킬</button>
-					<ul class="dropdown__menu">
-						<li><NuxtLink to="/skill/w">전사</NuxtLink></li>
-						<li><NuxtLink to="/skill/p">주술사</NuxtLink></li>
-						<li><NuxtLink to="/skill/n">도적</NuxtLink></li>
-						<li><NuxtLink to="/skill/t">도사</NuxtLink></li>
-					</ul>
-				</div>
-				<NuxtLink to="/map/level" role="button">레벨별 사냥터</NuxtLink>
+			<nav class="header__nav">
+				<NuxtLink to="/skill/w">전사</NuxtLink>
+				<NuxtLink to="/skill/p">주술사</NuxtLink>
+				<NuxtLink to="/skill/n">도적</NuxtLink>
+				<NuxtLink to="/skill/t">도사</NuxtLink>
 			</nav>
-
-			<!-- 모바일 사이드 메뉴 추가 -->
-			<div class="mobile-nav" :class="{ 'is-open': isMenuOpen }">
-				<div class="mobile-nav__overlay" @click="isMenuOpen = false"></div>
-				<div class="mobile-nav__content">
-					<button class="mobile-nav__close" @click="isMenuOpen = false">
-						×
-					</button>
-					<ul class="mobile-nav__menu">
-						<li>
-							<h3>스킬</h3>
-							<ul>
-								<li>
-									<NuxtLink
-										to="/skill/w"
-										@click="isMenuOpen = false"
-										:class="{
-											'router-link-active': $route.path === '/skill/w',
-										}"
-										>전사</NuxtLink
-									>
-								</li>
-								<li>
-									<NuxtLink
-										to="/skill/p"
-										@click="isMenuOpen = false"
-										:class="{
-											'router-link-active': $route.path === '/skill/p',
-										}"
-										>주술사</NuxtLink
-									>
-								</li>
-								<li>
-									<NuxtLink
-										to="/skill/n"
-										@click="isMenuOpen = false"
-										:class="{
-											'router-link-active': $route.path === '/skill/n',
-										}"
-										>도적</NuxtLink
-									>
-								</li>
-								<li>
-									<NuxtLink
-										to="/skill/t"
-										@click="isMenuOpen = false"
-										:class="{
-											'router-link-active': $route.path === '/skill/t',
-										}"
-										>도사</NuxtLink
-									>
-								</li>
-							</ul>
-						</li>
-						<!-- 추가 메뉴 항목들은 여기에 -->
-					</ul>
-				</div>
-			</div>
 		</div>
 
 		<!-- 하단 검색 영역 -->
@@ -127,7 +53,7 @@
 								role="button"
 							>
 								<NuxtImg
-									:src="`/remote/${result.type}/${result.image}`"
+									:src="`/images/${result.type}/${result.image}`"
 									:alt="result.name"
 									width="32"
 									height="32"
@@ -172,7 +98,7 @@
 								role="button"
 							>
 								<NuxtImg
-									:src="`/remote/${result.type}/${result.image}`"
+									:src="`/images/${result.type}/${result.image}`"
 									:alt="result.name"
 									width="32"
 									height="32"
@@ -299,29 +225,17 @@ watchEffect(async () => {
 onMounted(() => {
 	searchInput.value?.focus();
 });
-
-const isMenuOpen = ref(false);
-
-// 모바일 메뉴가 열려있을 때 스크롤 방지
-onMounted(() => {
-	watchEffect(() => {
-		if (isMenuOpen.value) {
-			document.body.style.overflow = 'hidden';
-		} else {
-			document.body.style.overflow = '';
-		}
-	});
-});
 </script>
 
 <style lang="scss" scoped>
-// Variables & Mixins
+// Variables
 $header-padding: 20px;
 $mobile-breakpoint: 768px;
 $small-mobile-breakpoint: 480px;
 $border-radius: 8px;
 $transition-duration: 0.3s;
 
+// Mixins
 @mixin mobile {
 	@media (max-width: $mobile-breakpoint) {
 		@content;
@@ -334,87 +248,28 @@ $transition-duration: 0.3s;
 	}
 }
 
-// Common Styles
-%scroll-style {
-	scrollbar-width: thin;
-	scrollbar-color: var(--border-color) rgba(0, 0, 0, 0.1);
-
-	&::-webkit-scrollbar {
-		width: 8px;
-
-		&-track {
-			background: rgba(0, 0, 0, 0.1);
-			border-radius: 4px;
-		}
-
-		&-thumb {
-			background: var(--border-color);
-			border-radius: 4px;
-		}
-	}
-}
-
-%paper-style {
-	&::before {
-		content: '';
-		position: absolute;
-		inset: 0;
-		background: var(--secondary-bg);
-		clip-path: polygon(
-			0% 15%,
-			15% 0%,
-			85% 0%,
-			100% 15%,
-			100% 85%,
-			85% 100%,
-			15% 100%,
-			0% 85%
-		);
-		border: 1px solid var(--border-color);
-		transform: scale(1.02);
-		z-index: -2;
-	}
-
-	&::after {
-		content: '';
-		position: absolute;
-		inset: 0;
-		background: linear-gradient(
-			45deg,
-			transparent 48%,
-			var(--border-color) 48%,
-			var(--border-color) 52%,
-			transparent 52%
-		);
-		background-size: 5px 5px;
-		clip-path: polygon(
-			0% 15%,
-			15% 0%,
-			85% 0%,
-			100% 15%,
-			100% 85%,
-			85% 100%,
-			15% 100%,
-			0% 85%
-		);
-		opacity: 0.1;
-		z-index: -1;
-	}
-}
-
-// Header Component
+// Styles
 .header {
+	// display: flex;
+	// flex-direction: column;
+	// padding: $header-padding 0;
+	// gap: 40px;
+
 	&__top {
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
 		max-width: 1200px;
-		margin: 0 auto 40px;
-		padding: 0 $header-padding;
+		margin-left: auto;
+		margin-right: auto;
+		margin-bottom: 40px;
 
 		@include mobile {
 			margin-top: 15px;
+			flex-direction: column;
 			gap: 15px;
+			align-items: flex-start;
+			width: 100%;
 		}
 	}
 
@@ -432,7 +287,7 @@ $transition-duration: 0.3s;
 		cursor: pointer;
 
 		@include mobile {
-			margin-left: 0;
+			margin-left: 0; // 왼쪽 마진 제거
 			align-self: flex-start;
 		}
 
@@ -476,10 +331,73 @@ $transition-duration: 0.3s;
 			font-weight: bold;
 			min-width: 80px;
 			text-align: center;
-			font-family: inherit;
-			font-size: inherit;
-			@extend %paper-style;
 
+			// 주문서 배경
+			&::before {
+				content: '';
+				position: absolute;
+				top: 0;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				background: var(--secondary-bg);
+				clip-path: polygon(
+					0% 15%,
+					// 왼쪽 상단 굴곡
+					15% 0%,
+					// 상단 왼쪽 굴곡
+					85% 0%,
+					// 상단 오른쪽 굴곡
+					100% 15%,
+					// 오른쪽 상단 굴곡
+					100% 85%,
+					// 오른쪽 하단 굴곡
+					85% 100%,
+					// 하단 오른쪽 굴곡
+					15% 100%,
+					// 하단 왼쪽 굴곡
+					0% 85% // 왼쪽 하단 굴곡
+				);
+				border: 1px solid var(--border-color);
+				transform: scale(1.02);
+				z-index: -2;
+			}
+
+			// 주문서 테두리 효과
+			&::after {
+				content: '';
+				position: absolute;
+				top: 0;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				background: linear-gradient(
+					45deg,
+					transparent 48%,
+					var(--border-color) 48%,
+					var(--border-color) 52%,
+					transparent 52%
+				);
+				background-size: 5px 5px;
+				clip-path: polygon(
+					0% 15%,
+					15% 0%,
+					85% 0%,
+					100% 15%,
+					100% 85%,
+					85% 100%,
+					15% 100%,
+					0% 85%
+				);
+				opacity: 0.1;
+				z-index: -1;
+			}
+
+			// 주문서 내부 그림자
+			box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.2),
+				0 2px 5px rgba(0, 0, 0, 0.1);
+
+			// 호버 효과
 			&:hover {
 				color: var(--highlight);
 				transform: translateY(-2px);
@@ -490,6 +408,7 @@ $transition-duration: 0.3s;
 				}
 			}
 
+			// 활성화 상태
 			&.router-link-active {
 				color: var(--highlight);
 
@@ -504,7 +423,6 @@ $transition-duration: 0.3s;
 	}
 }
 
-// Search Component
 .search {
 	&__container {
 		width: 100%;
@@ -546,6 +464,7 @@ $transition-duration: 0.3s;
 		width: calc(100% - 30px);
 		transform: translateX(-50%);
 		max-width: 600px;
+		margin: 0 auto;
 		background: rgba(60, 47, 37, 0.95);
 		border-radius: $border-radius;
 		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
@@ -564,10 +483,21 @@ $transition-duration: 0.3s;
 		max-height: 400px;
 		overflow-y: auto;
 		padding: 10px;
-		@extend %scroll-style;
+		scrollbar-width: thin;
+		scrollbar-color: var(--border-color) rgba(0, 0, 0, 0.1);
 
-		@include mobile {
-			max-height: 300px;
+		&::-webkit-scrollbar {
+			width: 8px;
+
+			&-track {
+				background: rgba(0, 0, 0, 0.1);
+				border-radius: 4px;
+			}
+
+			&-thumb {
+				background: var(--border-color);
+				border-radius: 4px;
+			}
 		}
 	}
 
@@ -616,275 +546,21 @@ $transition-duration: 0.3s;
 	}
 }
 
-// Dropdown Component
-.dropdown {
-	position: relative;
-
-	&__trigger {
-		position: relative;
-		padding: 15px 30px;
-		color: var(--text-color);
-		background: none;
-		border: none;
-		font-weight: bold;
-		min-width: 80px;
-		text-align: center;
-		cursor: pointer;
-		font-family: inherit;
-		font-size: inherit;
-		@extend %paper-style;
-
-		&:hover {
-			color: var(--highlight);
-			transform: translateY(-2px);
-
-			&::before {
-				border-color: var(--highlight);
-				box-shadow: 0 0 15px rgba(178, 145, 98, 0.3);
-			}
-		}
-	}
-
-	&__menu {
-		position: absolute;
-		top: 100%;
-		left: 50%;
-		transform: translateX(-50%);
-		min-width: 150px;
-		margin-top: 10px;
-		padding: 0;
-		list-style: none;
-		background: var(--secondary-bg);
-		border-radius: 8px;
-		opacity: 0;
-		visibility: hidden;
-		transform-origin: top center;
-		transition: all 0.3s ease;
-		z-index: 9999;
-
-		li {
-			height: 0;
-			overflow: hidden;
-			transition: height 0.3s ease;
-
-			a {
-				display: block;
-				padding: 12px 20px;
-				color: var(--text-color);
-				text-decoration: none;
-				transition: all 0.2s ease;
-				text-align: center;
-
-				&:hover {
-					color: var(--highlight);
-					background: var(--hover-highlight);
-				}
-			}
-		}
-	}
-
-	&:hover {
-		.dropdown__menu {
-			opacity: 1;
-			visibility: visible;
-
-			li {
-				height: 45px;
-
-				@for $i from 1 through 4 {
-					&:nth-child(#{$i}) {
-						transition-delay: $i * 0.05s;
-					}
-				}
-			}
-		}
-	}
-}
-
-// Mobile Navigation
-.mobile-menu-trigger {
-	display: none;
-	flex-direction: column;
-	justify-content: space-between;
-	width: 30px;
-	height: 20px;
-	background: none;
-	border: none;
-	padding: 0;
-	cursor: pointer;
-	z-index: 100;
-
-	span {
-		display: block;
-		width: 100%;
-		height: 2px;
-		background-color: var(--text-color);
-		transition: all 0.3s ease;
-	}
-
-	@include mobile {
-		display: flex;
-		margin-right: 2rem;
-	}
-}
-
-.mobile-nav {
-	display: none;
-
-	@include mobile {
-		display: block;
-		position: fixed;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
-		visibility: hidden;
-		z-index: 1000;
-		transition: visibility 0s linear 0.3s;
-
-		&.is-open {
-			visibility: visible;
-			transition-delay: 0s;
-
-			.mobile-nav__overlay {
-				opacity: 1;
-			}
-
-			.mobile-nav__content {
-				transform: translateX(0);
-				visibility: visible;
-			}
-		}
-	}
-
-	&__overlay {
-		position: fixed;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
-		background: rgba(0, 0, 0, 0.5);
-		opacity: 0;
-		transition: opacity 0.3s ease;
-	}
-
-	&__content {
-		position: fixed;
-		top: 0;
-		left: 0;
-		width: 80%;
-		max-width: 300px;
-		height: 100%;
-		background: var(--main-bg);
-		padding: 20px;
-		transform: translateX(-100%);
-		transition: all 0.3s ease;
-		overflow-y: auto;
-		box-shadow: 2px 0 15px rgba(0, 0, 0, 0.3);
-		@extend %paper-style;
-
-		&::before {
-			clip-path: none;
-			border-radius: 0;
-		}
-	}
-
-	&__close {
-		position: absolute;
-		top: 15px;
-		right: 15px;
-		background: none;
-		border: none;
-		font-size: 28px;
-		color: var(--text-color);
-		cursor: pointer;
-		width: 40px;
-		height: 40px;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		border-radius: 50%;
-		transition: all 0.3s ease;
-
-		&:hover {
-			background: var(--hover-highlight);
-			color: var(--highlight);
-			transform: rotate(90deg);
-		}
-	}
-
-	&__menu {
-		margin-top: 40px;
-
-		h3 {
-			color: var(--highlight);
-			margin-bottom: 15px;
-			font-size: 1.2em;
-			padding: 0 15px;
-			position: relative;
-
-			&::after {
-				content: '';
-				position: absolute;
-				bottom: -5px;
-				left: 15px;
-				width: 30px;
-				height: 2px;
-				background: var(--highlight);
-			}
+@include mobile {
+	.search {
+		&__input-wrapper {
+			max-width: 100%;
+			padding: 10px;
 		}
 
-		ul {
-			list-style: none;
-			padding: 0;
-			margin: 0 0 25px 0;
+		&__results {
+			width: calc(100% - 20px);
+			left: 10px;
 		}
 
-		li {
-			margin: 5px 0;
-
-			a {
-				display: block;
-				padding: 12px 20px;
-				color: var(--text-color);
-				text-decoration: none;
-				transition: all 0.3s ease;
-				position: relative;
-				border-radius: 6px;
-				margin: 0 8px;
-
-				&:hover {
-					color: var(--highlight);
-					background: var(--hover-highlight);
-					transform: translateX(5px);
-				}
-
-				&.router-link-active {
-					color: var(--highlight);
-					background: var(--secondary-panel);
-					border-left: 3px solid var(--highlight);
-					padding-left: 17px;
-
-					&::before {
-						content: '';
-						position: absolute;
-						inset: 0;
-						background: var(--secondary-panel);
-						border: 1px solid var(--highlight);
-						border-radius: 6px;
-						opacity: 0.2;
-						z-index: -1;
-					}
-				}
-			}
+		&__list {
+			max-height: 300px;
 		}
-	}
-}
-
-// Responsive Utilities
-.desktop-nav {
-	@include mobile {
-		display: none;
 	}
 }
 </style>

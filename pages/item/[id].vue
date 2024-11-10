@@ -4,7 +4,7 @@
 		<div v-else class="item-detail">
 			<div class="item-image">
 				<NuxtImg
-					:src="`/remote/item/${item.images}`"
+					:src="`/images/item/${item.images}`"
 					:alt="item.name"
 					width="100"
 					height="100"
@@ -148,7 +148,7 @@
 							<NuxtLink :to="`/monster/${drop.id}`">
 								<div class="monster-card">
 									<NuxtImg
-										:src="`/remote/monster/${drop.images}`"
+										:src="`/images/monster/${drop.images}`"
 										width="48"
 										height="48"
 									/>

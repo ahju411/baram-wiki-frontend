@@ -16,13 +16,6 @@
 						<span class="notice-date">2024.11.08</span>
 					</div>
 				</div>
-				<div class="notice-container">
-					<span class="notice-badge">공지</span>
-					<div class="notice-content">
-						<span class="notice-text">레벨별 사냥터 오픈!</span>
-						<span class="notice-date">2024.11.09</span>
-					</div>
-				</div>
 			</section>
 
 			<!-- 메인 검색 섹션 -->
@@ -84,7 +77,7 @@
 								>
 									<div class="result-icon">
 										<NuxtImg
-											:src="`/remote/${result.type}/${result.image}`"
+											:src="`/images/${result.type}/${result.image}`"
 											:alt="result.name"
 											class="result-icon-img"
 										/>
@@ -163,11 +156,9 @@
 							class="update-card"
 						>
 							<NuxtImg
-								:src="`/remote/${update.type}/${update.images}`"
+								:src="`/images/${update.type}/${update.images}`"
 								:alt="update.name"
 								class="update-image"
-								width="200"
-								height="200"
 							/>
 							<div class="update-info">
 								<h4>{{ update.name }}</h4>
