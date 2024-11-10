@@ -23,6 +23,7 @@
 
 			<!-- 데스크톱 네비게이션 -->
 			<nav class="header__nav desktop-nav">
+        <NuxtLink to="/item-table" role="button">아이템</NuxtLink>
 				<div class="dropdown">
 					<button class="dropdown__trigger">스킬</button>
 					<ul class="dropdown__menu">
