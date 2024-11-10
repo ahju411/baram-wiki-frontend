@@ -2,13 +2,13 @@
 export default defineNuxtConfig({
 	compatibilityDate: '2024-11-07',
 	devtools: { enabled: true },
-	image: {
-		provider: 'ipx',
-		domains: ['evfuckbgifbr27188584.gcdn.ntruss.com'],
-		alias: {
-			remote: 'https://evfuckbgifbr27188584.gcdn.ntruss.com',
-		},
-	},
+	// image: {
+	// 	provider: 'ipx',
+	// 	domains: ['evfuckbgifbr27188584.gcdn.ntruss.com'],
+	// 	alias: {
+	// 		remote: 'https://evfuckbgifbr27188584.gcdn.ntruss.com',
+	// 	},
+	// },
 
 	css: ['~/assets/variable.css'],
 
@@ -76,7 +76,6 @@ export default defineNuxtConfig({
 		apiBase: process.env.API_BASE_URL || 'http://localhost:3001', // 서버 전용 API 경로 설정
 	},
 
-	plugins: [{ src: '~/plugins/naive-ui.ts', mode: 'client' }],
 	vite: {
 		css: {
 			preprocessorOptions: {

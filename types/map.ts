@@ -64,7 +64,8 @@ export interface Map {
                                 "id": "I627884",
                                 "name": "도토리",
                                 "desc": "참나무의 열매",
-                                "images": "I627884.png"
+                                "images": "I627884.png",
+                                "price": 10
                             }
                         }
                     ]
@@ -84,7 +85,8 @@ export interface Map {
                                 "id": "I243816",
                                 "name": "토끼고기",
                                 "desc": "부드럽고 담백한 토끼의 고기",
-                                "images": "I243816.png"
+                                "images": "I243816.png",
+                                "price": 2
                             }
                         }
                     ]
@@ -92,6 +94,56 @@ export interface Map {
             }
         ]
     },
+    {
+        "id": "M375532",
+        "name": "쥐굴",
+        "level": "6 ~ 15",
+        "information": "가장 쉬운 던전으로 쥐와 박쥐, 흡혈쥐, 서생원이 등장합니다. 쥐굴 안쪽에는 뱀굴이 자리잡고 있어 금방 레벨을 높일 수 있는 좋은 곳입니다. 쥐고기는 초반에 체력을 채워주기 쉬운 아이템으로 많이 모아두면 유용하게 쓰입니다.",
+        "images": "M375532.png",
+        "monsters": [
+            {
+                "monster": {
+                    "id": "MO031418",
+                    "name": "서생원",
+                    "level": null,
+                    "exp": "2000",
+                    "information": "쥐굴에서 최고 보스격인 몬스터이다. 희귀아이템인 산삼을 가끔 준다.",
+                    "images": "MO031418.gif",
+                    "dropItems": [
+                        {
+                            "item": {
+                                "id": "I606869",
+                                "name": "산삼",
+                                "desc": "산에서 나는 인삼, 심봤다!",
+                                "images": "I606869.png",
+                                "price": 100
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                "monster": {
+                    "id": "MO393624",
+                    "name": "병든쥐",
+                    "level": null,
+                    "exp": "250",
+                    "information": "오염된 쥐. 시궁창쥐 보다는 세지만 역시 강함에 비해 많은 경험치를 주는 몬스터이다.",
+                    "images": "MO393624.gif",
+                    "dropItems": [
+                        {
+                            "item": {
+                                "id": "I450806",
+                                "name": "쥐고기",
+                                "desc": "먹어야 하나?",
+                                "images": "I450806.png",
+                                "price": 20
+                            }
+                        }
+                    ]
+                }
+			},
+			{
  */
 
 export interface MapLevel {
@@ -100,6 +152,9 @@ export interface MapLevel {
 	level: string;
 	information: string;
 	images: string;
+	xcoord: number;
+	ycoord: number;
+	type: number;
 	monsters: {
 		monster: Monster;
 	}[];

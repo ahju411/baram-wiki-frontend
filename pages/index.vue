@@ -84,7 +84,7 @@
 								>
 									<div class="result-icon">
 										<NuxtImg
-											:src="`/remote/${result.type}/${result.image}`"
+											:src="`https://evfuckbgifbr27188584.gcdn.ntruss.com/${result.type}/${result.image}`"
 											:alt="result.name"
 											class="result-icon-img"
 										/>
@@ -163,7 +163,7 @@
 							class="update-card"
 						>
 							<NuxtImg
-								:src="`/remote/${update.type}/${update.images}`"
+								:src="`https://evfuckbgifbr27188584.gcdn.ntruss.com/${update.type}/${update.images}`"
 								:alt="update.name"
 								class="update-image"
 								width="200"

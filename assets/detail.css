@@ -197,6 +197,7 @@ h3 {
 }
 
 .monster-image img {
+	object-fit: contain;
 	background: var(--main-bg);
 	border: 1px solid var(--border-color);
 	border-radius: 8px;
@@ -241,6 +242,7 @@ h3 {
 }
 
 .map-image img {
+	object-fit: contain;
 	background: var(--main-bg);
 	border: 1px solid var(--border-color);
 	border-radius: 8px;
