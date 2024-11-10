@@ -28,7 +28,7 @@
 						<div class="level-image">
 							<NuxtLink :to="`/map/${level.id}`">
 								<NuxtImg
-									:src="`/remote/map/${level.images}`"
+									:src="`https://evfuckbgifbr27188584.gcdn.ntruss.com/map/${level.images}`"
 									:alt="level.name"
 									width="300"
 									height="300"
@@ -56,7 +56,7 @@
 										<td class="monster-image">
 											<NuxtLink :to="`/monster/${monsterData.monster.id}`">
 												<NuxtImg
-													:src="`/remote/monster/${monsterData.monster.images}`"
+													:src="`https://evfuckbgifbr27188584.gcdn.ntruss.com/monster/${monsterData.monster.images}`"
 													:alt="monsterData.monster.name"
 													width="48"
 													height="48"
@@ -81,7 +81,7 @@
 													class="drop-item"
 												>
 													<NuxtImg
-														:src="`/remote/item/${drop.item.images}`"
+														:src="`https://evfuckbgifbr27188584.gcdn.ntruss.com/item/${drop.item.images}`"
 														:alt="drop.item.name"
 														width="32"
 														height="32"

@@ -4,7 +4,7 @@
 		<div v-else class="monster-detail">
 			<div class="monster-image">
 				<NuxtImg
-					:src="`/remote/monster/${monster.images}`"
+					:src="`https://evfuckbgifbr27188584.gcdn.ntruss.com/monster/${monster.images}`"
 					:alt="monster.name"
 					width="100"
 					height="100"
@@ -58,7 +58,7 @@
 					<NuxtLink :to="`/map/${monster.respawn}`">
 						<div class="map-spawn-info">
 							<NuxtImg
-								:src="`/remote/map/${monster.map_images}`"
+								:src="`https://evfuckbgifbr27188584.gcdn.ntruss.com/map/${monster.map_images}`"
 								:alt="monster.map_name"
 								width="100"
 								height="100"
@@ -75,7 +75,7 @@
 							<NuxtLink :to="`/item/${drop.item.id}`">
 								<div class="item-card">
 									<NuxtImg
-										:src="`/remote/item/${drop.item.images}`"
+										:src="`https://evfuckbgifbr27188584.gcdn.ntruss.com/item/${drop.item.images}`"
 										width="48"
 										height="48"
 									/>

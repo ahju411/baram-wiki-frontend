@@ -7,7 +7,7 @@
 				<div class="skill-header">
 					<div class="skill-image-container">
 						<NuxtImg
-							:src="`/remote/skill/${skill.images}`"
+							:src="`https://evfuckbgifbr27188584.gcdn.ntruss.com/skill/${skill.images}`"
 							:alt="skill.name"
 							width="100"
 							height="100"
@@ -31,7 +31,7 @@
 						>
 							<NuxtLink :to="`/item/${detail.item.id}`" class="item-container">
 								<NuxtImg
-									:src="`/remote/item/${detail.item.images}`"
+									:src="`https://evfuckbgifbr27188584.gcdn.ntruss.com/item/${detail.item.images}`"
 									:alt="detail.item.name"
 									width="24"
 									height="24"
