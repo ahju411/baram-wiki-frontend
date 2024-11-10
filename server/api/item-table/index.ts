@@ -4,7 +4,6 @@ export default defineEventHandler(async (event) => {
     const { apiBase } = useRuntimeConfig();
     const { id } = event.context.params as { item: string, sex: string, job: string, lmin: string, lmax: string };
 
-    console.log('id', id)
     try {
         const data = await $fetch(`${apiBase}/allitem?${id}`);
         return data;
