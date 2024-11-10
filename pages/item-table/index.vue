@@ -258,12 +258,11 @@ const searchItemList = async () => {
 
   try {
     const { data, error } = await useAsyncData('itemTableData', () =>
-        $fetch(`http://localhost:3001/api/allitem?${queryString}`)
+        $fetch(`/api/allitem?${queryString}`)
     );
 
     itemtable.value = data.value || [];
 
-    console.log('item', itemtable.value)
     if (selectedItem.value == '0') {
       tableFormat.value = '0'
     } else {
