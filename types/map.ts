@@ -152,6 +152,9 @@ export interface MapLevel {
 	level: string;
 	information: string;
 	images: string;
+	xcoord: number;
+	ycoord: number;
+	type: number;
 	monsters: {
 		monster: Monster;
 	}[];

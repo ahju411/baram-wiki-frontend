@@ -17,7 +17,9 @@
 			<ul class="level-list">
 				<li v-for="level in groupedLevels" :key="level.id" class="level-item">
 					<div class="level-header">
-						<h3 class="level-name">{{ level.name }}</h3>
+						<h3 class="level-name">
+							{{ level.name }} ({{ level.xcoord }}, {{ level.ycoord }})
+						</h3>
 						<span class="level-range">{{ level.level }}</span>
 					</div>
 					<div class="level-content">
