@@ -175,7 +175,9 @@
 						<tr v-for="(item, index) in itemtable" :key="index">
 							<td>
 								<NuxtLink :to="`/item/${item.id}`">
-									<NuxtImg :src="`/remote/item/${item.images}`"></NuxtImg>
+									<NuxtImg
+										:src="`https://evfuckbgifbr27188584.gcdn.ntruss.com/item/${item.images}`"
+									></NuxtImg>
 								</NuxtLink>
 							</td>
 							<td class="lt">
@@ -202,7 +204,7 @@
 										<div class="monster-detail">
 											<NuxtLink :to="`/monster/${drop.mob_id}`">
 												<NuxtImg
-													:src="`/remote/monster/${drop.MobMaster.images}`"
+													:src="`https://evfuckbgifbr27188584.gcdn.ntruss.com/monster/${drop.MobMaster.images}`"
 												/>
 											</NuxtLink>
 										</div>

@@ -155,7 +155,7 @@
 								role="button"
 							>
 								<NuxtImg
-									:src="`/remote/${result.type}/${result.image}`"
+									:src="`https://evfuckbgifbr27188584.gcdn.ntruss.com/${result.type}/${result.image}`"
 									:alt="result.name"
 									width="32"
 									height="32"
@@ -200,7 +200,7 @@
 								role="button"
 							>
 								<NuxtImg
-									:src="`/remote/${result.type}/${result.image}`"
+									:src="`https://evfuckbgifbr27188584.gcdn.ntruss.com/${result.type}/${result.image}`"
 									:alt="result.name"
 									width="32"
 									height="32"
