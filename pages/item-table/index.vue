@@ -258,7 +258,7 @@ const searchItemList = async () => {
 
   try {
     const { data, error } = await useAsyncData('itemTableData', () =>
-        $fetch(`/api/allitem?${queryString}`)
+        $fetch(`https://api.baramwiki.com/api/allitem?${queryString}`)
     );
 
     itemtable.value = data.value || [];
