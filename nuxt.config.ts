@@ -10,9 +10,7 @@ export default defineNuxtConfig({
 		},
 	},
 
-	css: [
-		'~/assets/variable.css'
-	],
+	css: ['~/assets/variable.css'],
 
 	app: {
 		layoutTransition: { name: 'layout', mode: 'out-in' },
@@ -78,9 +76,7 @@ export default defineNuxtConfig({
 		apiBase: process.env.API_BASE_URL || 'http://localhost:3001', // 서버 전용 API 경로 설정
 	},
 
-	plugins: [
-		{ src: '~/plugins/naive-ui.ts', mode: 'client' }
-	],
+	plugins: [{ src: '~/plugins/naive-ui.ts', mode: 'client' }],
 	vite: {
 		css: {
 			preprocessorOptions: {
@@ -95,7 +91,4 @@ export default defineNuxtConfig({
 	ssr: true,
 
 	modules: ['@nuxt/image'],
-	build: {
-		transpile: ['naive-ui']
-	}
 });

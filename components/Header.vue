@@ -23,7 +23,7 @@
 
 			<!-- 데스크톱 네비게이션 -->
 			<nav class="header__nav desktop-nav">
-        <NuxtLink to="/item-table" role="button">아이템</NuxtLink>
+				<NuxtLink to="/item-table" role="button">아이템 모음집</NuxtLink>
 				<div class="dropdown">
 					<button class="dropdown__trigger">스킬</button>
 					<ul class="dropdown__menu">
@@ -89,6 +89,34 @@
 								</li>
 							</ul>
 						</li>
+						<li>
+							<h3>정보요약</h3>
+							<ul>
+								<li>
+									<NuxtLink
+										to="/item-table"
+										@click="isMenuOpen = false"
+										:class="{
+											'router-link-active': $route.path === '/item-table',
+										}"
+										role="button"
+										>아이템 모음집</NuxtLink
+									>
+								</li>
+								<li>
+									<NuxtLink
+										to="/map/level"
+										@click="isMenuOpen = false"
+										:class="{
+											'router-link-active': $route.path === '/map/level',
+										}"
+										role="button"
+										>레벨별 사냥터</NuxtLink
+									>
+								</li>
+							</ul>
+						</li>
+
 						<!-- 추가 메뉴 항목들은 여기에 -->
 					</ul>
 				</div>
