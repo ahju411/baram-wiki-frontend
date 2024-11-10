@@ -3,23 +3,19 @@
 		<!-- 탭 네비게이션 추가 -->
 		<div class="level-tabs">
 			<button
-				v-for="(group, title) in groupedLevels"
-				:key="title"
-				:class="['tab-button', { active: activeTab === title }]"
-				@click="activeTab = title"
+				v-for="tab in tabs"
+				:key="tab.id"
+				:class="['tab-button', { active: activeTab === tab.id }]"
+				@click="activeTab = tab.id"
 			>
-				{{ title }}
+				{{ tab.name }}
 			</button>
 		</div>
 
 		<!-- 탭 컨텐츠 -->
-		<div
-			v-for="(group, title) in groupedLevels"
-			:key="title"
-			v-show="activeTab === title"
-		>
+		<div v-for="tab in tabs" :key="tab.id" v-show="activeTab === tab.id">
 			<ul class="level-list">
-				<li v-for="level in group" :key="level.id" class="level-item">
+				<li v-for="level in groupedLevels" :key="level.id" class="level-item">
 					<div class="level-header">
 						<h3 class="level-name">{{ level.name }}</h3>
 						<span class="level-range">{{ level.level }}</span>
@@ -107,17 +103,45 @@
 <script lang="ts" setup>
 import type { MapLevel } from '~/types/map';
 
-// 이미 처리된 데이터를 바로 사용
-const { data: groupedLevels } = await useAsyncData('map-level', () =>
-	$fetch('/api/map/level-guide')
+// 탭 설정 정의
+const tabs = [
+	{ id: 1, name: '초급사냥터' },
+	{ id: 2, name: '중급사냥터' },
+	{ id: 3, name: '고급사냥터' },
+	// { id: 4, name: '길림성' },
+	// { id: 5, name: '일본' },
+	// { id: 6, name: '용궁' },
+	// { id: 7, name: '중국' },
+	// { id: 8, name: '도삭산' },
+	// { id: 9, name: '중국남부' },
+	// { id: 10, name: '4차신전' },
+	// { id: 11, name: '환상의섬' },
+	// { id: 12, name: '12지신' },
+	// { id: 13, name: '북방대초원' },
+];
+
+const activeTab = ref(1);
+
+// API 호출 함수
+const fetchLevelData = async (range: number) => {
+	return await $fetch(`/api/map/level-guide?range=${range}`);
+};
+
+// 초기 데이터 로드 및 탭 변경시 데이터 갱신
+const { data: groupedLevels } = await useAsyncData(
+	'map-level',
+	() => fetchLevelData(activeTab.value),
+	{
+		watch: [activeTab],
+	}
 );
 
-const activeTab = ref('1 ~ 40');
+console.log(groupedLevels.value);
 
 // SEO 메타 설정
 useSeoMeta({
-	title: `바람위키 | 맵 레벨 가이드`,
-	description: `바람의 나라 맵 레벨 가이드`,
+	title: `바람위키 | 맵 레벨 가이드 - ${tabs[activeTab.value - 1].name}`,
+	description: `바람의 나라 맵 레벨 가이드 - ${tabs[activeTab.value - 1].name}`,
 });
 </script>
 
@@ -182,7 +206,7 @@ useSeoMeta({
 		}
 
 		.level-range {
-			color: var(--secondary-text);
+			color: var(--text-color);
 			font-size: 0.9rem;
 		}
 	}
