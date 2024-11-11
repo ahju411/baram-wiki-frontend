@@ -26,6 +26,28 @@ export default defineNuxtConfig({
 					j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 					'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
 					})(window,document,'script','dataLayer','GTM-MZZPWC5W');`,
+				},
+				{
+					src: 'https://www.googletagmanager.com/gtag/js?id=G-L4Y7M5ZQGC',
+					async: true
+				},
+				{
+					children: `window.dataLayer = window.dataLayer || [];
+					function gtag(){dataLayer.push(arguments);}
+					gtag('js', new Date());
+					gtag('config', 'G-L4Y7M5ZQGC');`
+				},
+				{
+					src: '//wcs.naver.net/wcslog.js',
+					type: 'text/javascript'
+				},
+				{
+					children: `if(!wcs_add) var wcs_add = {};
+					wcs_add["wa"] = "6a32e481606a10";
+					if(window.wcs) {
+						wcs_do();
+					}`,
+					type: 'text/javascript'
 				}
 			],
 			noscript: [
