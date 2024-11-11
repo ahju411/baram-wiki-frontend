@@ -34,6 +34,14 @@
 					</ul>
 				</div>
 				<NuxtLink to="/map/level" role="button">레벨별 사냥터</NuxtLink>
+        <div class="dropdown">
+          <button class="dropdown__trigger">경험치</button>
+          <ul class="dropdown__menu">
+            <li><NuxtLink to="/level/exp">레벨별</NuxtLink></li>
+<!--            <li><NuxtLink to="/level/king">왕퀘스트</NuxtLink></li>-->
+<!--            <li><NuxtLink to="/level/calc">계산기</NuxtLink></li>-->
+          </ul>
+        </div>
 			</nav>
 
 			<!-- 모바일 사이드 메뉴 추가 -->
