@@ -2,10 +2,15 @@
 export default defineNuxtConfig({
 	compatibilityDate: '2024-11-07',
 	devtools: { enabled: true },
+	// image: {
+	// 	provider: 'ipx',
+	// 	domains: ['evfuckbgifbr27188584.gcdn.ntruss.com'],
+	// 	alias: {
+	// 		remote: 'https://evfuckbgifbr27188584.gcdn.ntruss.com',
+	// 	},
+	// },
 
-	css: [
-		'~/assets/variable.css'
-	],
+	css: ['~/assets/variable.css'],
 
 	app: {
 		layoutTransition: { name: 'layout', mode: 'out-in' },
@@ -14,12 +19,57 @@ export default defineNuxtConfig({
 				lang: 'ko',
 			},
 			title: '바람위키',
+			script: [
+				{
+					children: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+					new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+					j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+					'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+					})(window,document,'script','dataLayer','GTM-MZZPWC5W');`,
+				},
+				{
+					src: 'https://www.googletagmanager.com/gtag/js?id=G-L4Y7M5ZQGC',
+					async: true
+				},
+				{
+					children: `window.dataLayer = window.dataLayer || [];
+					function gtag(){dataLayer.push(arguments);}
+					gtag('js', new Date());
+					gtag('config', 'G-L4Y7M5ZQGC');`
+				},
+				{
+					src: '//wcs.naver.net/wcslog.js',
+					type: 'text/javascript'
+				},
+				{
+					children: `if(!wcs_add) var wcs_add = {};
+					wcs_add["wa"] = "6a32e481606a10";
+					if(window.wcs) {
+						wcs_do();
+					}`,
+					type: 'text/javascript'
+				},
+				{
+					src: 'https://www.googletagmanager.com/gtag/js?id=G-L4Y7M5ZQGC',
+					async: true
+				},
+				{
+					children: `window.dataLayer = window.dataLayer || [];
+					function gtag(){dataLayer.push(arguments);}
+					gtag('js', new Date());
+					gtag('config', 'G-L4Y7M5ZQGC');`
+				}
+			],
+			noscript: [
+				{
+					children: '<iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MZZPWC5W" height="0" width="0" style="display:none;visibility:hidden"></iframe>',
+				}
+			],
 			meta: [
 				{ charset: 'utf-8' },
 				{
 					name: 'viewport',
-					content:
-						'width=device-width,initial-scale=1,viewport-fit=cover,maximum-scale=1',
+					content: 'width=device-width,initial-scale=1,viewport-fit=cover',
 				},
 				{ name: 'format-detection', content: 'telephone=no' },
 				{
@@ -72,9 +122,6 @@ export default defineNuxtConfig({
 		apiBase: process.env.API_BASE_URL || 'http://localhost:3001', // 서버 전용 API 경로 설정
 	},
 
-	plugins: [
-		{ src: '~/plugins/naive-ui.ts', mode: 'client' }
-	],
 	vite: {
 		css: {
 			preprocessorOptions: {
@@ -89,7 +136,4 @@ export default defineNuxtConfig({
 	ssr: true,
 
 	modules: ['@nuxt/image'],
-	build: {
-		transpile: ['naive-ui']
-	}
 });

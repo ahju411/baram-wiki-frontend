@@ -1,11 +1,28 @@
-import { defineEventHandler, createError } from 'h3';
+import { defineEventHandler, getQuery, createError } from 'h3';
 
 export default defineEventHandler(async (event) => {
 	const { apiBase } = useRuntimeConfig();
-	const { id } = event.context.params as { id: string };
+	const query = getQuery(event);
+
+	// 쿼리 파라미터 추출
+	const {
+		item = '0', // 아이템 타입 (무기, 갑옷 등)
+		sex = '0', // 성별 (공통, 남자, 여자)
+		job = '0', // 직업 (공통, 전사, 도적 등)
+		lmin = 0, // 최소 레벨
+		lmax = 99, // 최대 레벨
+	} = query;
 
 	try {
-		const data = await $fetch(`${apiBase}/item/${id}`, {
+		// 백엔드 API로 검색 요청
+		const data = await $fetch(`${apiBase}/allitem`, {
+			params: {
+				item,
+				sex,
+				job,
+				lmin,
+				lmax,
+			},
 			headers: {
 				'Content-Type': 'application/json',
 			},
