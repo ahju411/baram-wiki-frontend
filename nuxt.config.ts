@@ -48,6 +48,16 @@ export default defineNuxtConfig({
 						wcs_do();
 					}`,
 					type: 'text/javascript'
+				},
+				{
+					src: 'https://www.googletagmanager.com/gtag/js?id=G-L4Y7M5ZQGC',
+					async: true
+				},
+				{
+					children: `window.dataLayer = window.dataLayer || [];
+					function gtag(){dataLayer.push(arguments);}
+					gtag('js', new Date());
+					gtag('config', 'G-L4Y7M5ZQGC');`
 				}
 			],
 			noscript: [
