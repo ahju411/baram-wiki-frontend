@@ -138,8 +138,6 @@ const { data: groupedLevels } = await useAsyncData(
 	}
 );
 
-console.log(groupedLevels.value);
-
 // SEO 메타 설정
 useSeoMeta({
 	title: `바람위키 | 맵 레벨 가이드 - ${tabs[activeTab.value - 1].name}`,
@@ -366,6 +364,13 @@ useSeoMeta({
 				color: var(--secondary-text);
 			}
 		}
+	}
+}
+
+@media screen and (max-width: 768px) {
+	.level-guide {
+		padding: 0px;
+		padding-top: 12px;
 	}
 }
 </style>
