@@ -12,6 +12,7 @@
 10: 퀘스트재료
 11 : 기타
  */
+
 export interface Level {
     level: number;
     job: string;
