@@ -1,66 +1,132 @@
 <template>
-  <div class="exp-container">
-    <div class="exp-warrior exp-box">
-      <exp-card :data="lvlData.w" />
-    </div>
-    <div class="exp-rogue exp-box">
-      <exp-card :data="lvlData.n" />
-    </div>
-    <div class="exp-shaman exp-box">
-      <exp-card :data="lvlData.p" />
-    </div>
-    <div class="exp-sage exp-box">
-      <exp-card :data="lvlData.t" />
-    </div>
-  </div>
+	<div class="exp-container">
+		<div class="job-tabs">
+			<button
+				v-for="job in jobs"
+				:key="job.code"
+				:class="{ active: currentJob === job.code }"
+				@click="currentJob = job.code"
+			>
+				{{ job.name }}
+			</button>
+		</div>
+
+		<div
+			v-for="job in jobs"
+			:key="job.code"
+			:class="[
+				'exp-box',
+				`exp-${job.code}`,
+				{ active: currentJob === job.code },
+			]"
+		>
+			<exp-card :data="lvlData[job.code]" />
+		</div>
+	</div>
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
-import ExpCard from "@/components/level/ExpCard.vue";
+import { onMounted, ref, watch } from 'vue';
+import ExpCard from '@/components/level/ExpCard.vue';
+
+const currentJob = ref('w');
+const jobs = [
+	{ code: 'w', name: '전사' },
+	{ code: 'n', name: '도적' },
+	{ code: 'p', name: '주술사' },
+	{ code: 't', name: '도사' },
+];
 
 const lvlData = ref({
-  w: [],
-  n: [],
-  p: [],
-  t: [],
+	w: [],
+	n: [],
+	p: [],
+	t: [],
 });
 
-const getLevelData = async () => {
-  try {
-    const data = await $fetch(`/api/level`);
-    lvlData.value = data || {};
-  } catch (err) {
-    console.error("레벨 데이터 조회 중 오류 발생", err);
-    lvlData.value = {
-      w: [],
-      n: [],
-      p: [],
-      t: [],
-    };
-  }
-};
+const { data: levelData } = await useAsyncData(
+	'levelData',
+	() => $fetch('/api/level'),
+	{
+		server: true, // SSR 활성화
+		immediate: true, // 즉시 데이터 fetch
+	}
+);
 
-onMounted(async () => {
-  await getLevelData();
-});
+// levelData를 watch하여 변경사항 감지 및 반영
+watch(
+	levelData,
+	(newData) => {
+		if (newData) {
+			lvlData.value = newData;
+		}
+	},
+	{ immediate: true }
+);
 </script>
 
 <style scoped lang="scss">
 .exp-container {
-  padding: 24px;
-  width: 1400px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  .exp-box {
-    width: 100%;
-    height: 1000px;
-    background-color: var(--panel-bg);
-    border: 2px solid var(--border-color);
-    border-radius: 12px;
-    padding: 15px;
-    //overflow-y: auto; /* 내용이 500px 넘으면 스크롤 */
-  }
+	padding: 16px;
+	max-width: 1400px;
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+	margin: 0 auto;
+
+	.job-tabs {
+		display: none;
+		gap: 8px;
+		margin-bottom: 16px;
+
+		button {
+			padding: 8px 16px;
+			border: 1px solid var(--border-color);
+			background-color: var(--panel-bg);
+			color: var(--text-color);
+			border-radius: 8px;
+			cursor: pointer;
+
+			&.active {
+				background-color: var(--highlight);
+				color: white;
+			}
+		}
+	}
+
+	.exp-box {
+		width: 100%;
+		height: auto;
+		min-height: 500px;
+		background-color: var(--panel-bg);
+		border: 2px solid var(--border-color);
+		border-radius: 12px;
+		padding: 12px;
+	}
+}
+
+@media screen and (max-width: 768px) {
+	.exp-container {
+		padding: 8px;
+		gap: 12px;
+
+		.job-tabs {
+			display: flex;
+			justify-content: center;
+			flex-wrap: wrap;
+		}
+
+		.exp-box {
+			display: none;
+			width: auto;
+			padding: 8px;
+			border-radius: 8px;
+
+			&.active {
+				display: block;
+			}
+		}
+	}
 }
 </style>
