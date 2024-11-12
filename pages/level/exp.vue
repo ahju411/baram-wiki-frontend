@@ -66,6 +66,13 @@ watch(
 </script>
 
 <style scoped lang="scss">
+.exp-title {
+  color: var(--highlight);
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  text-align: center;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
 .exp-container {
 	padding: 16px;
 	max-width: 1400px;
