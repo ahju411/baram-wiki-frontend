@@ -768,6 +768,10 @@
 	border-radius: 20px;
 	font-size: 0.9rem;
 	font-weight: bold;
+
+	&.new {
+		background: var(--secondary-highlight);
+	}
 }
 
 .notice-content {

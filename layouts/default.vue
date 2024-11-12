@@ -28,6 +28,6 @@ import Footer from '~/components/Footer.vue';
 	padding: 0 20px;
 	display: flex;
 	// flex-direction: column;
-	align-items: center;
+	// align-items: center;
 }
 </style>
