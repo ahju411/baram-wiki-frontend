@@ -230,6 +230,11 @@ watch(selectedJob, async () => {
 	}
 });
 
+useSeoMeta({
+    title: '바람위키 | 경험치 계산기',
+    description: '바람의 나라 경험치 계산기',
+});
+
 const handleFocus = () => {
 	// 모바일 환경에서만 스크롤 실행
 	if (window.innerWidth <= 768) {
