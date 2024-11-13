@@ -53,6 +53,11 @@ const { data: levelData } = await useAsyncData(
 	}
 );
 
+useSeoMeta({
+    title: '바람위키 | 레벨별 경험치표',
+    description: '바람의 나라 레벨별 경험치표',
+});
+
 // levelData를 watch하여 변경사항 감지 및 반영
 watch(
 	levelData,

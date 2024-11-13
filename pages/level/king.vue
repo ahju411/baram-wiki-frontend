@@ -54,6 +54,11 @@ const getKingLevelData = async () => {
   }
 }
 
+useSeoMeta({
+    title: '바람위키 | 레벨별 왕 퀘스트 경험치표',
+    description: '바람의 나라 레벨별 왕 퀘스트 경험치표',
+});
+
 onMounted(async () => {
   await getKingLevelData();
 });
