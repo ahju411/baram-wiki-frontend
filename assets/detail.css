@@ -291,3 +291,34 @@ h3 {
 .monster-card span {
 	font-weight: bold;
 }
+
+.ingredients,
+.recipes {
+	background: var(--main-bg);
+	border-radius: 8px;
+	padding: 20px;
+}
+
+.ingredient-card,
+.recipe-card {
+	display: flex;
+	align-items: center;
+	padding: 10px;
+	border: 1px solid var(--border-color);
+	border-radius: 5px;
+	margin-bottom: 10px;
+	transition: background-color 0.3s, border-color 0.3s;
+	background-color: var(--panel-bg);
+	color: var(--text-color);
+}
+
+.ingredient-card:hover,
+.recipe-card:hover {
+	background-color: var(--hover-highlight);
+	border-color: var(--highlight);
+}
+
+.ingredient-card img,
+.recipe-card img {
+	margin-right: 10px;
+}

@@ -18,6 +18,20 @@ export interface ItemMobDrop {
 	images: string;
 }
 
+export interface ItemIngredient {
+	id: string;
+	name: string;
+	images: string;
+	quantity: number;
+}
+
+export interface ItemRecipe {
+	id: string;
+	name: string;
+	images: string;
+	quantity: number;
+}
+
 export interface Item {
 	id: string;
 	bid: number;
@@ -61,4 +75,6 @@ export interface Item {
 	swingsound: number;
 	images: string;
 	monsterDrops: ItemMobDrop[];
+	ingredients: ItemIngredient[];
+	usedInRecipes: ItemRecipe[];
 }
