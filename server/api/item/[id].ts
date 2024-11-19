@@ -1,13 +1,20 @@
-import { defineEventHandler, createError } from 'h3';
+import { defineEventHandler, createError, getRequestHeader } from 'h3';
 
 export default defineEventHandler(async (event) => {
 	const { apiBase } = useRuntimeConfig();
 	const { id } = event.context.params as { id: string };
 
+	// 클라이언트 IP 주소 가져오기
+	const clientIp =
+		getRequestHeader(event, 'x-forwarded-for')?.split(',')[0] ||
+		event.node.req.socket.remoteAddress?.replace(/^::ffff:/, '') ||
+		'0.0.0.0';
+
 	try {
 		const data = await $fetch(`${apiBase}/item/${id}`, {
 			headers: {
 				'Content-Type': 'application/json',
+				'X-Real-IP': clientIp, // 백엔드로 IP 전달
 			},
 		});
 
