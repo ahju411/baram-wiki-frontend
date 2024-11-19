@@ -141,6 +141,42 @@
 					</table>
 				</div>
 
+				<div class="ingredients">
+					<h3>조합 재료</h3>
+					<ul>
+						<li v-for="ingredient in item.ingredients" :key="ingredient.id">
+							<NuxtLink :to="`/item/${ingredient.id}`">
+								<div class="ingredient-card">
+									<NuxtImg
+										:src="`https://evfuckbgifbr27188584.gcdn.ntruss.com/item/${ingredient.images}`"
+										width="48"
+										height="48"
+									/>
+									{{ ingredient.name }} * {{ ingredient.quantity }}
+								</div>
+							</NuxtLink>
+						</li>
+					</ul>
+				</div>
+
+				<div class="recipes">
+					<h3>조합 가능 아이템</h3>
+					<ul>
+						<li v-for="recipe in item.usedInRecipes" :key="recipe.id">
+							<NuxtLink :to="`/item/${recipe.id}`">
+								<div class="recipe-card">
+									<NuxtImg
+										:src="`https://evfuckbgifbr27188584.gcdn.ntruss.com/item/${recipe.images}`"
+										width="48"
+										height="48"
+									/>
+									{{ recipe.name }}
+								</div>
+							</NuxtLink>
+						</li>
+					</ul>
+				</div>
+
 				<div class="drops">
 					<h3>드랍 정보</h3>
 					<ul>

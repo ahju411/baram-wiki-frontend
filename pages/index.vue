@@ -23,6 +23,13 @@
 						<span class="notice-date">2024.11.09</span>
 					</div>
 				</NuxtLink>
+				<NuxtLink to="/item/I575932" class="notice-container">
+					<span class="notice-badge new">신규</span>
+					<div class="notice-content">
+						<span class="notice-text">아이템 조합자료 업데이트</span>
+						<span class="notice-date">2024.11.19</span>
+					</div>
+				</NuxtLink>
 			</section>
 
 			<!-- 메인 검색 섹션 -->
@@ -137,17 +144,22 @@
 				</div>
 
 				<!-- 실시간 인기 검색어 -->
-				<div class="trending-searches" v-if="trendingKeywords.length">
-					<h3 class="trending-title">실시간 인기 검색어</h3>
+
+				<div
+					class="trending-searches"
+					v-if="!isLoadingPopular && popularItems?.length"
+				>
+					<h3 class="trending-title">실시간 인기 아이템</h3>
 					<div class="keyword-list">
 						<NuxtLink
-							v-for="keyword in trendingKeywords"
-							:key="keyword.id"
+							v-for="(item, index) in popularItems"
+							:key="item.item_id"
 							class="keyword-chip"
-							:to="`/${keyword.type}/${keyword.id}`"
+							:to="`/item/${item.item_id}`"
 							as="button"
 						>
-							{{ keyword.name }}
+							<span class="rank">{{ index + 1 }}</span>
+							{{ item.name }}
 						</NuxtLink>
 					</div>
 				</div>
@@ -193,13 +205,12 @@ const searchInput = ref<HTMLInputElement | null>(null);
 const isKeyboardVisible = ref(false);
 let prevVisualViewport = 0;
 
-// 2. 정적 데이터 (Static Data)
-const trendingKeywords = ref([
-	{ id: 'I627884', name: '도토리', type: 'item' },
-	{ id: 'MO110645', name: '다람쥐', type: 'monster' },
-	{ id: 'MO181712', name: '토끼', type: 'monster' },
-]);
+// 인기 아이템 상태 추가 및 API 호출 부분 수정
+const { data: popularItems, pending: isLoadingPopular } = await useAsyncData<
+	PopularItem[]
+>('popularItems', () => $fetch('/api/search/popular-items'));
 
+// 2. 정적 데이터 (Static Data)
 const recentUpdates = ref([
 	{
 		id: 'I091985',
@@ -328,7 +339,7 @@ const handleVisualViewportResize = () => {
 };
 
 // 6. 라이프사이클 훅 (Lifecycle Hooks)
-onMounted(() => {
+onMounted(async () => {
 	searchInput.value?.focus();
 	if (window?.visualViewport) {
 		prevVisualViewport = window.visualViewport.height;
@@ -374,4 +385,34 @@ watchEffect(async () => {
 
 <style scoped lang="scss">
 @use '@/assets/main.scss';
+
+.keyword-chip {
+	display: inline-flex;
+	align-items: center;
+	padding: 0.5rem 1rem;
+	margin: 0.25rem;
+	background: #f8f9fa;
+	border-radius: 20px;
+	text-decoration: none;
+	color: #495057;
+	font-size: 0.9rem;
+	transition: all 0.2s ease;
+
+	&:hover {
+		background: #e9ecef;
+	}
+
+	.rank {
+		margin-right: 0.5rem;
+		font-weight: bold;
+		color: #ff6b6b;
+	}
+}
+
+.keyword-list {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.5rem;
+	margin-top: 1rem;
+}
 </style>
