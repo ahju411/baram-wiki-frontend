@@ -114,7 +114,7 @@ export default defineNuxtConfig({
 				},
 				{
 					name: 'google-adsense-account',
-					content: 'ca-pub-8392715633610572'
+					content: 'ca-pub-9583781392760368'
 				},
 			],
 			link: [
