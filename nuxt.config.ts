@@ -58,11 +58,6 @@ export default defineNuxtConfig({
 					function gtag(){dataLayer.push(arguments);}
 					gtag('js', new Date());
 					gtag('config', 'G-L4Y7M5ZQGC');`
-				},
-				{
-					src: 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9583781392760368',
-					async: true,
-					crossorigin: 'anonymous'
 				}
 			],
 			noscript: [
@@ -80,12 +75,12 @@ export default defineNuxtConfig({
 				{
 					name: 'description',
 					content:
-						'바람위키는 바람의나라 게임 아이템, 몬스터, 맵 정보를 손쉽게 검색하고 찾아볼 수 있는 서비스입니다. 실시간 검색 기능을 통해 원하는 정보를 빠르게 찾아보세요!',
+						'바람의나라 게임 아이템, 몬스터, 맵 정보를 손쉽게 검색하고 찾아볼 수 있는 서비스입니다. 실시간 검색 기능을 통해 원하는 정보를 빠르게 찾아보세요!',
 				},
 				{
 					name: 'keywords',
 					content:
-						'바람의나라, 바람위키, 게임가이드, 아이템, 몬스터, 맵, 게임정보, 위키, 바람, 바람의나라 클래식, 클래식 바람의나라, 클바, 클바위키, 위키클바, 바람의나라 클래식위키 , 바람위키 클래식',
+						'바람의나라, 바람위키, 게임가이드, 아이템, 몬스터, 맵, 게임정보',
 				},
 				{ property: 'og:type', content: 'website' },
 				{
@@ -111,10 +106,6 @@ export default defineNuxtConfig({
 				{
 					name: 'naver-site-verification',
 					content: '1f19048f8b4d6021163baa4bd1b4fcd9ff667be9',
-				},
-				{
-					name: 'google-adsense-account',
-					content: 'ca-pub-8392715633610572'
 				},
 			],
 			link: [
