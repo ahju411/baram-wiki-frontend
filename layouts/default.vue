@@ -8,8 +8,7 @@
 					<Adsense 
 						v-if="showAds"
 						ad-slot="7398215734" 
-						ad-style="display:block" 
-						ad-format="auto"
+						:ad-style="{width: 160, height: 600}" 
 					/>
 				</client-only>
 			</div>
@@ -19,8 +18,7 @@
 					<Adsense 
 						v-if="showAds"
 						ad-slot="3458970727"
-						ad-style="display:block"
-						ad-format="auto" 
+						:ad-style="{width: 160, height: 600}" 
 					/>
 				</client-only>
 			</div>
@@ -50,27 +48,9 @@ onMounted(() => {
 .content {
 	flex: 1;
 	margin: 0 auto;
-	max-width: 1200px;
+	max-width: calc(1200px + 320px);
 	padding: 0 20px;
 	position: relative;
 	display: flex;
-}
-
-.ad-fixed {
-	position: fixed;
-	top: 100px;
-	width: 160px;
-
-	&.left {
-		left: calc((100% - 1200px) / 2 - 180px);
-	}
-
-	&.right {
-		right: calc((100% - 1200px) / 2 - 180px);
-	}
-
-	@media (max-width: 1400px) {
-		display: none;
-	}
 }
 </style>
