@@ -1,71 +1,75 @@
 <template>
-  <div class="adsense-container" :style="containerStyle">
-    <ins
-      class="adsbygoogle"
-      :style="{ display: 'block' }"
-      :data-ad-client="adClient"
-      :data-ad-slot="adSlot"
-      :data-ad-format="adFormat"
-      data-full-width-responsive="true"
-    />
+  <div :class="['adsense-container', position]">
+    <client-only>
+      <ins class="adsbygoogle"
+           :style="adStyle"
+           data-ad-client="ca-pub-9583781392760368"
+           :data-ad-slot="adSlot"
+           data-ad-format="auto"
+           data-full-width-responsive="true">
+      </ins>
+    </client-only>
   </div>
 </template>
 
-<script setup lang="ts">
-import { computed, onMounted } from 'vue'
+<script setup>
+import { onMounted, computed } from 'vue';
 
-// window.adsbygoogle 타입 정의
-declare global {
-  interface Window {
-    adsbygoogle: any[]
+const props = defineProps({
+  adSlot: {
+    type: String,
+    required: true
+  },
+  position: {
+    type: String,
+    default: 'left',
+    validator: (value) => ['left', 'right', 'bottom'].includes(value)
   }
-}
+});
 
-interface Props {
-  position?: {
-    top?: string
-    bottom?: string
-    left?: string
-    right?: string
-  }
-  width?: string
-  height?: string
-  adClient?: string
-  adSlot?: string
-  adFormat?: string
-}
-
-const props = withDefaults(defineProps<Props>(), {
-  position: () => ({}),
-  width: '100%',
-  height: 'auto',
-  adClient: 'ca-pub-9583781392760368',
-  adSlot: '',
-  adFormat: 'auto'
-})
-
-const containerStyle = computed(() => ({
-  position: 'absolute' as const,  // position 타입 명시
-  width: props.width,
-  height: props.height,
-  top: props.position.top,
-  bottom: props.position.bottom,
-  left: props.position.left,
-  right: props.position.right,
-  zIndex: 999
-}))
+const adStyle = computed(() => ({
+  display: 'block',
+  width: props.position === 'bottom' ? '100%' : '300px',
+  height: props.position === 'bottom' ? '280px' : '600px'
+}));
 
 onMounted(() => {
   try {
-    ;(window.adsbygoogle = window.adsbygoogle || []).push({})
+    (window.adsbygoogle = window.adsbygoogle || []).push({});
   } catch (error) {
-    console.error('애드센스 로딩 실패:', error)
+    console.error('AdSense 초기화 에러:', error);
   }
-})
+});
 </script>
 
 <style scoped>
 .adsense-container {
-  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  margin: 1rem 0;
+}
+
+.left {
+  margin-right: 1rem;
+}
+
+.right {
+  margin-left: 1rem;
+}
+
+.bottom {
+  width: 100%;
+  margin: 1rem auto;
+}
+
+@media (max-width: 768px) {
+  .adsense-container {
+    width: 100%;
+    margin: 1rem 0;
+  }
+  
+  .left, .right {
+    margin: 0;
+  }
 }
 </style>
