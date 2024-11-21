@@ -1,7 +1,8 @@
 <template>
   <div :class="['adsense-container', position]">
     <client-only>
-      <ins class="adsbygoogle"
+      <ins v-if="showAd"
+           class="adsbygoogle"
            :style="adStyle"
            data-ad-client="ca-pub-9583781392760368"
            :data-ad-slot="adSlot"
@@ -13,7 +14,7 @@
 </template>
 
 <script setup>
-import { onMounted, computed } from 'vue';
+import { ref, onMounted, computed, nextTick } from 'vue';
 
 const props = defineProps({
   adSlot: {
@@ -27,6 +28,8 @@ const props = defineProps({
   }
 });
 
+const showAd = ref(false);
+
 const adStyle = computed(() => ({
   display: 'block',
   width: props.position === 'bottom' ? '100%' : '300px',
@@ -34,11 +37,18 @@ const adStyle = computed(() => ({
 }));
 
 onMounted(() => {
-  try {
-    (window.adsbygoogle = window.adsbygoogle || []).push({});
-  } catch (error) {
-    console.error('AdSense 초기화 에러:', error);
-  }
+  // 컴포넌트가 마운트된 후 약간의 지연을 두고 광고 초기화
+  setTimeout(() => {
+    showAd.value = true;
+    // nextTick을 사용하여 DOM이 업데이트된 후 광고 초기화
+    nextTick(() => {
+      try {
+        (window.adsbygoogle = window.adsbygoogle || []).push({});
+      } catch (error) {
+        console.error('AdSense 초기화 에러:', error);
+      }
+    });
+  }, 100);
 });
 </script>
 
