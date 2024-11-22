@@ -27,7 +27,5 @@ import Footer from '~/components/Footer.vue';
 	max-width: 1200px;
 	padding: 0 20px;
 	display: flex;
-	// flex-direction: column;
-	// align-items: center;
 }
 </style>
