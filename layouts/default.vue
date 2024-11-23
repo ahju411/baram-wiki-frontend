@@ -25,10 +25,12 @@ watch(
 		currentRouteKey.value = newPath; // DOM 강제 업데이트
 		if (typeof window !== 'undefined') {
 			try {
-				// 애드센스 초기화에 텀 추가
+				// 애드센스 자동 광고 스크립트를 초기화
 				setTimeout(() => {
-					(window.adsbygoogle = window.adsbygoogle || []).push({});
-				}, 500); // 500ms의 딜레이
+					if (window.adsbygoogle) {
+						(window.adsbygoogle = window.adsbygoogle || []).push({});
+					}
+				}, 500); // 초기화 딜레이
 			} catch (e) {
 				console.error('Adsense initialization error:', e);
 			}
