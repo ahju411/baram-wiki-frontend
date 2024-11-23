@@ -12,6 +12,18 @@
 <script setup>
 import Header from '~/components/Header.vue';
 import Footer from '~/components/Footer.vue';
+import { useRouter } from 'vue-router';
+
+// 라우터 가져오기
+const router = useRouter();
+
+// 라우터 전환 후 Google Adsense 광고 재로드
+router.afterEach(() => {
+	if (typeof window !== 'undefined' && window.adsbygoogle) {
+		window.adsbygoogle = window.adsbygoogle || [];
+		window.adsbygoogle.push({});
+	}
+});
 </script>
 
 <style scoped lang="scss">
