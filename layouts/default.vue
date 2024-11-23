@@ -11,32 +11,52 @@
 
 <script setup>
 import { useRouter } from 'vue-router';
-import { ref, watch } from 'vue';
+import { ref, watch, onMounted } from 'vue';
 import Header from '~/components/Header.vue';
 import Footer from '~/components/Footer.vue';
 
-// 현재 라우트 키를 감지하여 DOM 강제 갱신
 const router = useRouter();
 const currentRouteKey = ref(router.currentRoute.value.fullPath);
 
+// 자동 광고 재초기화 함수
+const reinitializeAds = () => {
+	if (typeof window !== 'undefined' && window.adsbygoogle) {
+		try {
+			// 기존 광고 제거
+			const adElements = document.querySelectorAll('.adsbygoogle');
+			adElements.forEach((ad) => ad.remove());
+
+			// adsbygoogle 객체 초기화
+			window.adsbygoogle = [];
+
+			// 새로운 광고 초기화
+			(adsbygoogle = window.adsbygoogle || []).push({
+				google_ad_client: 'ca-pub-9583781392760368',
+				enable_page_level_ads: true,
+			});
+		} catch (e) {
+			console.error('Adsense reinitialization error:', e);
+		}
+	}
+};
+
+// 라우트 변경 감지
 watch(
 	() => router.currentRoute.value.fullPath,
 	(newPath) => {
-		currentRouteKey.value = newPath; // DOM 강제 업데이트
-		if (typeof window !== 'undefined') {
-			try {
-				// 애드센스 자동 광고 스크립트를 초기화
-				setTimeout(() => {
-					if (window.adsbygoogle) {
-						(window.adsbygoogle = window.adsbygoogle || []).push({});
-					}
-				}, 500); // 초기화 딜레이
-			} catch (e) {
-				console.error('Adsense initialization error:', e);
-			}
-		}
+		currentRouteKey.value = newPath;
+		// 약간의 지연 후 광고 재초기화
+		setTimeout(() => {
+			reinitializeAds();
+		}, 100);
 	}
 );
+
+// 초기 마운트시
+onMounted(() => {
+	// 초기 광고 로드
+	reinitializeAds();
+});
 </script>
 
 <style scoped lang="scss">
