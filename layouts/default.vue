@@ -25,21 +25,8 @@ watch(
 		currentRouteKey.value = newPath; // DOM 강제 업데이트
 		if (typeof window !== 'undefined') {
 			try {
-				// 광고 초기화 전에 기존 광고 상태 확인
-				const adsElements = document.querySelectorAll('ins.adsbygoogle');
-				let adsAlreadyLoaded = false;
-
-				// 이미 로드된 광고인지 확인
-				adsElements.forEach((ad) => {
-					if (ad.getAttribute('data-adsbygoogle-status') === 'done') {
-						adsAlreadyLoaded = true;
-					}
-				});
-
-				// 광고가 이미 로드되지 않았다면 초기화 실행
-				if (!adsAlreadyLoaded) {
-					(window.adsbygoogle = window.adsbygoogle || []).push({});
-				}
+				// 애드센스 자동 광고 스크립트 다시 실행
+				(window.adsbygoogle = window.adsbygoogle || []).push({});
 			} catch (e) {
 				console.error('Adsense initialization error:', e);
 			}
