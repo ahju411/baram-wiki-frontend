@@ -1,5 +1,5 @@
 <template>
-	<div class="container">
+	<div class="container" :key="currentRouteKey">
 		<NuxtRouteAnnouncer />
 		<Header />
 		<main class="content">
@@ -10,20 +10,42 @@
 </template>
 
 <script setup>
+import { useRouter } from 'vue-router';
+import { ref, watch } from 'vue';
 import Header from '~/components/Header.vue';
 import Footer from '~/components/Footer.vue';
-import { useRouter } from 'vue-router';
 
-// 라우터 가져오기
+// 현재 라우트 키를 감지하여 DOM 강제 갱신
 const router = useRouter();
+const currentRouteKey = ref(router.currentRoute.value.fullPath);
 
-// 라우터 전환 후 Google Adsense 광고 재로드
-router.afterEach(() => {
-	if (typeof window !== 'undefined' && window.adsbygoogle) {
-		window.adsbygoogle = window.adsbygoogle || [];
-		window.adsbygoogle.push({});
+watch(
+	() => router.currentRoute.value.fullPath,
+	(newPath) => {
+		currentRouteKey.value = newPath; // DOM 강제 업데이트
+		if (typeof window !== 'undefined') {
+			try {
+				// 광고 초기화 전에 기존 광고 상태 확인
+				const adsElements = document.querySelectorAll('ins.adsbygoogle');
+				let adsAlreadyLoaded = false;
+
+				// 이미 로드된 광고인지 확인
+				adsElements.forEach((ad) => {
+					if (ad.getAttribute('data-adsbygoogle-status') === 'done') {
+						adsAlreadyLoaded = true;
+					}
+				});
+
+				// 광고가 이미 로드되지 않았다면 초기화 실행
+				if (!adsAlreadyLoaded) {
+					(window.adsbygoogle = window.adsbygoogle || []).push({});
+				}
+			} catch (e) {
+				console.error('Adsense initialization error:', e);
+			}
+		}
 	}
-});
+);
 </script>
 
 <style scoped lang="scss">
