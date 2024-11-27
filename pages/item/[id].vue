@@ -129,7 +129,7 @@
 						</div>
 						<div class="flex justify-between">
 							<span class="text-game-secondary">직업</span>
-							<span>{{ item.reqjob }}</span>
+							<span>{{ getJob(item.reqjob) }}</span>
 						</div>
 						<div class="flex justify-between">
 							<span class="text-game-secondary">성별</span>
@@ -276,6 +276,17 @@ const getGender = (gender: number) => {
 		default:
 			return '알 수 없음';
 	}
+};
+
+const getJob = (job: number) => {
+	const jobs = {
+		0: '공용',
+		1: '전사',
+		2: '도적',
+		3: '주술사',
+		4: '도사',
+	};
+	return jobs[job as keyof typeof jobs] || '알 수 없음';
 };
 
 useSeoMeta({
