@@ -10,6 +10,11 @@
 			<!-- 중앙 로고 및 검색 섹션 -->
 			<div class="text-center mb-12">
 				<!-- 로고 이미지 -->
+				<NuxtImg
+					src="/images/logo.png"
+					alt="바람위키"
+					class="w-24 h-24 mx-auto mb-8"
+				/>
 				<div class="mb-8">
 					<h1 class="text-3xl sm:text-4xl font-bold text-game-legendary mt-4">
 						바람위키
@@ -121,20 +126,16 @@
 			<div class="bg-layer-surface rounded-lg p-6">
 				<h2 class="text-xl font-bold mb-4">최근 업데이트</h2>
 				<div class="space-y-4">
-					<a href="info-detail.html">
+					<div class="flex items-center gap-4 transition-colors">
 						<div
-							class="flex items-center gap-4 hover:bg-layer-overlay transition-colors"
+							class="bg-layer-overlay px-2 py-1 rounded text-sm text-game-secondary whitespace-nowrap"
 						>
-							<div
-								class="bg-layer-overlay px-2 py-1 rounded text-sm text-game-secondary whitespace-nowrap"
-							>
-								11/26
-							</div>
-							<div>
-								<p class="text-sm">새로운 아이템 30종이 추가되었습니다.</p>
-							</div>
+							11/28
 						</div>
-					</a>
+						<div>
+							<p class="text-sm">신규 UI 업데이트</p>
+						</div>
+					</div>
 					<div class="flex items-center gap-4">
 						<div
 							class="bg-layer-overlay px-2 py-1 rounded text-sm text-game-secondary whitespace-nowrap"
@@ -152,7 +153,7 @@
 							11/24
 						</div>
 						<div>
-							<p class="text-sm">레벨별 맵 정보가 추가되었습니다.</p>
+							<p class="text-sm">레벨별 사냥터 정보가 추가되었습니다.</p>
 						</div>
 					</div>
 				</div>

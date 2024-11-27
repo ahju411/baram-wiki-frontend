@@ -202,7 +202,7 @@
 						바람위키
 					</NuxtLink>
 
-					<nav class="flex items-center gap-8">
+					<nav class="flex items-center gap-8 z-50">
 						<NuxtLink
 							to="/item-table"
 							class="hover:text-game-legendary transition-colors"
@@ -311,7 +311,7 @@
 		<!-- Search Section -->
 		<div
 			v-if="!isMainPage"
-			class="px-4 py-2 bg-layer-bg border-b border-border-light relative"
+			class="px-4 py-2 bg-layer-bg border-b border-border-light relative max-w-3xl mx-auto"
 		>
 			<div class="relative">
 				<input
@@ -330,7 +330,7 @@
 				/>
 				<div
 					v-show="showSearchResults"
-					class="absolute left-0 right-0 mt-1 bg-layer-surface border border-border-light rounded-lg shadow-lg z-50"
+					class="absolute left-0 right-0 mt-1 bg-layer-surface border border-border-light rounded-lg shadow-lg z-50 max-h-[300px] overflow-y-auto"
 				>
 					<template v-if="isLoading">
 						<div class="p-4 text-center text-game-secondary">

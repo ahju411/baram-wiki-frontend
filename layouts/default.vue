@@ -1,8 +1,8 @@
 <template>
-	<div class="bg-layer-bg min-h-screen font-pretendard text-game-primary">
+	<div>
 		<NuxtRouteAnnouncer />
 		<Header />
-		<main>
+		<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
 			<NuxtPage />
 		</main>
 		<Footer />

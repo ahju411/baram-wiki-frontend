@@ -129,6 +129,10 @@ export default defineNuxtConfig({
 					rel: 'stylesheet',
 					href: 'https://cdn.jsdelivr.net/npm/reset-css@5.0.2/reset.min.css',
 				},
+				{
+					rel: 'stylesheet',
+					href: 'https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css',
+				},
 				{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
 			],
 		},
