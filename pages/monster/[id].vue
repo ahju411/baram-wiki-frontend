@@ -22,7 +22,7 @@
 						class="flex flex-wrap justify-center sm:justify-start gap-2 sm:gap-4 text-sm"
 					>
 						<div class="bg-layer-surface px-3 py-1 rounded">
-							{{ monster.mtype === 'y' ? '보스' : '일반' }}
+							{{ monster.mtype === 'Y' ? '보스' : '일반' }}
 						</div>
 					</div>
 				</div>

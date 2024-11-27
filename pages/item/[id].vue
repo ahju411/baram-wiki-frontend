@@ -73,12 +73,12 @@
 					<h2 class="text-lg font-bold mb-4">능력치</h2>
 					<div class="space-y-2">
 						<div v-if="item.smin || item.smax" class="flex justify-between">
-							<span class="text-game-secondary">공격력</span>
-							<span>{{ item.smin }} ~ {{ item.smax }}</span>
+							<span class="text-game-secondary">S 파괴력</span>
+							<span>{{ item.smin }}m{{ item.smax }}</span>
 						</div>
 						<div v-if="item.lmin || item.lmax" class="flex justify-between">
-							<span class="text-game-secondary">마법 공격력</span>
-							<span>{{ item.lmin }} ~ {{ item.lmax }}</span>
+							<span class="text-game-secondary">L 파괴력</span>
+							<span>{{ item.lmin }}m{{ item.lmax }}</span>
 						</div>
 						<div v-if="item.ac" class="flex justify-between">
 							<span class="text-game-secondary">방어력</span>

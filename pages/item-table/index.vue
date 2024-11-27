@@ -192,10 +192,12 @@
 											v-if="item.smin"
 											class="flex items-center gap-1 text-sm"
 										>
-											<span class="text-game-secondary">위력:</span>
+											<span class="text-game-secondary">파괴력:</span>
 											<span
-												>{{ item.smin
-												}}{{ item.smax ? ` ~ ${item.smax}` : '' }}</span
+												>{{ item.smin }}m{{ item.smax ? `${item.smax}` : '' }} |
+												{{ item.lmin }}m{{
+													item.lmax ? `${item.lmax}` : ''
+												}}</span
 											>
 										</div>
 										<div v-if="item.ac" class="flex items-center gap-1 text-sm">

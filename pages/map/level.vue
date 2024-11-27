@@ -21,7 +21,7 @@
 		<div v-for="tab in tabs" :key="tab.id" v-show="activeTab === tab.id">
 			<div class="space-y-8">
 				<div
-					v-for="level in groupedLevels"
+					v-for="level in sortedLevels"
 					:key="level.id"
 					class="bg-layer-surface rounded-lg overflow-hidden shadow-md"
 				>
@@ -75,7 +75,7 @@
 										:key="index"
 										class="border-b border-border-primary"
 									>
-										<td class="p-2">
+										<td class="p-2 align-middle">
 											<NuxtLink
 												:to="`/monster/${monsterData.monster.id}`"
 												class="flex items-center gap-2 hover:text-game-legendary"
@@ -90,10 +90,12 @@
 												}}</span>
 											</NuxtLink>
 										</td>
-										<td class="p-2 text-sm sm:text-base">
-											{{ monsterData.monster.exp }}
+										<td class="p-2 text-sm sm:text-base align-middle">
+											<div class="flex items-center">
+												{{ formatNumber(monsterData.monster.exp) }}
+											</div>
 										</td>
-										<td class="p-2">
+										<td class="p-2 align-middle">
 											<div class="flex flex-wrap gap-1 sm:gap-2">
 												<NuxtLink
 													v-for="drop in monsterData.monster.dropItems"
@@ -108,7 +110,7 @@
 													/>
 													<span>{{ drop.item.name }}</span>
 													<span class="text-game-secondary"
-														>({{ drop.item.price }}전)</span
+														>({{ formatNumber(drop.item.price) }}전)</span
 													>
 												</NuxtLink>
 											</div>
@@ -165,6 +167,22 @@ useSeoMeta({
 	title: `바람위키 | 맵 레벨 가이드 - ${tabs[activeTab.value - 1].name}`,
 	description: `바람의 나라 맵 레벨 가이드 - ${tabs[activeTab.value - 1].name}`,
 });
+
+// 경험치 기준으로 정렬된 레벨 데이터
+const sortedLevels = computed(() => {
+	if (!groupedLevels.value) return [];
+
+	return groupedLevels.value.map((level) => ({
+		...level,
+		monsters: [...level.monsters].sort((a, b) => a.monster.exp - b.monster.exp),
+	}));
+});
+
+const formatNumber = (number: number | string | null | undefined) => {
+	if (number === null || number === undefined) return '0';
+	const num = typeof number === 'string' ? parseInt(number) : number;
+	return num.toLocaleString('ko-KR');
+};
 </script>
 
 <style lang="scss" scoped>
