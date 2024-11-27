@@ -1,234 +1,338 @@
 <template>
-	<div class="screener-container">
-		<div class="screener-option-section">
-			<!-- Item Section -->
-			<div class="item-type-pos">
-				<div class="screener-title">아이템</div>
-				<div class="screener-option-box">
-					<div
-						class="weapon"
-						:class="{ on: selectedItem === '0' }"
-						@click="selectOption('item', '0')"
-					>
-						무기
+	<div
+		class="bg-layer-bg min-h-screen p-4 sm:p-8 font-pretendard text-game-primary"
+	>
+		<div class="max-w-6xl mx-auto">
+			<!-- 검색 필터 섹션 -->
+			<div class="bg-layer-surface rounded-lg p-4 sm:p-6 mb-6 sm:mb-8">
+				<h2 class="text-xl font-bold mb-4 sm:mb-6">아이템 검색</h2>
+
+				<div class="grid grid-cols-1 sm:grid-cols-4 gap-4 sm:gap-6">
+					<!-- 아이템 타입 -->
+					<div>
+						<h3 class="font-bold mb-2">아이템</h3>
+						<div class="flex flex-wrap gap-2">
+							<div
+								v-for="(item, index) in [
+									'무기',
+									'갑옷',
+									'방패',
+									'투구',
+									'반지',
+									'목걸이',
+								]"
+								:key="index"
+								@click="selectOption('item', index.toString())"
+								:class="[
+									'cursor-pointer px-3 py-2 rounded min-w-[80px] text-center',
+									selectedItem === index.toString()
+										? 'bg-layer-overlay text-game-legendary'
+										: 'text-game-secondary',
+								]"
+							>
+								{{ item }}
+							</div>
+						</div>
 					</div>
-					<div
-						class="armor"
-						:class="{ on: selectedItem === '1' }"
-						@click="selectOption('item', '1')"
-					>
-						갑옷
+
+					<!-- 성별 -->
+					<div>
+						<h3 class="font-bold mb-2">성별</h3>
+						<div class="flex flex-wrap gap-2">
+							<div
+								v-for="(sex, index) in ['공통', '남자', '여자']"
+								:key="index"
+								@click="selectOption('sex', index.toString())"
+								:class="[
+									'cursor-pointer px-3 py-2 rounded min-w-[80px] text-center',
+									selectedSex === index.toString()
+										? 'bg-layer-overlay text-game-legendary'
+										: 'text-game-secondary',
+									sexButtonController === '1' && index !== 0
+										? 'opacity-50 pointer-events-none'
+										: '',
+								]"
+							>
+								{{ sex }}
+							</div>
+						</div>
 					</div>
-					<div
-						class="shield"
-						:class="{ on: selectedItem === '2' }"
-						@click="selectOption('item', '2')"
-					>
-						방패
+
+					<!-- 직업 -->
+					<div>
+						<h3 class="font-bold mb-2">직업</h3>
+						<div class="flex flex-wrap gap-2">
+							<div
+								v-for="(job, index) in [
+									'공통',
+									'전사',
+									'도적',
+									'주술사',
+									'도사',
+								]"
+								:key="index"
+								@click="selectOption('job', index.toString())"
+								:class="[
+									'cursor-pointer px-3 py-2 rounded min-w-[80px] text-center',
+									selectedJob === index.toString()
+										? 'bg-layer-overlay text-game-legendary'
+										: 'text-game-secondary',
+								]"
+							>
+								{{ job }}
+							</div>
+						</div>
 					</div>
-					<div
-						class="helmet"
-						:class="{ on: selectedItem === '3' }"
-						@click="selectOption('item', '3')"
-					>
-						투구
+
+					<!-- 레벨 슬라이더 -->
+					<div>
+						<h3 class="font-bold mb-2">레벨 범위</h3>
+						<client-only>
+							<n-slider
+								class="w-full"
+								v-model:value="sliderValue"
+								:step="10"
+								:min="0"
+								:max="99"
+								:range="true"
+								:marks="marks"
+							/>
+						</client-only>
 					</div>
-					<div
-						class="ring"
-						:class="{ on: selectedItem === '4' }"
-						@click="selectOption('item', '4')"
+				</div>
+
+				<!-- 검색 버튼 -->
+				<div class="mt-6 flex justify-center">
+					<button
+						@click="searchItemList"
+						class="bg-layer-overlay px-6 py-2 rounded-lg hover:bg-game-legendary hover:text-layer-bg transition-colors"
 					>
-						반지
-					</div>
-					<div
-						class="necklace"
-						:class="{ on: selectedItem === '5' }"
-						@click="selectOption('item', '5')"
-					>
-						목걸이
+						검색
+					</button>
+				</div>
+			</div>
+
+			<!-- 검색 결과 섹션 -->
+			<div class="bg-layer-surface rounded-lg p-4 sm:p-6 mb-6">
+				<div class="flex justify-between items-center">
+					<h2 class="text-xl font-bold">검색 결과</h2>
+					<div class="flex items-center gap-2">
+						<span class="text-game-secondary">정렬:</span>
+						<select
+							v-model="sortOption"
+							class="bg-layer-overlay px-3 py-2 rounded-lg text-sm"
+							@change="sortItems"
+						>
+							<option value="level_asc">레벨 낮은순</option>
+							<option value="level_desc">레벨 높은순</option>
+							<option value="power_asc" v-if="tableFormat === '0'">
+								위력 낮은순
+							</option>
+							<option value="power_desc" v-if="tableFormat === '0'">
+								위력 높은순
+							</option>
+							<option value="ac_asc" v-if="tableFormat === '1'">
+								AC 낮은순
+							</option>
+							<option value="ac_desc" v-if="tableFormat === '1'">
+								AC 높은순
+							</option>
+						</select>
 					</div>
 				</div>
 			</div>
 
-			<!-- Sex Section -->
-			<div class="sex-type-pos">
-				<div class="screener-title">성별</div>
-				<div class="screener-option-box">
-					<div
-						class="sex-all"
-						:class="{ on: selectedSex === '0' }"
-						@click="selectOption('sex', '0')"
-					>
-						공통
-					</div>
-					<div
-						class="man"
-						:class="{
-							on: selectedSex === '1',
-							hide: sexButtonController == '1',
-						}"
-						@click="selectOption('sex', '1')"
-					>
-						남자
-					</div>
-					<div
-						class="woman"
-						:class="{
-							on: selectedSex === '2',
-							hide: sexButtonController == '1',
-						}"
-						@click="selectOption('sex', '2')"
-					>
-						여자
-					</div>
+			<!-- 아이템 결과 목 -->
+			<div class="space-y-4">
+				<div v-if="dataLoading" class="text-center py-8">
+					<p>데이터 로딩중 ...</p>
 				</div>
-			</div>
 
-			<!-- Job Section -->
-			<div class="job-type-pos">
-				<div class="screener-title">직업</div>
-				<div class="screener-option-box">
+				<div v-else-if="itemtable && itemtable.length > 0">
 					<div
-						class="job-all"
-						:class="{ on: selectedJob === '0' }"
-						@click="selectOption('job', '0')"
+						v-for="(item, index) in itemtable"
+						:key="index"
+						class="bg-layer-surface rounded-lg p-4 mb-4"
 					>
-						공통
-					</div>
-					<div
-						class="warrior"
-						:class="{ on: selectedJob === '1' }"
-						@click="selectOption('job', '1')"
-					>
-						전사
-					</div>
-					<div
-						class="rogue"
-						:class="{ on: selectedJob === '2' }"
-						@click="selectOption('job', '2')"
-					>
-						도적
-					</div>
-					<div
-						class="shaman"
-						:class="{ on: selectedJob === '3' }"
-						@click="selectOption('job', '3')"
-					>
-						주술사
-					</div>
-					<div
-						class="sage"
-						:class="{ on: selectedJob === '4' }"
-						@click="selectOption('job', '4')"
-					>
-						도사
-					</div>
-				</div>
-			</div>
+						<!-- 아이템 카드 내용 -->
+						<div class="flex flex-col gap-4">
+							<!-- 아이템 이미지와 기본 정보 -->
+							<div class="flex gap-4">
+								<div
+									class="w-16 h-16 bg-layer-overlay rounded-lg p-2 flex-shrink-0"
+								>
+									<NuxtLink :to="`/item/${item.id}`">
+										<NuxtImg
+											:src="`https://evfuckbgifbr27188584.gcdn.ntruss.com/item/${item.images}`"
+											class="w-full h-full object-contain"
+										/>
+									</NuxtLink>
+								</div>
 
-			<div class="level-type-pos">
-				<div class="screener-title">레벨</div>
-				<div class="screener-option-box">
-					<client-only>
-						<n-slider
-							class="level-slider"
-							v-model:value="sliderValue"
-							:step="10"
-							:min="0"
-							:max="99"
-							:range="true"
-							:marks="marks"
-						/>
-					</client-only>
-				</div>
-			</div>
-			<!-- Search Button -->
-			<div class="search-button" @click="searchItemList">검색</div>
-		</div>
+								<div class="flex-1">
+									<div class="flex items-center gap-2 mb-1">
+										<NuxtLink
+											:to="`/item/${item.id}`"
+											class="text-lg font-bold hover:text-game-legendary"
+										>
+											{{ item.name }}
+										</NuxtLink>
+									</div>
 
-		<!-- Table Section -->
-		<div class="screener-table-section">
-			<div v-if="dataLoading"><p>데이터 로딩중 ...</p></div>
-			<div v-else-if="itemtable && itemtable.length > 0">
-				<table class="allitem-table">
-					<thead>
-						<tr>
-							<th>이미지</th>
-							<th>이름</th>
-							<th>레벨</th>
-							<th v-if="itemtable[0]?.smin !== undefined">위력</th>
-							<th v-else-if="itemtable[0]?.ac !== undefined">무장</th>
-							<th>직업</th>
-							<th>체력</th>
-							<th>마력</th>
-							<th>힘</th>
-							<th>민첩</th>
-							<th>지능</th>
-							<th>명중률</th>
-							<th>파괴력</th>
-							<th v-if="itemtable[0]?.hr !== undefined">체력리젠</th>
-							<th v-if="itemtable[0]?.md !== undefined">마법방어</th>
-							<th>드랍</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr v-for="(item, index) in itemtable" :key="index">
-							<td>
-								<NuxtLink :to="`/item/${item.id}`">
-									<NuxtImg
-										:src="`https://evfuckbgifbr27188584.gcdn.ntruss.com/item/${item.images}`"
-									></NuxtImg>
-								</NuxtLink>
-							</td>
-							<td class="lt">
-								<NuxtLink :to="`/item/${item.id}`"> {{ item.name }}</NuxtLink>
-							</td>
-							<td>{{ item.reqlevel }}</td>
-							<td v-if="item.smin !== undefined">
-								{{ item.smin }} ~ {{ item.lmin }}
-							</td>
-							<td v-else-if="item.ac !== undefined">AC {{ item.ac }}</td>
-							<td>{{ jobFormatter(item.reqjob) }}</td>
-							<td>{{ item.MHP }}</td>
-							<td>{{ item.MMP }}</td>
-							<td>{{ item.M }}</td>
-							<td>{{ item.W }}</td>
-							<td>{{ item.G }}</td>
-							<td>{{ item.hit }}</td>
-							<td>{{ item.dam }}</td>
-							<td v-if="item.hr !== undefined">{{ item.hr }}</td>
-							<td v-if="item.md !== undefined">{{ item.md }}</td>
-							<td v-if="item.MobDrops.length !== 0" class="monster-box">
-								<template v-for="(drop, index) in item.MobDrops" :key="index">
-									<div class="monster-card">
-										<div class="monster-detail">
+									<div class="flex flex-wrap gap-x-6 gap-y-1">
+										<div class="flex items-center gap-1 text-sm">
+											<span class="text-game-secondary">레벨:</span>
+											<span>{{ item.reqlevel }}</span>
+										</div>
+										<div class="flex items-center gap-1 text-sm">
+											<span class="text-game-secondary">직업:</span>
+											<span>{{ jobFormatter(item.reqjob) }}</span>
+										</div>
+										<div
+											v-if="item.smin"
+											class="flex items-center gap-1 text-sm"
+										>
+											<span class="text-game-secondary">위력:</span>
+											<span
+												>{{ item.smin
+												}}{{ item.smax ? ` ~ ${item.smax}` : '' }}</span
+											>
+										</div>
+										<div v-if="item.ac" class="flex items-center gap-1 text-sm">
+											<span class="text-game-secondary">AC:</span>
+											<span>{{ item.ac }}</span>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<!-- 스탯 정보 섹션 -->
+							<div class="border-t border-border-light pt-4">
+								<div class="text-sm text-game-secondary mb-2">아이템 스탯</div>
+								<div class="flex flex-wrap gap-2">
+									<template v-for="(stat, label) in stats" :key="label">
+										<div
+											class="group relative w-10 h-10"
+											v-if="hasStatValue(item[stat])"
+										>
+											<div
+												class="w-full h-full bg-layer-overlay rounded p-1 cursor-pointer flex items-center justify-center border border-solid border-border-legendary"
+											>
+												<span class="text-xs text-center">{{ label }}</span>
+											</div>
+											<div
+												class="absolute bottom-full left-1/2 -translate-x-1/2 mb-1 px-2 py-1 bg-layer-surface border border-border-light rounded text-sm whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity z-10 pointer-events-none"
+											>
+												+{{ item[stat] }}
+											</div>
+										</div>
+										<div
+											v-else
+											class="w-10 h-10 bg-layer-overlay rounded p-1 flex items-center justify-center"
+										>
+											<span class="text-xs text-center text-game-secondary">{{
+												label
+											}}</span>
+										</div>
+									</template>
+								</div>
+							</div>
+
+							<!-- 드롭 몬스터 섹션 -->
+							<div
+								v-if="item.MobDrops.length > 0"
+								class="border-t border-border-light pt-4"
+							>
+								<div class="text-sm text-game-secondary mb-2">드롭 몬스터</div>
+								<div class="flex flex-wrap gap-2">
+									<div
+										v-for="(drop, dropIndex) in item.MobDrops"
+										:key="dropIndex"
+										class="group relative"
+									>
+										<div
+											class="w-10 h-10 bg-layer-overlay rounded p-1 cursor-pointer"
+										>
 											<NuxtLink :to="`/monster/${drop.mob_id}`">
 												<NuxtImg
 													:src="`https://evfuckbgifbr27188584.gcdn.ntruss.com/monster/${drop.MobMaster.images}`"
+													class="w-full h-full object-contain"
 												/>
 											</NuxtLink>
 										</div>
-										<div class="info">
-											<p>{{ drop.MobMaster.name }}</p>
+										<div
+											class="absolute bottom-full left-1/2 -translate-x-1/2 mb-1 px-2 py-1 bg-layer-surface border border-border-light rounded text-sm whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity"
+										>
+											{{ drop.MobMaster.name }}
 										</div>
 									</div>
-								</template>
-							</td>
-							<td v-else>-</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-			<div v-else>
-				<p>아이템이 없습니다.</p>
+								</div>
+							</div>
+						</div>
+
+						<!-- 아이템 정보 섹션 -->
+						<div
+							v-if="hasItemInfo(item)"
+							class="border-t border-border-light mt-4 pt-4"
+						>
+							<div class="text-sm text-game-secondary mb-2">아이템 정보</div>
+							<div class="flex flex-wrap gap-2">
+								<!-- 기본 정보 -->
+								<div v-if="item.info" class="group relative">
+									<div
+										class="px-3 py-1 bg-layer-overlay rounded cursor-pointer border border-solid border-border-legendary"
+									>
+										기본 정보
+									</div>
+									<div
+										class="absolute bottom-full left-1/2 -translate-x-1/2 mb-1 px-2 py-1 bg-layer-surface border border-border-light rounded text-sm whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity z-10"
+									>
+										{{ item.info }}
+									</div>
+								</div>
+
+								<!-- 세트 정보 -->
+								<div v-if="item.setinfo" class="group relative">
+									<div
+										class="px-3 py-1 bg-layer-overlay rounded cursor-pointer border border-solid border-border-legendary"
+									>
+										세트 효과
+									</div>
+									<div
+										class="absolute bottom-full left-1/2 -translate-x-1/2 mb-1 px-2 py-1 bg-layer-surface border border-border-light rounded text-sm whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity z-10 pointer-events-none"
+									>
+										{{ item.setinfo }}
+									</div>
+								</div>
+
+								<!-- 추가 정보 -->
+								<div v-if="item.addinfo" class="group relative">
+									<div
+										class="px-3 py-1 bg-layer-overlay rounded cursor-pointer border border-game-highlight"
+									>
+										추가 효과
+									</div>
+									<div
+										class="absolute bottom-full left-1/2 -translate-x-1/2 mb-1 px-2 py-1 bg-layer-surface border border-border-light rounded text-sm whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity z-10 pointer-events-none"
+									>
+										{{ item.addinfo }}
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div v-else class="text-center py-8">
+					<p>아이템이 없습니다.</p>
+				</div>
 			</div>
 		</div>
 	</div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onBeforeMount } from 'vue';
-import { useAsyncData } from '#app';
+import { ref, onMounted, onBeforeMount, computed } from 'vue';
 import { NSlider } from 'naive-ui';
 import type { AllItem } from '~/types/allitem';
 
@@ -314,6 +418,9 @@ const searchItemList = async () => {
 		const data = await $fetch(`/api/allitem?${queryString}`);
 		itemtable.value = data || [];
 
+		// 검색 후 정렬 적용
+		sortItems();
+
 		if (selectedItem.value == '0') {
 			tableFormat.value = '0';
 		} else {
@@ -356,6 +463,66 @@ onMounted(() => {
 		dataLoading.value = false;
 	}, 100);
 });
+
+const sortOption = ref('level_asc');
+
+const sortItems = () => {
+	if (!itemtable.value) return;
+
+	itemtable.value.sort((a, b) => {
+		switch (sortOption.value) {
+			case 'level_asc':
+				return a.reqlevel - b.reqlevel;
+			case 'level_desc':
+				return b.reqlevel - a.reqlevel;
+			case 'power_asc':
+				return (a.smin || 0) - (b.smin || 0);
+			case 'power_desc':
+				return (b.smin || 0) - (a.smin || 0);
+			case 'ac_asc':
+				return (a.ac || 0) - (b.ac || 0);
+			case 'ac_desc':
+				return (b.ac || 0) - (a.ac || 0);
+			default:
+				return 0;
+		}
+	});
+};
+
+const hasBasicStats = (item: AllItem) => {
+	return item.MHP || item.MMP || item.hr;
+};
+
+const hasMainStats = (item: AllItem) => {
+	return item.M || item.W || item.G;
+};
+
+const hasCombatStats = (item: AllItem) => {
+	return item.hit || item.dam || item.md;
+};
+
+// 아이템 정보 존재 여부 확인 함수 추가
+const hasItemInfo = (item: AllItem) => {
+	return item.info || item.setinfo || item.addinfo;
+};
+
+// 스탯 정보 매핑
+const stats = {
+	체력: 'MHP',
+	마력: 'MMP',
+	힘: 'M',
+	민첩: 'W',
+	지능: 'G',
+	명중: 'hit',
+	파괴: 'dam',
+	마방: 'md',
+	// 필요한 스탯 추가
+};
+
+// 스탯 값 존재 여부 체크 함수
+const hasStatValue = (value: any) => {
+	return value !== null && value !== undefined && value !== 0;
+};
 </script>
 
 <style scoped lang="scss">

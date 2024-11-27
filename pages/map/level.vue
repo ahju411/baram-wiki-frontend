@@ -1,92 +1,114 @@
 <template>
-	<div class="level-guide">
-		<!-- 탭 네비게이션 추가 -->
-		<div class="level-tabs">
+	<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+		<!-- 탭 네비게이션 -->
+		<div class="flex flex-wrap justify-center gap-2 mb-6">
 			<button
 				v-for="tab in tabs"
 				:key="tab.id"
-				:class="['tab-button', { active: activeTab === tab.id }]"
+				:class="[
+					'px-4 py-2 rounded-md transition-all',
+					activeTab === tab.id
+						? 'bg-layer-overlay text-game-primary'
+						: 'bg-layer-surface text-game-secondary hover:bg-opacity-80',
+				]"
 				@click="activeTab = tab.id"
 			>
 				{{ tab.name }}
 			</button>
 		</div>
 
-		<!-- 탭 컨텐츠 -->
+		<!-- 레벨 리스트 -->
 		<div v-for="tab in tabs" :key="tab.id" v-show="activeTab === tab.id">
-			<ul class="level-list">
-				<li v-for="level in groupedLevels" :key="level.id" class="level-item">
-					<div class="level-header">
-						<h3 class="level-name">
-							{{ level.name }} ({{ level.xcoord }}, {{ level.ycoord }})
+			<div class="space-y-8">
+				<div
+					v-for="level in groupedLevels"
+					:key="level.id"
+					class="bg-layer-surface rounded-lg overflow-hidden shadow-md"
+				>
+					<!-- 레벨 헤더 -->
+					<div
+						class="bg-layer-overlay p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center"
+					>
+						<h3 class="text-xl font-bold text-game-primary mb-2 sm:mb-0">
+							{{ level.name }}
 						</h3>
-						<span class="level-range">{{ level.level }}</span>
-					</div>
-					<div class="level-content">
-						<div class="level-image">
-							<NuxtLink :to="`/map/${level.id}`">
-								<NuxtImg
-									:src="`https://evfuckbgifbr27188584.gcdn.ntruss.com/map/${level.images}`"
-									:alt="level.name"
-									width="300"
-									height="300"
-								/>
-							</NuxtLink>
+						<div class="flex flex-col sm:flex-row sm:items-center">
+							<span class="text-game-secondary text-sm mr-2"
+								>좌표: ({{ level.xcoord }}, {{ level.ycoord }})</span
+							>
+							<span class="text-game-primary text-sm"
+								>레벨: {{ level.level }}</span
+							>
 						</div>
-						<p class="level-info">{{ level.information }}</p>
+					</div>
 
-						<!-- 몬스터 리스트 부분만 수정 -->
-						<div class="monster-list">
-							<table>
+					<div class="p-4 sm:p-6">
+						<!-- 레벨 이미지 및 정보 -->
+						<div class="flex flex-col md:flex-row gap-4 sm:gap-6 mb-6">
+							<div class="w-full md:w-1/3">
+								<NuxtLink :to="`/map/${level.id}`" class="block">
+									<NuxtImg
+										:src="`https://evfuckbgifbr27188584.gcdn.ntruss.com/map/${level.images}`"
+										:alt="level.name"
+										class="w-full h-48 sm:h-64 object-cover rounded-lg"
+									/>
+								</NuxtLink>
+							</div>
+							<div class="w-full md:w-2/3">
+								<p class="text-game-secondary mb-4">{{ level.information }}</p>
+							</div>
+						</div>
+
+						<!-- 몬스터 리스트 -->
+						<div class="overflow-x-auto">
+							<table class="w-full">
 								<thead>
-									<tr>
-										<th>이미지</th>
-										<th>몬스터명</th>
-										<th>경험치</th>
-										<th colspan="3">드롭 아이템</th>
+									<tr class="bg-layer-overlay">
+										<th class="p-2 text-left">몬스터</th>
+										<th class="p-2 text-left">경험치</th>
+										<th class="p-2 text-left">드롭 아이템</th>
 									</tr>
 								</thead>
 								<tbody>
 									<tr
 										v-for="(monsterData, index) in level.monsters"
 										:key="index"
+										class="border-b border-border-primary"
 									>
-										<td class="monster-image">
-											<NuxtLink :to="`/monster/${monsterData.monster.id}`">
+										<td class="p-2">
+											<NuxtLink
+												:to="`/monster/${monsterData.monster.id}`"
+												class="flex items-center gap-2 hover:text-game-legendary"
+											>
 												<NuxtImg
 													:src="`https://evfuckbgifbr27188584.gcdn.ntruss.com/monster/${monsterData.monster.images}`"
 													:alt="monsterData.monster.name"
-													width="48"
-													height="48"
+													class="w-8 h-8 sm:w-10 sm:h-10 object-contain"
 												/>
+												<span class="text-sm sm:text-base">{{
+													monsterData.monster.name
+												}}</span>
 											</NuxtLink>
 										</td>
-										<td>
-											<NuxtLink
-												:to="`/monster/${monsterData.monster.id}`"
-												class="monster-name"
-											>
-												{{ monsterData.monster.name }}
-											</NuxtLink>
+										<td class="p-2 text-sm sm:text-base">
+											{{ monsterData.monster.exp }}
 										</td>
-										<td>{{ monsterData.monster.exp }}</td>
-										<td class="drop-items" colspan="3">
-											<div class="drop-item-list">
+										<td class="p-2">
+											<div class="flex flex-wrap gap-1 sm:gap-2">
 												<NuxtLink
 													v-for="drop in monsterData.monster.dropItems"
 													:key="drop.item.id"
 													:to="`/item/${drop.item.id}`"
-													class="drop-item"
+													class="flex items-center gap-1 bg-layer-overlay p-1 rounded hover:bg-opacity-80 transition-all text-xs sm:text-sm"
 												>
 													<NuxtImg
 														:src="`https://evfuckbgifbr27188584.gcdn.ntruss.com/item/${drop.item.images}`"
 														:alt="drop.item.name"
-														width="32"
-														height="32"
+														class="w-4 h-4 sm:w-6 sm:h-6 object-contain"
 													/>
-													<span class="drop-name">{{ drop.item.name }}</span>
-													<span class="drop-price"
-														>{{ drop.item.price }}전</span
+													<span>{{ drop.item.name }}</span>
+													<span class="text-game-secondary"
+														>({{ drop.item.price }}전)</span
 													>
 												</NuxtLink>
 											</div>
@@ -96,8 +118,8 @@
 							</table>
 						</div>
 					</div>
-				</li>
-			</ul>
+				</div>
+			</div>
 		</div>
 	</div>
 </template>
@@ -146,231 +168,5 @@ useSeoMeta({
 </script>
 
 <style lang="scss" scoped>
-.level-guide {
-	padding: 20px;
-
-	.level-tabs {
-		display: flex;
-		gap: 10px;
-		margin-bottom: 20px;
-
-		.tab-button {
-			padding: 10px 20px;
-			border: 1px solid var(--border-color);
-			border-radius: 4px;
-			background: var(--panel-bg);
-			cursor: pointer;
-			transition: all 0.2s ease;
-			color: var(--secondary-text);
-
-			&.active {
-				background: var(--button-gradient);
-				color: var(--text-color);
-			}
-		}
-	}
-
-	.level-list {
-		list-style: none;
-		padding: 0;
-		margin: 0;
-		display: flex;
-		flex-direction: column;
-		gap: 20px;
-	}
-
-	.level-item {
-		background-color: var(--panel-bg);
-		border: 1px solid var(--border-color);
-		border-radius: 8px;
-		overflow: hidden;
-		transition: transform 0.2s ease;
-
-		&:hover {
-			transform: translateY(-2px);
-			box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-		}
-	}
-
-	.level-header {
-		background: var(--button-gradient);
-		padding: 12px 20px;
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-
-		.level-name {
-			margin: 0;
-			color: var(--text-color);
-			font-size: 1.2rem;
-		}
-
-		.level-range {
-			color: var(--text-color);
-			font-size: 0.9rem;
-		}
-	}
-
-	.level-content {
-		padding: 20px;
-
-		.level-image {
-			width: 300px;
-			height: 300px;
-			margin: 0 auto 15px;
-
-			img {
-				width: 100%;
-				height: 100%;
-				object-fit: contain;
-				border-radius: 4px;
-			}
-
-			&:hover {
-				opacity: 0.8;
-			}
-		}
-
-		.level-info {
-			color: var(--text-color);
-			margin-bottom: 20px;
-			line-height: 1.6;
-		}
-	}
-
-	.monster-list {
-		margin-top: 20px;
-		overflow-x: auto;
-
-		table {
-			width: 100%;
-			border-collapse: collapse;
-			background-color: var(--secondary-bg);
-			border-radius: 8px;
-			overflow: hidden;
-
-			th,
-			td {
-				padding: 12px;
-				text-align: left;
-				border-bottom: 1px solid var(--border-color);
-				vertical-align: middle;
-			}
-
-			th {
-				background-color: var(--button-gradient);
-				color: var(--text-color);
-				font-weight: 600;
-				text-align: center;
-			}
-
-			td {
-				text-align: center;
-			}
-
-			.monster-image {
-				width: 48px;
-				height: 48px;
-				padding: 4px;
-
-				img {
-					width: 100%;
-					height: 100%;
-					object-fit: contain;
-					vertical-align: middle;
-				}
-
-				&:hover {
-					opacity: 0.8;
-				}
-			}
-
-			.monster-name {
-				color: var(--text-color);
-
-				&:hover {
-					color: var(--secondary-highlight);
-				}
-			}
-
-			.drop-items {
-				.drop-item-list {
-					display: flex;
-					flex-wrap: wrap;
-					gap: 10px;
-					justify-content: center;
-					align-items: center;
-				}
-
-				.drop-item {
-					display: inline-flex;
-					align-items: center;
-					gap: 8px;
-
-					img {
-						width: 32px;
-						height: 32px;
-						vertical-align: middle;
-					}
-
-					.drop-name {
-						color: var(--text-color);
-					}
-
-					.drop-price {
-						color: var(--secondary-text);
-					}
-
-					&:hover {
-						.drop-name {
-							color: var(--secondary-highlight);
-						}
-					}
-				}
-			}
-		}
-	}
-
-	.drop-items {
-		margin-top: 10px;
-
-		h5 {
-			font-size: 0.9rem;
-			margin-bottom: 5px;
-		}
-
-		.drop-item-list {
-			display: flex;
-			flex-wrap: wrap;
-			gap: 8px;
-		}
-
-		.drop-item {
-			display: flex;
-			align-items: center;
-			gap: 5px;
-			font-size: 0.8rem;
-
-			img {
-				width: 32px;
-				height: 32px;
-			}
-
-			.drop-name {
-				color: var(--text-color);
-			}
-
-			.drop-price {
-				color: var(--secondary-text);
-			}
-		}
-	}
-}
-
-@media screen and (max-width: 768px) {
-	.level-guide {
-		padding: 0px;
-		padding-top: 12px;
-	}
-}
+// 스타일은 대부분 Tailwind 클래스로 대체되어 필요한 경우에만 추가
 </style>

@@ -10,7 +10,13 @@ export default defineNuxtConfig({
 	// 	},
 	// },
 
-	css: ['~/assets/variable.css'],
+	css: ['~/assets/variable.css', '~/assets/tailwind.css'],
+	postcss: {
+		plugins: {
+			tailwindcss: {},
+			autoprefixer: {},
+		},
+	},
 
 	app: {
 		layoutTransition: { name: 'layout', mode: 'out-in' },
@@ -29,17 +35,17 @@ export default defineNuxtConfig({
 				},
 				{
 					src: 'https://www.googletagmanager.com/gtag/js?id=G-L4Y7M5ZQGC',
-					async: true
+					async: true,
 				},
 				{
 					children: `window.dataLayer = window.dataLayer || [];
 					function gtag(){dataLayer.push(arguments);}
 					gtag('js', new Date());
-					gtag('config', 'G-L4Y7M5ZQGC');`
+					gtag('config', 'G-L4Y7M5ZQGC');`,
 				},
 				{
 					src: '//wcs.naver.net/wcslog.js',
-					type: 'text/javascript'
+					type: 'text/javascript',
 				},
 				{
 					children: `if(!wcs_add) var wcs_add = {};
@@ -47,28 +53,29 @@ export default defineNuxtConfig({
 					if(window.wcs) {
 						wcs_do();
 					}`,
-					type: 'text/javascript'
+					type: 'text/javascript',
 				},
 				{
 					src: 'https://www.googletagmanager.com/gtag/js?id=G-L4Y7M5ZQGC',
-					async: true
+					async: true,
 				},
 				{
 					children: `window.dataLayer = window.dataLayer || [];
 					function gtag(){dataLayer.push(arguments);}
 					gtag('js', new Date());
-					gtag('config', 'G-L4Y7M5ZQGC');`
+					gtag('config', 'G-L4Y7M5ZQGC');`,
 				},
 				{
 					src: 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9583781392760368',
 					async: true,
-					crossorigin: 'anonymous'
-				}
+					crossorigin: 'anonymous',
+				},
 			],
 			noscript: [
 				{
-					children: '<iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MZZPWC5W" height="0" width="0" style="display:none;visibility:hidden"></iframe>',
-				}
+					children:
+						'<iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MZZPWC5W" height="0" width="0" style="display:none;visibility:hidden"></iframe>',
+				},
 			],
 			meta: [
 				{ charset: 'utf-8' },
@@ -114,13 +121,17 @@ export default defineNuxtConfig({
 				},
 				{
 					name: 'google-adsense-account',
-					content: 'ca-pub-9583781392760368'
+					content: 'ca-pub-9583781392760368',
 				},
 			],
 			link: [
 				{
 					rel: 'stylesheet',
 					href: 'https://cdn.jsdelivr.net/npm/reset-css@5.0.2/reset.min.css',
+				},
+				{
+					rel: 'stylesheet',
+					href: 'https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css',
 				},
 				{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
 			],

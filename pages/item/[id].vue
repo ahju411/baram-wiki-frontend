@@ -1,198 +1,238 @@
 <template>
-	<div class="detail-container">
-		<p v-if="!item">Loading...</p>
-		<div v-else class="item-detail">
-			<div class="item-image">
-				<NuxtImg
-					:src="`https://evfuckbgifbr27188584.gcdn.ntruss.com/item/${item.images}`"
-					:alt="item.name"
-					width="100"
-					height="100"
-				/>
-				<h2>{{ item.name }}</h2>
+	<div class="max-w-4xl mx-auto">
+		<p v-if="!item" class="text-center text-game-secondary">Loading...</p>
+		<div v-else>
+			<!-- 아이템 헤더 -->
+			<div class="flex flex-col sm:flex-row gap-4 sm:gap-6 mb-6 sm:mb-8">
+				<!-- 아이템 이미지 -->
+				<div
+					class="w-24 h-24 sm:w-32 sm:h-32 bg-layer-surface border-2 border-border-primary rounded-lg p-4 flex items-center justify-center mx-auto sm:mx-0"
+				>
+					<NuxtImg
+						:src="`https://evfuckbgifbr27188584.gcdn.ntruss.com/item/${item.images}`"
+						:alt="item.name"
+						class="w-full h-full object-contain"
+					/>
+				</div>
+				<!-- 아이템 기본 정보 -->
+				<div class="flex-1 text-center sm:text-left">
+					<h1 class="text-xl sm:text-2xl font-bold mb-2">{{ item.name }}</h1>
+					<p class="text-game-secondary mb-4">{{ item.desc }}</p>
+					<div
+						class="flex flex-wrap justify-center sm:justify-start gap-2 sm:gap-4 text-sm"
+					>
+						<div class="bg-layer-surface px-3 py-1 rounded">
+							{{ getItemType(item.type) }}
+						</div>
+						<div class="bg-layer-surface px-3 py-1 rounded">
+							{{ item.trade ? '거래 가능' : '거래 불가' }}
+						</div>
+					</div>
+				</div>
 			</div>
 
-			<div class="item-info">
-				<div class="description">
-					<h3>아이템 설명</h3>
-					<p>{{ item.desc }}</p>
+			<!-- 기본 정보 -->
+			<div class="bg-layer-surface rounded-lg p-4 sm:p-6 mb-4 sm:mb-8">
+				<h2 class="text-lg font-bold mb-4">기본 정보</h2>
+				<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+					<div class="space-y-2">
+						<div class="flex justify-between">
+							<span class="text-game-secondary">가격</span>
+							<span>{{ item.price }}전</span>
+						</div>
+						<div class="flex justify-between">
+							<span class="text-game-secondary">최대 수량</span>
+							<span>{{ item.maxquan }}</span>
+						</div>
+						<div class="flex justify-between">
+							<span class="text-game-secondary">수리 가능</span>
+							<span>{{ item.repair ? '가능' : '불가능' }}</span>
+						</div>
+						<div v-if="item.repair" class="flex justify-between">
+							<span class="text-game-secondary">수리 비용</span>
+							<span>{{ item.repairprice }}전</span>
+						</div>
+					</div>
+					<div class="space-y-2">
+						<div class="flex justify-between">
+							<span class="text-game-secondary">보관 비용</span>
+							<span>{{ item.storageprice }}전</span>
+						</div>
+						<div class="flex justify-between">
+							<span class="text-game-secondary">작명 비용</span>
+							<span>{{ item.namingprice }}전</span>
+						</div>
+					</div>
 				</div>
-				<div class="stats">
-					<h3>기본 정보</h3>
-					<table>
-						<tbody>
-							<tr>
-								<td>아이템 타입</td>
-								<td>{{ getItemType(item.type) }}</td>
-							</tr>
-							<tr>
-								<td>가격</td>
-								<td>{{ item.price }}전</td>
-							</tr>
-							<tr>
-								<td>내구도</td>
-								<td>{{ item.maxdura }}</td>
-							</tr>
-							<tr>
-								<td>최대 수량</td>
-								<td>{{ item.maxquan }}</td>
-							</tr>
-							<tr>
-								<td>거래 가능</td>
-								<td>{{ item.trade ? '가능' : '불가능' }}</td>
-							</tr>
-							<tr>
-								<td>수리 가능</td>
-								<td>{{ item.repair ? '가능' : '불가능' }}</td>
-							</tr>
-							<tr v-if="item.repair">
-								<td>수리 비용</td>
-								<td>{{ item.repairprice }}전</td>
-							</tr>
-							<tr>
-								<td>보관 비용</td>
-								<td>{{ item.storageprice }}전</td>
-							</tr>
-							<tr>
-								<td>작명 비용</td>
-								<td>{{ item.namingprice }}전</td>
-							</tr>
-						</tbody>
-					</table>
+			</div>
+
+			<!-- 스탯 정보 -->
+			<div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-8 mb-4 sm:mb-8">
+				<!-- 기본 스탯 -->
+				<div class="bg-layer-surface rounded-lg p-4 sm:p-6">
+					<h2 class="text-lg font-bold mb-4">능력치</h2>
+					<div class="space-y-2">
+						<div v-if="item.smin || item.smax" class="flex justify-between">
+							<span class="text-game-secondary">공격력</span>
+							<span>{{ item.smin }} ~ {{ item.smax }}</span>
+						</div>
+						<div v-if="item.lmin || item.lmax" class="flex justify-between">
+							<span class="text-game-secondary">마법 공격력</span>
+							<span>{{ item.lmin }} ~ {{ item.lmax }}</span>
+						</div>
+						<div v-if="item.ac" class="flex justify-between">
+							<span class="text-game-secondary">방어력</span>
+							<span>{{ item.ac }}</span>
+						</div>
+						<div v-if="item.MHP" class="flex justify-between">
+							<span class="text-game-secondary">최대 생명력</span>
+							<span>+{{ item.MHP }}</span>
+						</div>
+						<div v-if="item.MMP" class="flex justify-between">
+							<span class="text-game-secondary">최대 정신력</span>
+							<span>+{{ item.MMP }}</span>
+						</div>
+						<div v-if="item.hit" class="flex justify-between">
+							<span class="text-game-secondary">명중률</span>
+							<span>+{{ item.hit }}</span>
+						</div>
+						<div v-if="item.dam" class="flex justify-between">
+							<span class="text-game-secondary">타격치</span>
+							<span>+{{ item.dam }}</span>
+						</div>
+						<div v-if="item.hr" class="flex justify-between">
+							<span class="text-game-secondary">회복력</span>
+							<span>+{{ item.hr }}</span>
+						</div>
+						<div v-if="item.md" class="flex justify-between">
+							<span class="text-game-secondary">마법 방어력</span>
+							<span>+{{ item.md }}</span>
+						</div>
+						<div v-if="item.M || item.W || item.G" class="flex justify-between">
+							<span class="text-game-secondary">속성</span>
+							<div class="text-right">
+								<div v-if="item.M">무 +{{ item.M }}</div>
+								<div v-if="item.W">수 +{{ item.W }}</div>
+								<div v-if="item.G">지 +{{ item.G }}</div>
+							</div>
+						</div>
+					</div>
 				</div>
 
-				<div class="stats">
-					<h3>요구 조건</h3>
-					<table>
-						<tbody>
-							<tr>
-								<td>요구 레벨</td>
-								<td>{{ item.reqlevel }}</td>
-							</tr>
-							<tr>
-								<td>요구 직업</td>
-								<td>{{ item.reqjob }}</td>
-							</tr>
-							<tr>
-								<td>요구 성별</td>
-								<td>{{ getGender(item.reqgender) }}</td>
-							</tr>
-							<tr>
-								<td>요구 능력치</td>
-								<td>
-									<div>힘: {{ item.reqmight }}</div>
-									<div>민첩: {{ item.reqwill }}</div>
-									<div>지혜: {{ item.reqgrace }}</div>
-								</td>
-							</tr>
-						</tbody>
-					</table>
+				<!-- 착용 조건 -->
+				<div class="bg-layer-surface rounded-lg p-4 sm:p-6">
+					<h2 class="text-lg font-bold mb-4">착용 조건</h2>
+					<div class="space-y-2">
+						<div class="flex justify-between">
+							<span class="text-game-secondary">레벨 제한</span>
+							<span>{{ item.reqlevel }}</span>
+						</div>
+						<div class="flex justify-between">
+							<span class="text-game-secondary">직업</span>
+							<span>{{ item.reqjob }}</span>
+						</div>
+						<div class="flex justify-between">
+							<span class="text-game-secondary">성별</span>
+							<span>{{ getGender(item.reqgender) }}</span>
+						</div>
+						<div class="flex justify-between">
+							<span class="text-game-secondary">능력치</span>
+							<div class="text-right">
+								<div>힘: {{ item.reqmight }}</div>
+								<div>민첩: {{ item.reqwill }}</div>
+								<div>지혜: {{ item.reqgrace }}</div>
+							</div>
+						</div>
+					</div>
 				</div>
+			</div>
 
-				<div class="stats">
-					<h3>능력치</h3>
-					<table>
-						<tbody>
-							<tr v-if="item.smin || item.smax">
-								<td>공격력</td>
-								<td>{{ item.smin }} ~ {{ item.smax }}</td>
-							</tr>
-							<tr v-if="item.lmin || item.lmax">
-								<td>마법 공격력</td>
-								<td>{{ item.lmin }} ~ {{ item.lmax }}</td>
-							</tr>
-							<tr v-if="item.ac">
-								<td>방어력</td>
-								<td>{{ item.ac }}</td>
-							</tr>
-							<tr v-if="item.MHP">
-								<td>최대 생명력</td>
-								<td>+{{ item.MHP }}</td>
-							</tr>
-							<tr v-if="item.MMP">
-								<td>최대 정신력</td>
-								<td>+{{ item.MMP }}</td>
-							</tr>
-							<tr v-if="item.hit">
-								<td>명중률</td>
-								<td>+{{ item.hit }}</td>
-							</tr>
-							<tr v-if="item.dam">
-								<td>타격치</td>
-								<td>+{{ item.dam }}</td>
-							</tr>
-							<tr v-if="item.M || item.W || item.G">
-								<td>속성</td>
-								<td>
-									<div v-if="item.M">무 +{{ item.M }}</div>
-									<div v-if="item.W">수 +{{ item.W }}</div>
-									<div v-if="item.G">지 +{{ item.G }}</div>
-								</td>
-							</tr>
-							<tr v-if="item.hr">
-								<td>회복력</td>
-								<td>+{{ item.hr }}</td>
-							</tr>
-							<tr v-if="item.md">
-								<td>마법 방어력</td>
-								<td>+{{ item.md }}</td>
-							</tr>
-						</tbody>
-					</table>
+			<!-- 드랍 정보 -->
+			<div
+				v-if="item.monsterDrops?.length"
+				class="bg-layer-surface rounded-lg p-4 sm:p-6 mb-4 sm:mb-8"
+			>
+				<h2 class="text-lg font-bold mb-4">드랍 몬스터</h2>
+				<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+					<NuxtLink
+						v-for="drop in item.monsterDrops"
+						:key="drop.id"
+						:to="`/monster/${drop.id}`"
+						class="flex items-center gap-3 bg-layer-overlay p-3 rounded hover:bg-opacity-80 transition-all cursor-pointer border border-transparent hover:border-border-primary hover:shadow-lg hover:text-game-legendary"
+					>
+						<NuxtImg
+							:src="`https://evfuckbgifbr27188584.gcdn.ntruss.com/monster/${drop.images}`"
+							class="w-12 h-12 object-contain"
+						/>
+						<span>{{ drop.name }}</span>
+					</NuxtLink>
 				</div>
+			</div>
 
-				<div class="ingredients">
-					<h3>조합 재료</h3>
-					<ul>
-						<li v-for="ingredient in item.ingredients" :key="ingredient.id">
-							<NuxtLink :to="`/item/${ingredient.id}`">
-								<div class="ingredient-card">
+			<!-- 조합 재료 -->
+			<div
+				v-if="item.ingredients?.length"
+				class="bg-layer-surface rounded-lg p-4 sm:p-6 mb-4 sm:mb-8"
+			>
+				<h2 class="text-lg font-bold mb-4">제작 재료</h2>
+				<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+					<NuxtLink
+						v-for="ingredient in item.ingredients"
+						:key="ingredient.id"
+						:to="`/item/${ingredient.id}`"
+						class="flex items-center gap-3 bg-layer-overlay p-3 rounded hover:bg-opacity-80 transition-all cursor-pointer border border-transparent hover:border-border-primary hover:shadow-lg hover:text-game-legendary"
+					>
+						<NuxtImg
+							:src="`https://evfuckbgifbr27188584.gcdn.ntruss.com/item/${ingredient.images}`"
+							:alt="ingredient.name"
+							class="w-12 h-12 object-contain"
+						/>
+						<div class="flex-1">
+							<span>{{ ingredient.name }}</span>
+							<span class="text-sm text-game-secondary ml-2"
+								>×{{ ingredient.quantity }}</span
+							>
+						</div>
+					</NuxtLink>
+				</div>
+			</div>
+
+			<!-- 제작 정보 -->
+			<div
+				v-if="item.usedInRecipes?.length"
+				class="bg-layer-surface rounded-lg p-4 sm:p-6"
+			>
+				<h2 class="text-lg font-bold mb-4">제작 가능한 아이템</h2>
+				<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+					<NuxtLink
+						v-for="recipe in item.usedInRecipes"
+						:key="recipe.id"
+						:to="`/item/${recipe.id}`"
+						class="flex items-center gap-3 bg-layer-overlay p-3 rounded hover:bg-opacity-80 transition-all cursor-pointer border border-transparent hover:border-border-primary hover:shadow-lg hover:text-game-legendary"
+					>
+						<NuxtImg
+							:src="`https://evfuckbgifbr27188584.gcdn.ntruss.com/item/${recipe.images}`"
+							:alt="recipe.name"
+							class="w-12 h-12 object-contain"
+						/>
+						<div class="flex-1">
+							<span class="block">{{ recipe.name }}</span>
+							<div class="flex items-center gap-2 mt-1">
+								<div
+									class="flex items-center gap-2 bg-layer-surface px-2 py-1 rounded border border-border-light"
+								>
 									<NuxtImg
-										:src="`https://evfuckbgifbr27188584.gcdn.ntruss.com/item/${ingredient.images}`"
-										width="48"
-										height="48"
+										:src="`https://evfuckbgifbr27188584.gcdn.ntruss.com/item/${item.images}`"
+										:alt="item.name"
+										class="w-6 h-6 object-contain"
 									/>
-									{{ ingredient.name }} * {{ ingredient.quantity }}
+									<span class="text-sm text-game-secondary"
+										>×{{ recipe.quantity }}</span
+									>
 								</div>
-							</NuxtLink>
-						</li>
-					</ul>
-				</div>
-
-				<div class="recipes">
-					<h3>조합 가능 아이템</h3>
-					<ul>
-						<li v-for="recipe in item.usedInRecipes" :key="recipe.id">
-							<NuxtLink :to="`/item/${recipe.id}`">
-								<div class="recipe-card">
-									<NuxtImg
-										:src="`https://evfuckbgifbr27188584.gcdn.ntruss.com/item/${recipe.images}`"
-										width="48"
-										height="48"
-									/>
-									{{ recipe.name }}
-								</div>
-							</NuxtLink>
-						</li>
-					</ul>
-				</div>
-
-				<div class="drops">
-					<h3>드랍 정보</h3>
-					<ul>
-						<li v-for="drop in item.monsterDrops" :key="drop.id">
-							<NuxtLink :to="`/monster/${drop.id}`">
-								<div class="monster-card">
-									<NuxtImg
-										:src="`https://evfuckbgifbr27188584.gcdn.ntruss.com/monster/${drop.images}`"
-										width="48"
-										height="48"
-									/>
-									<span>{{ drop.name }}</span>
-								</div>
-							</NuxtLink>
-						</li>
-					</ul>
+							</div>
+						</div>
+					</NuxtLink>
 				</div>
 			</div>
 		</div>
@@ -243,38 +283,3 @@ useSeoMeta({
 	description: '바람의 나라 아이템 정보 - ' + item.value?.desc,
 });
 </script>
-
-<style scoped lang="scss">
-@import '@/assets/detail.css';
-
-.stats td span {
-	margin-right: 10px;
-}
-
-.stats td div {
-	margin: 2px 0;
-}
-
-.monster-card {
-	display: flex;
-	align-items: center;
-	padding: 10px;
-	border: 1px solid var(--border-color);
-	border-radius: 5px;
-	margin-bottom: 10px;
-	transition: background-color 0.3s, border-color 0.3s;
-	background-color: var(--panel-bg);
-	color: var(--text-color);
-
-	&:hover {
-		background-color: var(--hover-highlight);
-		border-color: var(--highlight);
-	}
-	img {
-		margin-right: 10px;
-	}
-	span {
-		font-weight: bold;
-	}
-}
-</style>
