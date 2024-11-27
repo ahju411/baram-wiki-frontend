@@ -13,8 +13,6 @@ export default defineEventHandler(async (event) => {
 			},
 		});
 
-		console.log(data);
-
 		if (!data) {
 			throw createError({
 				statusCode: 404,

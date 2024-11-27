@@ -1,27 +1,45 @@
+/* 
+ * Base Container Styles
+ * 공통적으로 사용되는 컨테이너 스타일
+ */
 .detail-container {
 	background: var(--panel-bg);
 	border: 1px solid var(--border-color);
 	border-radius: 8px;
 	padding: 30px;
 	margin-top: 20px;
-	width: 100vw;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
 }
 
-.item-detail {
+/* 
+ * Common Detail Layout Styles
+ * item, monster, map 상세 페이지의 공통 레이아웃
+ */
+.item-detail,
+.monster-detail,
+.map-detail {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 	gap: 20px;
+	width: 600px;
+	max-width: 800px;
 }
 
-.item-image {
+.item-image,
+.monster-image,
+.map-image {
 	position: static;
 	text-align: center;
 	width: 100%;
 	max-width: 400px;
 }
 
-.item-image img {
+.item-image img,
+.monster-image img,
+.map-image img {
 	object-fit: contain;
 	background: var(--main-bg);
 	border: 1px solid var(--border-color);
@@ -30,12 +48,16 @@
 	margin: 0 auto;
 }
 
-.item-image h2 {
+.item-image h2,
+.monster-image h2,
+.map-image h2 {
 	margin: 15px 0;
 	color: var(--highlight);
 }
 
-.item-info {
+.item-info,
+.monster-info,
+.map-info {
 	width: 100%;
 	max-width: 400px;
 	display: flex;
@@ -43,20 +65,43 @@
 	gap: 15px;
 }
 
+/* 
+ * Common Section Styles
+ * 공통적으로 사되는 섹션 스타일
+ */
 .stats,
-.description {
-	grid-column: 1 / -1;
+.description,
+.drops,
+.found-in-maps,
+.spawned-monsters,
+.ingredients,
+.recipes {
 	background: var(--main-bg);
 	border-radius: 8px;
 	padding: 20px;
 }
 
-.drops {
-	background: var(--main-bg);
-	border-radius: 8px;
-	padding: 20px;
+/* Stats Table Styles */
+.stats table {
+	width: 100%;
+	border-collapse: collapse;
 }
 
+.stats td {
+	padding: 8px;
+	border-bottom: 1px solid rgba(142, 116, 75, 0.3);
+	font-size: 0.95em;
+}
+
+.stats td:first-child {
+	width: 100px;
+	color: var(--highlight);
+	font-weight: bold;
+}
+
+/* 
+ * Drop Items Grid
+ */
 .drop-items {
 	display: grid;
 	grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
@@ -89,12 +134,9 @@
 	margin-bottom: 8px;
 }
 
-.found-in-maps {
-	background: var(--main-bg);
-	border-radius: 8px;
-	padding: 20px;
-}
-
+/* 
+ * Map Grid Styles
+ */
 .map-grid {
 	display: flex;
 	flex-direction: column;
@@ -128,6 +170,48 @@
 	padding: 15px;
 }
 
+/* 
+ * Common Card Styles
+ * monster, ingredient, recipe 카드의 공통 스타일
+ */
+.monster-card,
+.ingredient-card,
+.recipe-card {
+	display: flex;
+	align-items: center;
+	padding: 10px;
+	border: 1px solid var(--border-color);
+	border-radius: 5px;
+	margin-bottom: 10px;
+	transition: background-color 0.3s, border-color 0.3s;
+	background-color: var(--panel-bg);
+	color: var(--text-color);
+}
+
+.monster-card:hover,
+.ingredient-card:hover,
+.recipe-card:hover {
+	background-color: var(--hover-highlight);
+	border-color: var(--highlight);
+}
+
+.monster-card img,
+.ingredient-card img,
+.recipe-card img {
+	object-fit: contain;
+	margin-right: 10px;
+}
+
+/* Typography */
+h3 {
+	color: var(--highlight);
+	margin: 0 0 15px 0;
+	font-size: 1.2em;
+}
+
+/* 
+ * Responsive Design
+ */
 @media (max-width: 1024px) {
 	.item-info {
 		grid-template-columns: 1fr;
@@ -142,11 +226,15 @@
 	.detail-container {
 		width: 100%;
 	}
-	.item-detail {
-		grid-template-columns: 1fr;
+
+	.item-detail,
+	.monster-detail,
+	.map-detail {
+		width: 100%;
 	}
 
-	.item-image {
+	.item-image,
+	.monster-image {
 		position: static;
 	}
 
@@ -159,168 +247,51 @@
 	}
 }
 
-.stats table {
-	width: 100%;
-	border-collapse: collapse;
-}
-
-.stats td {
-	padding: 8px;
-	border-bottom: 1px solid rgba(142, 116, 75, 0.3);
-	font-size: 0.95em;
-}
-
-.stats td:first-child {
-	width: 100px;
-	color: var(--highlight);
-	font-weight: bold;
-}
-
-h3 {
-	color: var(--highlight);
-	margin: 0 0 15px 0;
-	font-size: 1.2em;
-}
-
-.monster-detail {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	gap: 20px;
-}
-
-.monster-image {
-	position: static;
-	text-align: center;
-	width: 100%;
-	max-width: 400px;
-}
-
-.monster-image img {
-	object-fit: contain;
-	background: var(--main-bg);
-	border: 1px solid var(--border-color);
-	border-radius: 8px;
-	padding: 20px;
-}
-
-.monster-image h2 {
-	margin: 15px 0;
-	color: var(--highlight);
-}
-
-.monster-info {
-	width: 100%;
-	max-width: 400px;
-	display: flex;
-	flex-direction: column;
-	gap: 15px;
-}
-
-@media (max-width: 768px) {
-	.monster-detail {
-		grid-template-columns: 1fr;
-	}
-
-	.monster-image {
-		position: static;
-	}
-}
-
-.map-detail {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	gap: 20px;
-}
-
-.map-image {
-	position: static;
-	text-align: center;
-	width: 100%;
-	max-width: 400px;
-}
-
-.map-image img {
-	object-fit: contain;
-	background: var(--main-bg);
-	border: 1px solid var(--border-color);
-	border-radius: 8px;
-	padding: 20px;
-}
-
-.map-image h2 {
-	margin: 15px 0;
-	color: var(--highlight);
-}
-
-.map-info {
-	width: 100%;
-	max-width: 400px;
-	display: flex;
-	flex-direction: column;
-	gap: 15px;
-}
-
-.spawned-monsters {
-	background: var(--main-bg);
-	border-radius: 8px;
-	padding: 20px;
-}
-
-.monster-card {
-	display: flex;
-	align-items: center;
-	padding: 10px;
-	border: 1px solid var(--border-color);
-	border-radius: 5px;
-	margin-bottom: 10px;
-	transition: background-color 0.3s, border-color 0.3s;
-	background-color: var(--panel-bg);
-	color: var(--text-color);
-}
-.monster-card:hover {
-	background-color: var(--hover-highlight);
-	border-color: var(--highlight);
-}
-
-.monster-card img {
-	object-fit: contain;
-	margin-right: 10px;
-}
-
-.monster-card span {
-	font-weight: bold;
-}
-
-.ingredients,
-.recipes {
-	background: var(--main-bg);
-	border-radius: 8px;
-	padding: 20px;
-}
-
+/* 애니메이션 최적화 */
+.drop-item,
+.map-card,
+.monster-card,
 .ingredient-card,
 .recipe-card {
-	display: flex;
-	align-items: center;
-	padding: 10px;
-	border: 1px solid var(--border-color);
-	border-radius: 5px;
-	margin-bottom: 10px;
-	transition: background-color 0.3s, border-color 0.3s;
-	background-color: var(--panel-bg);
-	color: var(--text-color);
+	will-change: transform;
+	transform: translateZ(0); /* GPU 가속 활성화 */
 }
 
-.ingredient-card:hover,
-.recipe-card:hover {
-	background-color: var(--hover-highlight);
-	border-color: var(--highlight);
+/* 포커스 표시 개선 */
+.drop-item:focus-visible,
+.map-card:focus-visible,
+.monster-card:focus-visible {
+	outline: 2px solid var(--highlight);
+	outline-offset: 2px;
 }
 
-.ingredient-card img,
-.recipe-card img {
-	object-fit: contain;
-	margin-right: 10px;
+/* 다크모드 대비 개선 */
+:root {
+	--text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+h2,
+h3 {
+	text-shadow: var(--text-shadow);
+}
+
+/* 스켈레톤 로딩 애니메이션 */
+@keyframes skeleton-loading {
+	0% {
+		background-position: 200% 0;
+	}
+	100% {
+		background-position: -200% 0;
+	}
+}
+
+.skeleton {
+	background: linear-gradient(
+		90deg,
+		var(--panel-bg) 25%,
+		var(--secondary-panel) 50%,
+		var(--panel-bg) 75%
+	);
+	background-size: 200% 100%;
+	animation: skeleton-loading 1.5s infinite;
 }
