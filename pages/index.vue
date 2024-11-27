@@ -28,6 +28,7 @@
 				<div class="max-w-2xl mx-auto relative">
 					<div class="relative">
 						<input
+							ref="searchInput"
 							type="text"
 							v-model="keyword"
 							@input="handleInput"
@@ -171,7 +172,6 @@ const keyword = ref('');
 const results = ref<Search[]>([]);
 const isLoading = ref(false);
 const resultIndex = ref(0);
-const searchInput = ref<HTMLInputElement | null>(null);
 const isKeyboardVisible = ref(false);
 let prevVisualViewport = 0;
 
@@ -291,7 +291,6 @@ const handleVisualViewportResize = () => {
 
 // 6. 라이프사이클 훅 (Lifecycle Hooks)
 onMounted(async () => {
-	searchInput.value?.focus();
 	if (window?.visualViewport) {
 		prevVisualViewport = window.visualViewport.height;
 		window.visualViewport.addEventListener(
