@@ -9,13 +9,10 @@ import { useRouter } from 'vue-router';
 
 const router = useRouter();
 
-// 라우트 변경 시 새로고침 처리 개선
-router.beforeEach((to, from, next) => {
-	if (to.path !== window.location.pathname) {
-		window.location.replace(to.fullPath);
-		return false; // 라우터 네비게이션 중단
-	}
-	return true; // 같은 경로일 경우 정상적으로 진행
+// 라우트 변경 시 강제로 새로고침
+router.beforeEach((to) => {
+	window.location.href = to.fullPath; // 모든 라우트에서 강제 새로고침
+	return false;
 });
 
 useHead({
