@@ -6,18 +6,24 @@
 
 <script setup>
 import { useRouter } from 'vue-router';
+import { useHead } from '@vueuse/head';
 
 const router = useRouter();
 
+// 라우트 변경 시 강제 새로고침 처리
 router.beforeEach((to, from, next) => {
-	// 브라우저 네비게이션(뒤로가기/앞으로가기)인 경우
-	if (window.history.state?.back || window.history.state?.forward) {
-		return next();
-	}
+	// 현재 페이지가 이미 새로고침된 상태인지 확인
+	const reloaded = sessionStorage.getItem('reloaded');
 
-	// 모든 일반 네비게이션에 대해 강제 새로고침
-	window.location.href = to.fullPath;
-	return false;
+	if (!reloaded) {
+		// 플래그 설정 후 새로고침
+		sessionStorage.setItem('reloaded', 'true');
+		window.location.href = to.fullPath;
+	} else {
+		// 플래그 해제 후 네비게이션 허용
+		sessionStorage.removeItem('reloaded');
+		next();
+	}
 });
 
 useHead({
