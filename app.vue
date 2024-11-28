@@ -10,12 +10,12 @@ import { useRouter } from 'vue-router';
 const router = useRouter();
 
 // 라우트 변경 시 새로고침 처리 개선
-router.beforeEach((to) => {
+router.beforeEach((to, from, next) => {
 	if (to.path !== window.location.pathname) {
-		window.location.replace(to.fullPath); // replace를 사용하여 히스토리 스택 관리
-		return false;
+		window.location.replace(to.fullPath);
+		return false; // 라우터 네비게이션 중단
 	}
-	return true;
+	return true; // 같은 경로일 경우 정상적으로 진행
 });
 
 useHead({
