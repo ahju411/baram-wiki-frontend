@@ -16,14 +16,10 @@ router.beforeEach((to, from, next) => {
 		return next();
 	}
 
-	if (to.path !== window.location.pathname) {
-		// history.state 정보 유지하면서 페이지 이동
-		window.history.pushState({ forward: true }, '', to.fullPath);
-		window.location.reload();
-		return false;
-	}
-
-	next();
+	// 모든 라우트 변경 시 새로고침 처리
+	window.history.pushState({ forward: true }, '', to.fullPath);
+	window.location.reload();
+	return false;
 });
 
 useHead({
