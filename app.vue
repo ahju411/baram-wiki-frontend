@@ -6,7 +6,6 @@
 
 <script setup>
 import { useRouter } from 'vue-router';
-import { useHead } from '@vueuse/head';
 
 const router = useRouter();
 
