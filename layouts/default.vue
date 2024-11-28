@@ -12,6 +12,12 @@
 <script setup>
 import Header from '~/components/Header.vue';
 import Footer from '~/components/Footer.vue';
+import { onBeforeRouteUpdate } from 'vue-router';
+
+// 페이지 이동 시 새로고침
+onBeforeRouteUpdate(() => {
+	window.location.href = location.href; // URL 변경 후 전체 새로고침
+});
 </script>
 
 <style scoped lang="scss">
