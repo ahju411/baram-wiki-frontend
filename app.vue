@@ -9,17 +9,31 @@ import { useRouter } from 'vue-router';
 
 const router = useRouter();
 
-// 라우트 변경 시 처리 로직 개선
+let isNavigating = false;
+
 router.beforeEach((to, from, next) => {
-	// 브라우저 뒤로가기/앞으로가기 동작 감지
-	if (window.history.state?.forward) {
+	// 이미 진행 중인 네비게이션이면 통과
+	if (isNavigating) {
+		isNavigating = false;
 		return next();
 	}
 
-	// 모든 라우트 변경 시 새로고침 처리
+	// 브라우저 네비게이션(뒤로가기/앞으로가기)인 경우
+	if (window.history.state?.forward) {
+		window.history.replaceState(null, '', to.fullPath);
+		return next();
+	}
+
+	// 일반 네비게이션
+	isNavigating = true;
 	window.history.pushState({ forward: true }, '', to.fullPath);
-	window.location.reload();
+	window.location.href = to.fullPath;
 	return false;
+});
+
+// 네비게이션 완료 후 상태 초기화
+router.afterEach(() => {
+	isNavigating = false;
 });
 
 useHead({
