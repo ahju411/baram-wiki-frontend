@@ -9,13 +9,10 @@ import { useRouter } from 'vue-router';
 
 const router = useRouter();
 
-// 라우트 변경 시 새로고침 처리 개선
+// 라우트 변경 시 강제로 새로고침
 router.beforeEach((to) => {
-	if (to.path !== window.location.pathname) {
-		window.location.replace(to.fullPath); // replace를 사용하여 히스토리 스택 관리
-		return false;
-	}
-	return true;
+	window.location.href = to.fullPath; // 모든 라우트에서 강제 새로고침
+	return false;
 });
 
 useHead({
