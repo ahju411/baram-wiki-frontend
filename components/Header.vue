@@ -118,6 +118,13 @@
 						</div>
 
 						<NuxtLink
+							to="/map/all"
+							class="block py-2 hover:text-game-legendary transition-colors"
+							@click="closeMenu"
+						>
+							대표맵
+						</NuxtLink>
+						<NuxtLink
 							to="/map/level"
 							class="block py-2 hover:text-game-legendary transition-colors"
 							@click="closeMenu"
@@ -256,6 +263,11 @@
 							</div>
 						</div>
 
+						<NuxtLink
+							to="/map/all"
+							class="hover:text-game-legendary transition-colors"
+							>대표맵</NuxtLink
+						>
 						<NuxtLink
 							to="/map/level"
 							class="hover:text-game-legendary transition-colors"
