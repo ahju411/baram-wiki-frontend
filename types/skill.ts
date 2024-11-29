@@ -41,6 +41,7 @@ export interface Skill {
 	job: string;
 	advence: string;
 	images: string;
+	cool: string;
 	information: string;
 	details: SkillDetail[];
 }
