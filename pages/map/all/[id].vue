@@ -59,115 +59,103 @@
 
 			<!-- 맵 이미지와 마커 표시 영역 -->
 			<div class="relative mb-8">
-				<!-- 이미지 컨테이너 추가 -->
-				<div
-					class="max-h-[800px] overflow-hidden flex justify-center items-center"
-				>
+				<!-- 이미지 컨테이너 수정 -->
+				<div class="relative" ref="mapContainer">
 					<NuxtImg
 						v-if="mapData.id"
+						ref="mapImage"
 						:src="`https://evfuckbgifbr27188584.gcdn.ntruss.com/map/${mapData.id}.png`"
 						:alt="mapData.name"
 						:width="800"
 						:height="800"
-						class="w-full h-full object-contain rounded-lg"
+						class="w-full h-auto object-contain rounded-lg"
 						loading="lazy"
 						placeholder
 						format="webp"
 						@load="handleImageLoad"
 					/>
+
+					<template v-if="isImageLoaded">
+						<template v-if="displayMode === 'map'">
+							<div
+								v-for="port in ports"
+								:key="port.id"
+								:style="getMarkerPosition(port.f_xaxis, port.f_yaxis)"
+								class="group cursor-pointer absolute"
+								@click="navigateToPort(port.b_map_id)"
+							>
+								<!-- 기본 네임택 -->
+								<div
+									class="absolute bottom-0 left-1/2 transform -translate-x-1/2 whitespace-nowrap"
+								>
+									<div
+										class="bg-layer-surface px-3 py-1.5 rounded-lg text-sm text-game-primary shadow-lg group-hover:hidden"
+									>
+										{{ port.b_name }}
+										<div
+											class="absolute w-3 h-3 bg-layer-surface transform rotate-45 left-1/2 -translate-x-1/2 -bottom-1.5"
+										></div>
+									</div>
+								</div>
+								<!-- Hover 시 확장된 네임택 -->
+								<div
+									class="absolute bottom-0 left-1/2 transform -translate-x-1/2 whitespace-nowrap hidden group-hover:block"
+								>
+									<div
+										class="bg-layer-surface px-3 py-1.5 rounded-lg text-sm text-game-primary shadow-lg"
+									>
+										<div class="font-bold">{{ port.b_name }}</div>
+										<div class="text-xs text-game-secondary">
+											좌표: ({{ port.f_xaxis }}, {{ port.f_yaxis }})
+										</div>
+										<div
+											class="absolute w-3 h-3 bg-layer-surface transform rotate-45 left-1/2 -translate-x-1/2 -bottom-1.5"
+										></div>
+									</div>
+								</div>
+							</div>
+						</template>
+
+						<template v-else>
+							<div
+								v-for="npc in npcs"
+								:key="npc.id"
+								:style="getMarkerPosition(npc.x_coord, npc.y_coord)"
+								class="group absolute"
+							>
+								<!-- 기본 네임택 -->
+								<div
+									class="absolute bottom-0 left-1/2 transform -translate-x-1/2 whitespace-nowrap"
+								>
+									<div
+										class="bg-layer-surface px-3 py-1.5 rounded-lg text-sm text-game-primary shadow-lg group-hover:hidden"
+									>
+										{{ npc.npc_name }}
+										<div
+											class="absolute w-3 h-3 bg-layer-surface transform rotate-45 left-1/2 -translate-x-1/2 -bottom-1.5"
+										></div>
+									</div>
+								</div>
+								<!-- Hover 시 확장된 네임택 -->
+								<div
+									class="absolute bottom-0 left-1/2 transform -translate-x-1/2 whitespace-nowrap hidden group-hover:block"
+								>
+									<div
+										class="bg-layer-surface px-3 py-1.5 rounded-lg text-sm text-game-primary shadow-lg"
+									>
+										<div class="font-bold">{{ npc.npc_name }}</div>
+										<div class="text-xs text-game-secondary">
+											좌표: ({{ npc.x_coord }}, {{ npc.y_coord }})
+										</div>
+										<div
+											class="absolute w-3 h-3 bg-layer-surface transform rotate-45 left-1/2 -translate-x-1/2 -bottom-1.5"
+										></div>
+									</div>
+								</div>
+							</div>
+						</template>
+					</template>
 				</div>
-
-				<!-- 이미지 로드 완료 후에만 마커 표시 -->
-				<template v-if="isImageLoaded">
-					<!-- 포트 마커 (맵 모드일 때만 표시) -->
-					<template v-if="displayMode === 'map'">
-						<div
-							v-for="port in ports"
-							:key="port.id"
-							:style="{
-								position: 'absolute',
-								left: `${(parseInt(port.f_xaxis) / mapData.width) * 100}%`,
-								top: `${(parseInt(port.f_yaxis) / mapData.height) * 100}%`,
-							}"
-							class="group cursor-pointer"
-							@click="navigateToPort(port.b_map_id)"
-						>
-							<!-- 기본 네임택 -->
-							<div
-								class="absolute bottom-0 left-1/2 transform -translate-x-1/2 whitespace-nowrap"
-							>
-								<div
-									class="bg-layer-surface px-3 py-1.5 rounded-lg text-sm text-game-primary shadow-lg group-hover:hidden"
-								>
-									{{ port.b_name }}
-									<div
-										class="absolute w-3 h-3 bg-layer-surface transform rotate-45 left-1/2 -translate-x-1/2 -bottom-1.5"
-									></div>
-								</div>
-							</div>
-							<!-- Hover 시 확장된 네임택 -->
-							<div
-								class="absolute bottom-0 left-1/2 transform -translate-x-1/2 whitespace-nowrap hidden group-hover:block"
-							>
-								<div
-									class="bg-layer-surface px-3 py-1.5 rounded-lg text-sm text-game-primary shadow-lg"
-								>
-									<div class="font-bold">{{ port.b_name }}</div>
-									<div class="text-xs text-game-secondary">
-										좌표: ({{ port.f_xaxis }}, {{ port.f_yaxis }})
-									</div>
-									<div
-										class="absolute w-3 h-3 bg-layer-surface transform rotate-45 left-1/2 -translate-x-1/2 -bottom-1.5"
-									></div>
-								</div>
-							</div>
-						</div>
-					</template>
-
-					<!-- NPC 마커 (NPC 모드일 때만 표시) -->
-					<template v-else>
-						<div
-							v-for="npc in npcs"
-							:key="npc.id"
-							:style="{
-								position: 'absolute',
-								left: `${(parseInt(npc.x_coord) / mapData.width) * 100}%`,
-								top: `${(parseInt(npc.y_coord) / mapData.height) * 100}%`,
-							}"
-							class="group"
-						>
-							<!-- 기본 네임택 -->
-							<div
-								class="absolute bottom-0 left-1/2 transform -translate-x-1/2 whitespace-nowrap"
-							>
-								<div
-									class="bg-layer-surface px-3 py-1.5 rounded-lg text-sm text-game-primary shadow-lg group-hover:hidden"
-								>
-									{{ npc.npc_name }}
-									<div
-										class="absolute w-3 h-3 bg-layer-surface transform rotate-45 left-1/2 -translate-x-1/2 -bottom-1.5"
-									></div>
-								</div>
-							</div>
-							<!-- Hover 시 확장된 네임택 -->
-							<div
-								class="absolute bottom-0 left-1/2 transform -translate-x-1/2 whitespace-nowrap hidden group-hover:block"
-							>
-								<div
-									class="bg-layer-surface px-3 py-1.5 rounded-lg text-sm text-game-primary shadow-lg"
-								>
-									<div class="font-bold">{{ npc.npc_name }}</div>
-									<div class="text-xs text-game-secondary">
-										좌표: ({{ npc.x_coord }}, {{ npc.y_coord }})
-									</div>
-									<div
-										class="absolute w-3 h-3 bg-layer-surface transform rotate-45 left-1/2 -translate-x-1/2 -bottom-1.5"
-									></div>
-								</div>
-							</div>
-						</div>
-					</template>
-				</template>
 			</div>
 
 			<!-- 하단 리스트 섹션 -->
@@ -327,15 +315,42 @@ onMounted(() => {
 // 이미지 로드 상태 관리
 const isImageLoaded = ref(false);
 
-// 이미지 로드 완료 핸들러
+const mapContainer = ref<HTMLElement | null>(null);
+const mapImage = ref<HTMLImageElement | null>(null);
+
+// 이미지 로드 완료 핸들러 수정
 const handleImageLoad = () => {
-	// 약간의 지연을 주어 이미지가 완전히 렌더링된 후 마커를 표시
 	setTimeout(() => {
 		isImageLoaded.value = true;
 	}, 100);
 };
 
-// 라우트 변경 시 이미지 로드 상태 초기화
+// 마커 위치 계산 함수
+const getMarkerPosition = (x: number, y: number) => {
+	if (!mapData.value) return {};
+
+	return {
+		left: `${(parseInt(String(x)) / mapData.value.width) * 100}%`,
+		top: `${(parseInt(String(y)) / mapData.value.height) * 100}%`,
+		transform: 'translate(-50%, -50%)',
+	};
+};
+
+// 윈도우 리사이즈 대응
+onMounted(() => {
+	const handleResize = () => {
+		if (isImageLoaded.value) {
+			handleImageLoad();
+		}
+	};
+
+	window.addEventListener('resize', handleResize);
+	onUnmounted(() => {
+		window.removeEventListener('resize', handleResize);
+	});
+});
+
+// 라우트 변경 시 초기화
 watch(
 	() => route.params.id,
 	() => {
