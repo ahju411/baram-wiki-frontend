@@ -127,36 +127,57 @@
 			<div class="bg-layer-surface rounded-lg p-6">
 				<h2 class="text-xl font-bold mb-4">최근 업데이트</h2>
 				<div class="space-y-4">
-					<div class="flex items-center gap-4 transition-colors">
+					<NuxtLink to="/map/all" class="update-item">
 						<div
-							class="bg-layer-overlay px-2 py-1 rounded text-sm text-game-secondary whitespace-nowrap"
+							class="flex items-center gap-4 transition-colors hover:bg-layer-overlay rounded-lg p-2"
 						>
-							11/28
+							<div
+								class="bg-layer-overlay px-2 py-1 rounded text-sm text-game-secondary whitespace-nowrap min-w-[60px] text-center"
+							>
+								11/29
+							</div>
+							<p class="text-sm">대표맵 정보 추가 | 포탈 | NPC</p>
 						</div>
-						<div>
+					</NuxtLink>
+
+					<NuxtLink to="/monster/MO864933" class="update-item">
+						<div
+							class="flex items-center gap-4 transition-colors hover:bg-layer-overlay rounded-lg p-2"
+						>
+							<div
+								class="bg-layer-overlay px-2 py-1 rounded text-sm text-game-secondary whitespace-nowrap min-w-[60px] text-center"
+							>
+								11/29
+							</div>
+							<p class="text-sm">몬스터 아이템 드랍률 업데이트</p>
+						</div>
+					</NuxtLink>
+
+					<NuxtLink to="/info/ui" class="update-item">
+						<div
+							class="flex items-center gap-4 transition-colors hover:bg-layer-overlay rounded-lg p-2"
+						>
+							<div
+								class="bg-layer-overlay px-2 py-1 rounded text-sm text-game-secondary whitespace-nowrap min-w-[60px] text-center"
+							>
+								11/28
+							</div>
 							<p class="text-sm">신규 UI 업데이트</p>
 						</div>
-					</div>
-					<div class="flex items-center gap-4">
+					</NuxtLink>
+
+					<NuxtLink to="/level/calc" class="update-item">
 						<div
-							class="bg-layer-overlay px-2 py-1 rounded text-sm text-game-secondary whitespace-nowrap"
+							class="flex items-center gap-4 transition-colors hover:bg-layer-overlay rounded-lg p-2"
 						>
-							11/25
-						</div>
-						<div>
+							<div
+								class="bg-layer-overlay px-2 py-1 rounded text-sm text-game-secondary whitespace-nowrap min-w-[60px] text-center"
+							>
+								11/25
+							</div>
 							<p class="text-sm">경험치 계산기가 업데이트 되었습니다.</p>
 						</div>
-					</div>
-					<div class="flex items-center gap-4">
-						<div
-							class="bg-layer-overlay px-2 py-1 rounded text-sm text-game-secondary whitespace-nowrap"
-						>
-							11/24
-						</div>
-						<div>
-							<p class="text-sm">레벨별 사냥터 정보가 추가되었습니다.</p>
-						</div>
-					</div>
+					</NuxtLink>
 				</div>
 			</div>
 		</main>

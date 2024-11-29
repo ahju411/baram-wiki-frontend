@@ -59,6 +59,14 @@
 							<span class="text-game-secondary">마법 방어력</span>
 							<span>{{ monster.mdefense }}</span>
 						</div>
+						<div class="flex justify-between">
+							<span class="text-game-secondary">최소 데미지</span>
+							<span>{{ monster.mindamage }}</span>
+						</div>
+						<div class="flex justify-between">
+							<span class="text-game-secondary">최대 데미지</span>
+							<span>{{ monster.maxdamage }}</span>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -98,7 +106,24 @@
 							:alt="drop.item.name"
 							class="w-12 h-12 object-contain"
 						/>
-						<span>{{ drop.item.name }}</span>
+						<div class="flex-1">
+							<div class="flex items-center justify-between mb-1">
+								<span class="text-lg">{{ drop.item.name }}</span>
+							</div>
+							<div class="flex flex-col gap-2">
+								<div
+									class="px-2 py-1 bg-layer-surface rounded text-sm inline-block"
+								>
+									<span class="text-game-legendary">{{
+										drop.range ? `${Number(drop.range).toFixed(1)}%` : '?'
+									}}</span>
+									확률
+								</div>
+								<div class="text-sm text-game-secondary">
+									{{ Number(drop.vals).toFixed(0) }}개 획득
+								</div>
+							</div>
+						</div>
 					</NuxtLink>
 				</div>
 			</div>
