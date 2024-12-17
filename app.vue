@@ -19,13 +19,17 @@ onMounted(() => {
 // 라우트 변경 시 첫 방문이 아닐 때만 강제 새로고침
 router.beforeEach((to) => {
 	if (isFirstVisit.value) {
-		// 최초 방문 표시
 		sessionStorage.setItem('hasVisited', 'true');
 		isFirstVisit.value = false;
 		return true;
 	}
 
-	window.location.href = to.fullPath;
+	// 현재 히스토리 엔트리를 새 라우트로 대체
+	window.history.replaceState({}, '', to.fullPath);
+	// 해당 URL에서 페이지 리로드
+	window.location.reload();
+
+	// Nuxt 라우팅 진행 중단
 	return false;
 });
 
