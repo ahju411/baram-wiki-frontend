@@ -111,9 +111,12 @@
 					</div>
 				</div>
 
-				<div class="flex items-center gap-2">
+				<div
+					class="flex items-center gap-2"
+					style="flex-wrap: wrap; align-items: flex-start"
+				>
 					<template v-for="(step, index) in route.path" :key="index">
-						<div class="flex items-center">
+						<div class="flex items-center mb-2">
 							<span class="text-game-primary">{{ step.name }}</span>
 							<template v-if="index < route.path.length - 1">
 								<svg
