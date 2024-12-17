@@ -139,6 +139,12 @@
 			</div>
 		</div>
 
+		<!-- 검색 결과 없음 또는 에러 메시지 -->
+		<div v-if="showNoResults" class="text-center py-12">
+			<p class="text-game-secondary text-3xl">검색된 경로가 없습니다.</p>
+			<p class="text-game-secondary mt-2 text-xl">다른 지역을 검색해보세요.</p>
+		</div>
+
 		<!-- 로딩 상태 -->
 		<div v-if="isLoading" class="text-center py-12">
 			<div class="loading-spinner"></div>
@@ -161,6 +167,8 @@ const showStartSuggestions = ref(false);
 const showEndSuggestions = ref(false);
 const selectedStartIndex = ref(-1);
 const selectedEndIndex = ref(-1);
+
+const showNoResults = ref(false);
 
 // 맵 이름 검색 함수
 const searchMapNames = async (type: 'start' | 'end', e: Event) => {
@@ -261,6 +269,8 @@ const searchRoutes = async () => {
 	if (!startPoint.value || !endPoint.value) return;
 
 	isLoading.value = true;
+	showNoResults.value = false;
+
 	try {
 		const response = await $fetch('/api/map/path', {
 			params: {
@@ -270,8 +280,11 @@ const searchRoutes = async () => {
 		});
 
 		routes.value = response.paths;
+		showNoResults.value = !response.paths || response.paths.length === 0;
 	} catch (error) {
 		console.error('경로 검색 실패:', error);
+		routes.value = [];
+		showNoResults.value = true;
 	} finally {
 		isLoading.value = false;
 	}
