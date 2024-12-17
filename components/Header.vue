@@ -117,20 +117,60 @@
 							</div>
 						</div>
 
-						<NuxtLink
-							to="/map/all"
-							class="block py-2 hover:text-game-legendary transition-colors"
-							@click="closeMenu"
-						>
-							대표맵
-						</NuxtLink>
-						<NuxtLink
-							to="/map/level"
-							class="block py-2 hover:text-game-legendary transition-colors"
-							@click="closeMenu"
-						>
-							레벨별 사냥터
-						</NuxtLink>
+						<!-- 맵 Dropdown -->
+						<div class="submenu-container overflow-hidden">
+							<button
+								class="flex items-center justify-between w-full py-2 hover:text-game-legendary transition-colors"
+								@click="toggleSubmenu('map')"
+							>
+								<span>맵</span>
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									fill="none"
+									viewBox="0 0 24 24"
+									stroke-width="1.5"
+									stroke="currentColor"
+									class="w-4 h-4 transition-transform duration-200"
+									:class="{ 'rotate-180': activeSubmenu === 'map' }"
+								>
+									<path
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										d="M19.5 8.25l-7.5 7.5-7.5-7.5"
+									/>
+								</svg>
+							</button>
+							<div
+								class="submenu ml-4 space-y-1 transition-all duration-200 overflow-hidden"
+								:class="[
+									activeSubmenu === 'map'
+										? 'max-h-[160px] opacity-100'
+										: 'max-h-0 opacity-0',
+								]"
+							>
+								<NuxtLink
+									to="/map/all"
+									class="block py-2 text-sm hover:text-game-legendary transition-colors"
+									@click="closeMenu"
+								>
+									대표맵
+								</NuxtLink>
+								<NuxtLink
+									to="/map/findmap"
+									class="block py-2 text-sm hover:text-game-legendary transition-colors"
+									@click="closeMenu"
+								>
+									길찾기
+								</NuxtLink>
+								<NuxtLink
+									to="/map/level"
+									class="block py-2 text-sm hover:text-game-legendary transition-colors"
+									@click="closeMenu"
+								>
+									레벨별 사냥터
+								</NuxtLink>
+							</div>
+						</div>
 
 						<!-- Experience Dropdown -->
 						<div class="submenu-container overflow-hidden">
@@ -263,16 +303,48 @@
 							</div>
 						</div>
 
-						<NuxtLink
-							to="/map/all"
-							class="hover:text-game-legendary transition-colors"
-							>대표맵</NuxtLink
-						>
-						<NuxtLink
-							to="/map/level"
-							class="hover:text-game-legendary transition-colors"
-							>레벨별 사냥터</NuxtLink
-						>
+						<!-- 맵 Dropdown -->
+
+						<div class="group relative">
+							<button
+								class="flex items-center gap-1 hover:text-game-legendary transition-colors py-2"
+							>
+								맵
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									fill="none"
+									viewBox="0 0 24 24"
+									stroke-width="1.5"
+									stroke="currentColor"
+									class="w-4 h-4 transition-transform group-hover:rotate-180"
+								>
+									<path
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										d="M19.5 8.25l-7.5 7.5-7.5-7.5"
+									/>
+								</svg>
+							</button>
+							<div
+								class="absolute top-full -left-4 hidden group-hover:block bg-layer-surface border border-border-light rounded-lg py-2 min-w-[160px] shadow-lg"
+							>
+								<NuxtLink
+									to="/map/all"
+									class="block px-4 py-2 hover:bg-layer-overlay transition-colors"
+									>대표맵</NuxtLink
+								>
+								<NuxtLink
+									to="/map/findmap"
+									class="block px-4 py-2 hover:bg-layer-overlay transition-colors"
+									>길찾기</NuxtLink
+								>
+								<NuxtLink
+									to="/map/level"
+									class="block px-4 py-2 hover:bg-layer-overlay transition-colors"
+									>레벨별 사냥터</NuxtLink
+								>
+							</div>
+						</div>
 
 						<!-- Experience Dropdown -->
 						<div class="group relative">
