@@ -1,3 +1,6 @@
+
+![screencapture-baramwiki-2025-05-14-09_41_22](https://github.com/user-attachments/assets/f625dcd3-0312-4d3d-92f1-753cb8f8b173)
+
 # 바람의나라 아이템 도감
 
 _바람의나라 게임 정보를 쉽게 찾아보고 검색할 수 있는 웹 서비스_
@@ -144,3 +147,24 @@ yarn build
 - 레벨별 필요 경험치 정보
 - 경험치 계산기
 - 직업별 경험치 테이블
+
+## 주요 화면
+
+### 메인화면
+![screencapture-baramwiki-2025-05-14-09_41_22](https://github.com/user-attachments/assets/1687b619-6a78-4e47-8cf2-7e0638cb02f4)
+
+### 아이템 정보
+![screencapture-baramwiki-item-I208572-2025-05-14-09_46_00](https://github.com/user-attachments/assets/0e137e5a-ca1a-47ef-8dcb-0faed57b3795)
+
+### 몬스터 정보
+![screencapture-baramwiki-monster-MO041612-2025-05-14-09_46_53](https://github.com/user-attachments/assets/245eb2e5-892a-40f2-97c7-9d5ca901e8fb)
+
+### 아이템 테이블 (스크리너)
+![screencapture-baramwiki-item-table-2025-05-14-09_41_55](https://github.com/user-attachments/assets/b4ca7886-461a-4605-82c7-e6a3dd124666)
+
+### 지도
+![screencapture-baramwiki-map-all-000860-2025-05-14-09_42_41](https://github.com/user-attachments/assets/5a1634fe-ab92-4ca0-8ed2-f2e86a2c52bb)
+
+### 길찾기
+![screencapture-baramwiki-map-findmap-2025-05-14-09_43_40](https://github.com/user-attachments/assets/05c4de3c-f407-48ae-b7f6-6822298aee57)
+
